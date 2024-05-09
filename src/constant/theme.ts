@@ -30,3 +30,9 @@ export const SIZES = {
   width,
   height,
 };
+export const COLORS = {
+  primaryText: '#e78577',
+  textBlack: '#000',
+  textLink: '#e78577',
+  grey: 'grey',
+};

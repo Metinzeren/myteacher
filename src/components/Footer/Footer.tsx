@@ -1,5 +1,4 @@
 import {View, TouchableOpacity} from 'react-native';
-import React from 'react';
 import styled from 'styled-components';
 import CustomText from '../Text/Text';
 import useThemeColors from '../../constant/useColor';
@@ -33,7 +32,4 @@ const FooterHelpContainer = styled(View)`
   align-items: center;
   margin-top: 20px;
   margin-bottom: 20px;
-`;
-const FooterHelpText = styled(CustomText)`
-  color: ${({theme}) => theme.textColor};
 `;

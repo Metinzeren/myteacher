@@ -55,13 +55,13 @@ export default function Button({
           ? 'transparent'
           : backgroundColor || colors.primary,
       }}>
-      {icon && <IconLeft icon={icon} color={colors.textColor} />}
+      {icon && <IconLeft icon={icon} color={colors.text} />}
       {loading ? (
         <ActivityIndicator color={'white'} />
       ) : (
         <ButtonText
           theme={{
-            color: textColor || colors.textColor,
+            color: textColor || colors.text,
           }}>
           {text}
         </ButtonText>

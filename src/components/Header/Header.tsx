@@ -1,5 +1,5 @@
 import {View, Text, SafeAreaView, TouchableOpacity} from 'react-native';
-import React from 'react';
+
 import styled from 'styled-components';
 import useThemeColors from '../../constant/useColor';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';

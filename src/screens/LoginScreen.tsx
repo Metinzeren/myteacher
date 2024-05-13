@@ -17,9 +17,12 @@ import Input from '../components/Input/Input';
 import Footer from '../components/Footer/Footer';
 import CustomText from '../components/Text/Text';
 import {COLORS} from '../constant/theme';
+import { useNavigation } from '@react-navigation/native';
 
 export default function LoginScreen() {
   const {t} = useTranslation();
+  const navigation = useNavigation();
+
   return (
     <Container>
       <LoginTopContainer>
@@ -52,7 +55,7 @@ export default function LoginScreen() {
       </FormContainer>
       <RegisterContainer>
         <CustomText color="grey">Henüz hesabın yok mu? </CustomText>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={()=>navigation.navigate('RegisterScreen')}>
           <CustomText color={'textLink'}>Hesap oluştur</CustomText>
         </TouchableOpacity>
       </RegisterContainer>

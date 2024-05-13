@@ -1,28 +1,31 @@
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faEnvelope,
-  faKey,
-  faLock,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
+import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
 
-import useThemeColors from '../constant/useColor';
 import {useTranslation} from 'react-i18next';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Button from '../components/Button/Button';
 import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
-import Footer from '../components/Footer/Footer';
 import CustomText from '../components/Text/Text';
-import {COLORS} from '../constant/theme';
-import { useNavigation } from '@react-navigation/native';
+import {useState} from 'react';
 
-export default function LoginScreen() {
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../firebase/config';
+
+export default function LoginScreen(props: any) {
   const {t} = useTranslation();
-  const navigation = useNavigation();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
+  const handleLogin = async () => {
+    console.log('a');
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+    );
+  };
   return (
     <Container>
       <LoginTopContainer>
@@ -32,22 +35,17 @@ export default function LoginScreen() {
         <CustomText color="primaryText" center h1>
           Teacher Application
         </CustomText>
-        <CustomText color={'textBlack'} description center>
-          The First Teaching Services Provider with a Click of a Button
-        </CustomText>
       </LoginTopContainer>
       <FormContainer>
         <Input placeholder="E-mail" icon={faEnvelope} />
         <Input placeholder="Şifre" icon={faLock} secureTextEntry={true} />
-        <TouchableOpacity onPress={()=>navigation.navigate('ForgotPasswordScreen')}>
-          <CustomText color="textBlack">Şifremi Unuttum</CustomText>
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate('ForgotPasswordScreen')}>
+          <CustomText color="grey">Şifremi Unuttum</CustomText>
         </TouchableOpacity>
         <Button
           onPress={() => {
-            AlertDialog.showModal({
-              title: 'Başlık',
-              message: 'Mesaj',
-            });
+            handleLogin();
           }}
           borderRadius={10}
           text={t('LOGIN')}
@@ -55,7 +53,8 @@ export default function LoginScreen() {
       </FormContainer>
       <RegisterContainer>
         <CustomText color="grey">Henüz hesabın yok mu? </CustomText>
-        <TouchableOpacity onPress={()=>navigation.navigate('RegisterScreen')}>
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate('RegisterScreen')}>
           <CustomText color={'textLink'}>Hesap oluştur</CustomText>
         </TouchableOpacity>
       </RegisterContainer>
@@ -72,6 +71,7 @@ const LoginTopContainer = styled(View)`
   text-align: center;
   margin-bottom: 45px;
   margin-top: 45px;
+  gap: 10px;
 `;
 const RegisterContainer = styled(View)`
   margin-top: 15px;

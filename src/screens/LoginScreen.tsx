@@ -39,7 +39,7 @@ export default function LoginScreen() {
       <FormContainer>
         <Input placeholder="E-mail" icon={faEnvelope} />
         <Input placeholder="Şifre" icon={faLock} secureTextEntry={true} />
-        <TouchableOpacity onPress={() => console.log('Şifremi Unuttum')}>
+        <TouchableOpacity onPress={()=>navigation.navigate('ForgotPasswordScreen')}>
           <CustomText color="textBlack">Şifremi Unuttum</CustomText>
         </TouchableOpacity>
         <Button

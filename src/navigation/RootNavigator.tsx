@@ -2,10 +2,11 @@ import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-
+import ForgotPasswordScreen from '../screens/ForgotPassword'
 export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen:undefined;
+  ForgotPasswordScreen:undefined;
 };
 const RootNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -26,6 +27,13 @@ const RootNavigator = () => {
       <Stack.Screen
         name="RegisterScreen"
         component={RegisterScreen}
+        options={{
+          headerShown: false,
+        }}
+      />
+       <Stack.Screen
+        name="ForgotPasswordScreen"
+        component={ForgotPasswordScreen}
         options={{
           headerShown: false,
         }}

@@ -17,10 +17,6 @@ export default function RegisterScreen() {
 
   return (
     <Container>
-      <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
-      <IconBack icon={faArrowLeft} size={24} color="#70664C"/>
-
-      </TouchableOpacity>
       <RegisterTopContainer>
         <CustomText color={'textLink'} center title>Kayıt Ol</CustomText>
       </RegisterTopContainer>
@@ -42,6 +38,12 @@ export default function RegisterScreen() {
           text={t('KAYITOL')}
         />
       </FormContainer>
+      <LoginContainer>
+        <CustomText color="grey">Zaten bir hesabın var mı?</CustomText>
+        <TouchableOpacity onPress={()=>navigation.navigate('LoginScreen')}>
+          <CustomText color={'textLink'}> Giriş yap</CustomText>
+        </TouchableOpacity>
+      </LoginContainer>
     </Container>
   )
 }
@@ -59,5 +61,11 @@ const FormContainer = styled(View)`
   gap: 20px;
 `;
 
-const IconBack = styled(FontAwesomeIcon)`
+
+
+const LoginContainer = styled(View)`
+  margin-top: 15px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
 `;

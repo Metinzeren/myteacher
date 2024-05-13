@@ -22,7 +22,7 @@ export default function CustomText(props: CustomTextProps) {
     <Text
       style={{
         textAlign: props.center ? 'center' : props.left ? 'left' : 'left',
-        color: props.color ? props.color : colors.text,
+        color: props.color ? COLORS[props.color] : colors.text,
         fontSize: props.h1
           ? 35
           : props.title

@@ -10,7 +10,7 @@ import Input from '../components/Input/Input';
 import CustomText from '../components/Text/Text';
 import {useState} from 'react';
 
-import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/config';
 
 export default function LoginScreen(props: any) {
@@ -19,18 +19,21 @@ export default function LoginScreen(props: any) {
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(userCredential => {
         const user = userCredential.user;
-        console.log('Kullanıcı başarıyla giriş yaptı:', user);
       })
-      .catch((error) => {
+      .catch(error => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.error('Giriş hatası:', errorCode, errorMessage);
+        console.log(errorMessage);
+        AlertDialog.showModal({
+          title: errorCode,
+          message: errorMessage,
+        });
       });
   };
-  
+
   return (
     <Container>
       <LoginTopContainer>
@@ -42,8 +45,19 @@ export default function LoginScreen(props: any) {
         </CustomText>
       </LoginTopContainer>
       <FormContainer>
-        <Input placeholder="E-mail" onChangeText={(e)=>setEmail(e)} icon={faEnvelope} />
-        <Input placeholder="Şifre" onChangeText={(e)=>setPassword(e)} icon={faLock} secureTextEntry={true} />
+        <Input
+          autoCapitalize="none"
+          autoCorrect={false}
+          placeholder="E-mail"
+          onChangeText={e => setEmail(e)}
+          icon={faEnvelope}
+        />
+        <Input
+          placeholder="Şifre"
+          onChangeText={e => setPassword(e)}
+          icon={faLock}
+          secureTextEntry={true}
+        />
         <TouchableOpacity
           onPress={() => props.navigation.navigate('ForgotPasswordScreen')}>
           <CustomText color="grey">Şifremi Unuttum</CustomText>

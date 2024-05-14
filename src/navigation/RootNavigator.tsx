@@ -2,42 +2,72 @@ import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
-import ForgotPasswordScreen from '../screens/ForgotPassword'
+import ForgotPasswordScreen from '../screens/ForgotPassword';
+
+import {useEffect, useState} from 'react';
+import {onAuthStateChanged} from 'firebase/auth';
+import {auth} from '../firebase/config';
+import DrawerNavigator from './DrawerNavigator';
 export type RootStackParamList = {
   LoginScreen: undefined;
-  RegisterScreen:undefined;
-  ForgotPasswordScreen:undefined;
+  RegisterScreen: undefined;
+  ForgotPasswordScreen: undefined;
+  DrawerNavigator: undefined;
 };
 const RootNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
-
+  const [authUser, setAuth] = useState(null);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        setAuth(user as any);
+      } else {
+        setAuth(null);
+      }
+    });
+    return unsubscribe;
+  }, []);
   return (
     <Stack.Navigator
       initialRouteName="LoginScreen"
       screenOptions={{
         ...TransitionPresets.SlideFromRightIOS,
       }}>
-      <Stack.Screen
-        name="LoginScreen"
-        component={LoginScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-      <Stack.Screen
-        name="RegisterScreen"
-        component={RegisterScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
-       <Stack.Screen
-        name="ForgotPasswordScreen"
-        component={ForgotPasswordScreen}
-        options={{
-          headerShown: false,
-        }}
-      />
+      {authUser === null ? (
+        <>
+          <Stack.Screen
+            name="LoginScreen"
+            component={LoginScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="RegisterScreen"
+            component={RegisterScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ForgotPasswordScreen"
+            component={ForgotPasswordScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <Stack.Screen
+            name="DrawerNavigator"
+            component={DrawerNavigator}
+            options={{
+              headerShown: false,
+            }}
+          />
+        </>
+      )}
     </Stack.Navigator>
   );
 };

@@ -15,10 +15,25 @@ import AlertDialog from '../components/AlertDialog/AlertDialog';
 import {t} from 'i18next';
 import {useTranslation} from 'react-i18next';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../firebase/config';
+import {useState} from 'react';
 
 export default function RegisterScreen(props: any) {
   const {t} = useTranslation();
-
+  const [registerDto, setRegisterDto] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const handleChange = (key: keyof typeof registerDto, value: string) => {
+    setRegisterDto({
+      ...registerDto,
+      [key]: value,
+    });
+  };
   return (
     <Container>
       <RegisterTopContainer>
@@ -31,21 +46,63 @@ export default function RegisterScreen(props: any) {
       </RegisterTopContainer>
 
       <FormContainer>
-        <Input placeholder="Ad Soyad" icon={faUser} />
-        <Input placeholder="E-mail" icon={faEnvelope} />
-        <Input placeholder="Şifre" icon={faLock} secureTextEntry={true} />
+        <Input
+          placeholder="Ad"
+          icon={faUser}
+          value={registerDto.firstName}
+          onChangeText={e => handleChange('firstName', e)}
+        />
+        <Input
+          placeholder="Soyad"
+          icon={faUser}
+          value={registerDto.lastName}
+          onChangeText={e => handleChange('lastName', e)}
+        />
+        <Input
+          autoCapitalize="none"
+          autoCorrect={false}
+          placeholder="E-mail"
+          icon={faEnvelope}
+          value={registerDto.email}
+          onChangeText={e => handleChange('email', e)}
+        />
+        <Input
+          placeholder="Şifre"
+          icon={faLock}
+          secureTextEntry={true}
+          value={registerDto.password}
+          onChangeText={e => handleChange('password', e)}
+        />
         <Input
           placeholder="Şifre (Tekrar)"
           icon={faLock}
           secureTextEntry={true}
+          value={registerDto.confirmPassword}
+          onChangeText={e => handleChange('confirmPassword', e)}
         />
 
         <Button
           onPress={() => {
-            AlertDialog.showModal({
-              title: 'Başlık',
-              message: 'Mesaj',
-            });
+            createUserWithEmailAndPassword(
+              auth,
+              registerDto.email,
+              registerDto.password,
+            )
+              .then(userCredential => {
+                const user = userCredential.user;
+                AlertDialog.showModal({
+                  title: 'Başarılı',
+                  message: 'Kullanıcı başarıyla oluşturuldu',
+                });
+              })
+              .catch(error => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                AlertDialog.showModal({
+                  title: errorCode,
+                  message: errorMessage,
+                });
+              });
           }}
           borderRadius={10}
           text={t('KAYITOL')}

@@ -18,14 +18,19 @@ export default function LoginScreen(props: any) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
-    console.log('a');
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    );
+  const handleLogin = () => {
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log('Kullanıcı başarıyla giriş yaptı:', user);
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.error('Giriş hatası:', errorCode, errorMessage);
+      });
   };
+  
   return (
     <Container>
       <LoginTopContainer>
@@ -37,8 +42,8 @@ export default function LoginScreen(props: any) {
         </CustomText>
       </LoginTopContainer>
       <FormContainer>
-        <Input placeholder="E-mail" icon={faEnvelope} />
-        <Input placeholder="Şifre" icon={faLock} secureTextEntry={true} />
+        <Input placeholder="E-mail" onChangeText={(e)=>setEmail(e)} icon={faEnvelope} />
+        <Input placeholder="Şifre" onChangeText={(e)=>setPassword(e)} icon={faLock} secureTextEntry={true} />
         <TouchableOpacity
           onPress={() => props.navigation.navigate('ForgotPasswordScreen')}>
           <CustomText color="grey">Şifremi Unuttum</CustomText>

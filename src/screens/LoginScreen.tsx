@@ -15,10 +15,12 @@ import {auth} from '../firebase/config';
 
 export default function LoginScreen(props: any) {
   const {t} = useTranslation();
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = () => {
+    setLoading(true);
     signInWithEmailAndPassword(auth, email, password)
       .then(userCredential => {
         const user = userCredential.user;
@@ -31,6 +33,9 @@ export default function LoginScreen(props: any) {
           title: errorCode,
           message: errorMessage,
         });
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
 
@@ -63,6 +68,7 @@ export default function LoginScreen(props: any) {
           <CustomText color="grey">Şifremi Unuttum</CustomText>
         </TouchableOpacity>
         <Button
+          loading={loading}
           onPress={() => {
             handleLogin();
           }}

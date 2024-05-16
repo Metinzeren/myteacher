@@ -1,7 +1,7 @@
 {
   "translation": {
-    "LOGIN": "Login",
-    "KAYITOL":"Kayıt Ol",
-    "GONDER":"Gönder"
+    "LOGIN": "Giriş yap",
+    "REGISTER":"Kayıt Ol",
+    "SEND":"Gönder"
   }
 }

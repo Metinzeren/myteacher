@@ -5,6 +5,7 @@ import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {ModalPortal} from 'react-native-modals';
 import KeyboardManager from 'react-native-keyboard-manager';
+import './src/lang/i18n';
 LogBox.ignoreAllLogs();
 const MyTeacher = () => {
   if (Platform.OS === 'ios') {

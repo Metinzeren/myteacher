@@ -59,7 +59,7 @@ export default function ForgotPassword(props: any) {
               });
           }}
           borderRadius={10}
-          text={t('Gönder')}
+          text={t('SEND')}
         />
       </FormContainer>
     </Container>

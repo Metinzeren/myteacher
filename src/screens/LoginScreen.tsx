@@ -1,4 +1,4 @@
-import {View, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 import styled from 'styled-components/native';
 import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
 
@@ -9,9 +9,9 @@ import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
 import CustomText from '../components/Text/Text';
 import {useState} from 'react';
-
 import {signInWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/config';
+import '../lang/i18n';
 
 export default function LoginScreen(props: any) {
   const {t} = useTranslation();

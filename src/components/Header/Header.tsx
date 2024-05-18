@@ -13,36 +13,37 @@ export interface HeaderProps {
   showNotification?: boolean;
   isGoBack?: boolean;
 }
-export default function Header(props: HeaderProps) {
+export default function Header({
+  title,
+  showNotification = false,
+  isGoBack = false,
+}: HeaderProps) {
   const navigation = useNavigation();
   const colors = useThemeColors();
+
   return (
     <HeaderContainer
       theme={{
         background: colors.primary,
       }}>
       <Container>
-        <IconLeft
-          hitSlop={15}
-          onPress={() => {
-            if (props.isGoBack) {
-              navigation.goBack();
-            } else {
-              navigation.dispatch(DrawerActions.openDrawer());
-            }
-          }}>
-          <FontAwesomeIcon
-            icon={props.isGoBack ? faAngleLeft : faBars}
-            color={'#fff'}
-            size={20}
-          />
-        </IconLeft>
-        {props?.title?.length != 0 && (
+        {isGoBack && (
+          <IconLeft
+            hitSlop={15}
+            onPress={() => {
+              if (isGoBack) {
+                navigation.goBack();
+              }
+            }}>
+            <FontAwesomeIcon icon={faAngleLeft} color={'#fff'} size={20} />
+          </IconLeft>
+        )}
+        {title?.length != 0 && (
           <TitleContainer>
-            <HeaderTitle adjustsFontSizeToFit={true}>{props.title}</HeaderTitle>
+            <HeaderTitle adjustsFontSizeToFit={true}>{title}</HeaderTitle>
           </TitleContainer>
         )}
-        {props.showNotification && (
+        {showNotification && (
           <IconRight hitSlop={15}>
             <FontAwesomeIcon icon={faBell} color={'#fff'} size={20} />
           </IconRight>

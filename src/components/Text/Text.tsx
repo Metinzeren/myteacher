@@ -1,38 +1,32 @@
-import {View, Text, TextProps} from 'react-native';
+import {View, Text, TextProps, StyleProp, TextStyle} from 'react-native';
 import useThemeColors from '../../constant/useColor';
-import {COLORS} from '../../constant/theme';
-
-const colorKeys = Object.keys(COLORS) as (keyof typeof COLORS)[];
-export type ColorType = (typeof colorKeys)[number];
+import {COLORS, FONTSIZES} from '../../constant/theme';
+import {ColorType, FontSizeType} from '../../types/type';
 
 interface CustomTextProps extends TextProps {
   children: React.ReactNode;
-  title?: boolean;
-  h1?: boolean;
-  subTitle?: boolean;
+  fontSizes?: FontSizeType;
   description?: boolean;
   color?: ColorType;
   center?: boolean;
   left?: boolean;
   right?: boolean;
+  sx?: StyleProp<TextStyle>;
 }
 export default function CustomText(props: CustomTextProps) {
   const colors = useThemeColors();
   return (
     <Text
-      style={{
-        textAlign: props.center ? 'center' : props.left ? 'left' : 'left',
-        color: props.color ? COLORS[props.color] : colors.text,
-        fontSize: props.h1
-          ? 35
-          : props.title
-          ? 24
-          : props.subTitle
-          ? 12
-          : props.description
-          ? 12
-          : 16,
-      }}
+      style={[
+        props.sx,
+        {
+          textAlign: props.center ? 'center' : props.left ? 'left' : 'left',
+          color: props.color ? COLORS[props.color] : colors.text,
+          fontSize: props.fontSizes
+            ? FONTSIZES[props.fontSizes]
+            : FONTSIZES.default,
+        },
+      ]}
       {...props}>
       {props.children}
     </Text>

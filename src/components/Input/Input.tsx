@@ -74,6 +74,7 @@ const CustomInput = styled(TextInput)`
   padding: 15px ${props => props.theme.right || '15px'} 15px
     ${props => props.theme.left || '15px'};
   width: 100%;
+  color: #707070;
   border-radius: 10px;
   background-color: #ebeff3;
   border: 1px solid ${props => props.theme.borderColor};

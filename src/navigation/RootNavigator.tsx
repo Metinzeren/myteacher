@@ -7,13 +7,10 @@ import ForgotPasswordScreen from '../screens/ForgotPassword';
 import {useEffect, useState} from 'react';
 import {onAuthStateChanged} from 'firebase/auth';
 import {auth} from '../firebase/config';
-import DrawerNavigator from './DrawerNavigator';
-export type RootStackParamList = {
-  LoginScreen: undefined;
-  RegisterScreen: undefined;
-  ForgotPasswordScreen: undefined;
-  DrawerNavigator: undefined;
-};
+import HomeScreen from '../screens/HomeScreen';
+import {RootStackParamList} from '../types/Navigation';
+import StudentsScreen from '../screens/StudentsScreen';
+
 const RootNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
   const [authUser, setAuth] = useState(null);
@@ -60,8 +57,15 @@ const RootNavigator = () => {
       ) : (
         <>
           <Stack.Screen
-            name="DrawerNavigator"
-            component={DrawerNavigator}
+            name="HomeScreen"
+            component={HomeScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="StudentsScreen"
+            component={StudentsScreen}
             options={{
               headerShown: false,
             }}

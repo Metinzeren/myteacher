@@ -42,10 +42,10 @@ export default function LoginScreen(props: any) {
   return (
     <Container>
       <LoginTopContainer>
-        <CustomText color="textBlack" center title>
+        <CustomText color="textBlack" center fontSizes='h1'>
           Welcome To
         </CustomText>
-        <CustomText color="primaryText" center h1>
+        <CustomText color="textLink" center fontSizes='h1'>
           Teacher Application
         </CustomText>
       </LoginTopContainer>

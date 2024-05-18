@@ -1,9 +1,9 @@
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faAngleRight,
   faBook,
@@ -15,44 +15,30 @@ import GroupSvgIcon from '../assets/icons/GroupSvgIcon';
 import BookSvgIcon from '../assets/icons/BookSvgIcon';
 import ScheduleSvgIcon from '../assets/icons/ScheduleSvgIcon';
 import useThemeColors from '../constant/useColor';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
+import { homeMenu } from '../data/data';
+import Button from '../components/Button/Button';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import HomeWidgets from '../components/HomeWidgets/HomeWidgets';
 
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
 ) => {
-  const homeMenu = [
-    {
-      name: 'Öğrenciler',
-      icon: <BookSvgIcon height={35} width={50} />,
-      link: 'StudentsScreen',
-    },
-    {
-      name: 'Ödevler',
-      icon: <BookSvgIcon height={35} width={50} />,
-      link: 'StudentsScreen',
-    },
-    {
-      name: 'Ödev Takvimi',
-      icon: <ScheduleSvgIcon height={35} width={50} />,
-      link: 'StudentsScreen',
-    },
-    {
-      name: 'Veliler',
-      icon: <GroupSvgIcon height={35} width={50} />,
-      link: 'StudentsScreen',
-    },
-  ];
-
+  const [loading, setLoading] = useState(false);
   return (
     <Container title="Anasayfa" header showNotification>
-      <HomeContainer>
+      <HomeTopContainer>
+        <HomeWidgets />
+      </HomeTopContainer>
+      <HomeBottomContainer>
         {homeMenu.map((item, index) => (
           <TouchableOpacity
             onPress={() => props.navigation.navigate(item?.link as any)}
             key={index}>
             <MenuItem>
-              <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                 {item?.icon}
                 <CustomText fontSizes="h5" color="primaryText" center>
                   {item.name}
@@ -68,11 +54,30 @@ const HomeScreen = (
             </MenuItem>
           </TouchableOpacity>
         ))}
-      </HomeContainer>
+        <Button
+          loading={loading}
+          text="Çıkış Yap"
+          onPress={() => {
+            setLoading(true);
+            signOut(auth)
+              .then(() => {
+                props.navigation.navigate('LoginScreen');
+              })
+              .finally(() => {
+                setLoading(false);
+              });
+          }}
+        />
+      </HomeBottomContainer>
     </Container>
   );
 };
-const HomeContainer = styled(View)``;
+const HomeBottomContainer = styled(View)``;
+const HomeTopContainer = styled(View)`
+  margin-horizontal: 10px;
+  margin-top: 10px;
+  padding-right: 10px;
+`;
 const MenuItem = styled(View)`
   flex-direction: row;
   padding-vertical: 10px;

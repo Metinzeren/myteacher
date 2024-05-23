@@ -1,12 +1,13 @@
 interface Student {
-    id?: string;
-    firstName: string;
-    lastName: string;
-    parentFirstName: string;
-    parentLastName: string;
-    parent: "Mother" | "Father";
-    parentEmail: string;
-    parentPhone: string;
-    createdAt?: Date;
+  id?: string;
+  firstName: string;
+  lastName: string;
+  studentNo: number;
+  parentFirstName: string;
+  parentLastName: string;
+  parent: 'Mother' | 'Father';
+  parentEmail: string;
+  parentPhone: string;
+  createdAt?: Date;
 }
 export default Student;

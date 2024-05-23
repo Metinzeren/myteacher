@@ -10,6 +10,7 @@ import {auth} from '../firebase/config';
 import HomeScreen from '../screens/HomeScreen';
 import {RootStackParamList} from '../types/Navigation';
 import StudentsScreen from '../screens/StudentsScreen';
+import AddStudentScreen from '../screens/AddStudentScreen';
 
 const RootNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -66,6 +67,13 @@ const RootNavigator = () => {
           <Stack.Screen
             name="StudentsScreen"
             component={StudentsScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AddStudentScreen"
+            component={AddStudentScreen}
             options={{
               headerShown: false,
             }}

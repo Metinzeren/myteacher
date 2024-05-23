@@ -25,7 +25,6 @@ export default function StudentsScreen(
     studentNo: '',
     parentName: '',
     parentPhoneNo: '',
-    confirmPassword: '',
   });
   const [loading, setLoading] = useState(false);
 
@@ -43,11 +42,12 @@ export default function StudentsScreen(
     try {
      
       await addDoc(studentRef, { 
-        firstName: "Los Angeles",
-        lastName: "CA",
-        number: 13,
-        parentMail: "deneme asdga",
-        parentPhoneNumber: 1241
+        firstName: registerDto.firstName,
+        lastName: registerDto.lastName,
+        studentNo:registerDto.studentNo,
+        number: registerDto.studentNo,
+        parentMail: registerDto.email,
+        parentPhoneNumber: registerDto.parentPhoneNo
       });
       console.log("Document successfully written!");
     } catch (error) {

@@ -12,8 +12,6 @@ interface CustomTextProps extends TextProps {
   left?: boolean;
   right?: boolean;
   sx?: StyleProp<TextStyle>;
-  borderTop?: boolean;
-  borderColor?:ColorType;
 }
 
 export default function CustomText(props: CustomTextProps) {
@@ -26,8 +24,6 @@ export default function CustomText(props: CustomTextProps) {
           textAlign: props.center ? 'center' : props.left ? 'left' : 'left',
           color: props.color ? COLORS[props.color] : colors.text,
           fontSize: props.fontSizes ? FONTSIZES[props.fontSizes] : FONTSIZES.default,
-          borderTopWidth: props.borderTop ? 1 : 0,
-          borderColor: props.borderColor ? COLORS[props.borderColor] || colors.text : 'transparent', 
         },
       ]}
       {...props}>

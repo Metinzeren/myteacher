@@ -38,4 +38,8 @@ export const homeWidget = [
         title:"Veli sayısı",
         count:"31"
     },
+    {
+      title:"Veli sayısı",
+      count:"31"
+  },
 ]

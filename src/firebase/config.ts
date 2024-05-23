@@ -1,8 +1,12 @@
-import {initializeApp} from 'firebase/app';
-import {getAuth, initializeAuth} from 'firebase/auth';
+// firebase.ts
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getFirestore } from 'firebase/firestore';
+import { initializeAuth } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as firebaseAuth from 'firebase/auth';
+
 const reactNativePersistence = (firebaseAuth as any).getReactNativePersistence;
+
 const firebaseConfig = {
   apiKey: 'AIzaSyBOqyURyaTZySJrn64Solnh01ZBjUdLDkI',
   authDomain: 'my-teacher-553bb.firebaseapp.com',
@@ -13,8 +17,20 @@ const firebaseConfig = {
   measurementId: 'G-RML9LCRBGJ',
 };
 
-const app = initializeApp(firebaseConfig);
-export default app;
-export const auth = initializeAuth(app, {
+// Initialize Firebase
+let app;
+if (!getApps().length) {
+  app = initializeApp(firebaseConfig);
+} else {
+  app = getApp();
+}
+
+// Initialize Firestore
+const db = getFirestore(app);
+
+// Initialize Auth
+const auth = initializeAuth(app, {
   persistence: reactNativePersistence(AsyncStorage),
 });
+
+export { db, auth };

@@ -12,11 +12,12 @@ import { useTranslation } from 'react-i18next';
 import Input from '../components/Input/Input';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import FormContainer from '../components/FormContainer/FormContainer';
+import {  addDoc, collection, doc, setDoc } from "firebase/firestore"; 
+import { db} from '../firebase/config'
 export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
   const { t } = useTranslation();
-
   const [registerDto, setRegisterDto] = useState({
     firstName: '',
     lastName: '',
@@ -26,12 +27,34 @@ export default function StudentsScreen(
     parentPhoneNo: '',
     confirmPassword: '',
   });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (key: keyof typeof registerDto, value: string) => {
     setRegisterDto({
       ...registerDto,
       [key]: value,
     });
+  };
+  const studentRef = collection(db, "students");
+
+
+  const handleAddStudent = async () => {
+    console.log("deneme");
+    try {
+     
+      await addDoc(studentRef, { 
+        firstName: "Los Angeles",
+        lastName: "CA",
+        number: 13,
+        parentMail: "deneme asdga",
+        parentPhoneNumber: 1241
+      });
+      console.log("Document successfully written!");
+    } catch (error) {
+      console.error("Error writing document: ", error);
+    } finally {
+      setLoading(false);
+    }
   };
   return <Container isGoBack header title="Öğrenciler">
 
@@ -87,6 +110,9 @@ export default function StudentsScreen(
           />
           <Button
             borderRadius={10}
+            onPress={() => {
+              handleAddStudent();
+            }}
             text={t('KAYDET')}
           />
         </FormContainer>

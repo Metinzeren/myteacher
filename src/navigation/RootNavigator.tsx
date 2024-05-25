@@ -11,6 +11,8 @@ import HomeScreen from '../screens/HomeScreen';
 import {RootStackParamList} from '../types/Navigation';
 import StudentsScreen from '../screens/StudentsScreen';
 import AddStudentScreen from '../screens/AddStudentScreen';
+import CalendarScreen from '../screens/CalendarScreen';
+import StudentDetailScreen from '../screens/StudentDetailScreen';
 
 const RootNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -77,6 +79,20 @@ const RootNavigator = () => {
             options={{
               headerShown: false,
             }}
+          />
+          <Stack.Screen
+          name='CalendarScreen'
+          component={CalendarScreen}
+          options={{
+            headerShown: false,
+          }}
+          />
+          <Stack.Screen
+          name='StudentDetailScreen'
+          component={StudentDetailScreen}
+          options={{
+            headerShown: false,
+          }}
           />
         </>
       )}

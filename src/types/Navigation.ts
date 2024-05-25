@@ -5,4 +5,6 @@ export type RootStackParamList = {
   HomeScreen: undefined;
   StudentsScreen: undefined;
   AddStudentScreen: undefined;
+  CalendarScreen:undefined;
+  StudentDetailScreen:{studentId:string};
 };

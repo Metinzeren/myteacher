@@ -25,6 +25,7 @@ class StudentRepository {
     const studentDoc = doc(this.studentCollection);
     student.id = studentDoc.id;
     await setDoc(studentDoc, student);
+    return student
   }
   async updateStudent(student: Student) {
     const studentDoc = doc(this.studentCollection, student.id);

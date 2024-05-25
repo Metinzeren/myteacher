@@ -9,5 +9,6 @@ interface Student {
   parentEmail: string;
   parentPhone: string;
   createdAt?: Date;
+  photo?:string;
 }
 export default Student;

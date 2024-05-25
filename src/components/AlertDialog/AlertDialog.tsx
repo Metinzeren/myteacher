@@ -163,6 +163,7 @@ const ButtonContainer = styled(View)`
   justify-content: space-between;
   margin-top: 10px;
   gap: 10px;
+  
 `;
 const IconContainer = styled(View)`
   align-items: center;

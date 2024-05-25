@@ -8,26 +8,25 @@ import CustomText from '../Text/Text';
 
 export default function HomeWidgets() {
     return (
-        <View>
-            <WidgetContainer>
-                {homeWidget.map((item, index) => (
-                    <TouchableOpacity key={index} onPress={() => console.log(`${item.title} clicked!`)}>
-                         <WidgetItem>
-                                    <WidgetCount>
-                                        <CustomText fontSizes="hGiant" color="primaryText" center>
-                                            {item.count}
-                                        </CustomText>
-                                    </WidgetCount>
-                                    <WidgetTitle>
-                                        <CustomText fontSizes="body4" color="primaryText" center>
-                                            {item.title}
-                                        </CustomText>
-                                    </WidgetTitle>
-                        </WidgetItem>
-                    </TouchableOpacity>
-                ))}
-            </WidgetContainer>
-        </View>
+
+        <WidgetContainer>
+            {homeWidget.map((item, index) => (
+                <TouchableOpacity key={index} onPress={() => console.log(`${item.title} clicked!`)}>
+                    <WidgetItem>
+                        <WidgetCount>
+                            <CustomText fontSizes="hGiant" color="primaryText" center>
+                                {item.count}
+                            </CustomText>
+                        </WidgetCount>
+                        <WidgetTitle>
+                            <CustomText fontSizes="body4" color="primaryText" center>
+                                {item.title}
+                            </CustomText>
+                        </WidgetTitle>
+                    </WidgetItem>
+                </TouchableOpacity>
+            ))}
+        </WidgetContainer>
     );
 }
 
@@ -36,8 +35,6 @@ const WidgetContainer = styled(View)`
     align-items: center;
     flex-direction: row;
     flex-wrap: wrap;
-    margin-vertical: 20px;
-    gap: 15px;
 `;
 
 const WidgetItem = styled(View)`

@@ -6,6 +6,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {ModalPortal} from 'react-native-modals';
 import KeyboardManager from 'react-native-keyboard-manager';
 import './src/lang/i18n';
+import StudentProvider from './src/context/StudentContext';
 LogBox.ignoreAllLogs();
 const MyTeacher = () => {
   if (Platform.OS === 'ios') {
@@ -29,8 +30,10 @@ const MyTeacher = () => {
   }
   return (
     <NavigationContainer>
-      <RootNavigator />
-      <ModalPortal />
+      <StudentProvider>
+         <RootNavigator />
+         <ModalPortal />
+      </StudentProvider>
     </NavigationContainer>
   );
 };

@@ -1,5 +1,5 @@
-import {View, Text} from 'react-native';
-import React, {useState} from 'react';
+import { View, Text } from 'react-native';
+import React, { useState } from 'react';
 import Container from '../components/Container/Container';
 import FormContainer from '../components/FormContainer/FormContainer';
 import Input from '../components/Input/Input';
@@ -13,11 +13,15 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
+import { useStudents } from '../context/StudentContext';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 
-export default function AddStudentScreen() {
-  const {t} = useTranslation();
+export default function AddStudentScreen(props:NativeStackScreenProps<RootStackParamList>) {
+  const { t } = useTranslation();
   const studentRepo = StudentRepository.getInstance();
+  const { addStudent } = useStudents()
 
   const [registerDto, setRegisterDto] = useState<Student>({
     firstName: 'deneme',
@@ -37,17 +41,17 @@ export default function AddStudentScreen() {
   };
 
   const handleAddStudent = async () => {
-    studentRepo
-      .addStudent(registerDto)
-      .then(res => {
-        AlertDialog.showModal({
-          title: 'Başarılı',
-          message: 'Öğrenci başarıyla eklendi',
-        });
-      })
-      .catch(err => {
-        console.log('Hata: ' + err);
-      });
+    const entity = await studentRepo
+      .addStudent(registerDto);
+    addStudent(entity);
+    
+    AlertDialog.showModal({
+      title: 'Başarılı',
+      message: 'Öğrenci başarıyla eklendi',
+      onConfirm() {
+        props.navigation.goBack()
+      },
+    });
   };
   return (
     <Container isGoBack header title="Öğrenci Ekle">

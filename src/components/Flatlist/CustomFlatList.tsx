@@ -17,6 +17,7 @@ export default function CustomFlatList(props: CustomListProps) {
   const [search, setSearch] = useState('');
 
   const GetData = () => {
+    
     if (props.data) {
       if (props.filter && props.sort) {
         return props.data

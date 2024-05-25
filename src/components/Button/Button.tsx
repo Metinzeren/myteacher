@@ -30,7 +30,7 @@ export default function Button({
   text,
   textColor,
   backgroundColor,
-  borderRadius = SIZES.radius_lg,
+  borderRadius = SIZES.radius_sm,
   ...props
 }: OutlineButtonProps) {
   const colors = useThemeColors();
@@ -61,7 +61,7 @@ export default function Button({
       ) : (
         <ButtonText
           theme={{
-            color: textColor || colors.text,
+            color: outline ? colors.primary :  textColor || colors.text,
           }}>
           {text}
         </ButtonText>
@@ -77,7 +77,6 @@ const CustomButton = styled(TouchableOpacity)`
   background-color: ${props => props.theme.backgroundColor};
   padding: 10px;
   border-radius: ${props => props.theme.borderRadius}px;
-  min-width: 150px;
   border-width: 1px;
   height: 45px;
   border-color: ${props => props.theme.borderColor};

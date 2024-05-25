@@ -1,38 +1,27 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Container from '../components/Container/Container';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import {
-  faEnvelope,
-  faLock,
-  faPhone,
-  faSortNumericDesc,
-  faUser,
-} from '@fortawesome/free-solid-svg-icons';
+
 import Button from '../components/Button/Button';
-import {t} from 'i18next';
-import {useTranslation} from 'react-i18next';
-import Input from '../components/Input/Input';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import FormContainer from '../components/FormContainer/FormContainer';
-import {addDoc, collection, doc, setDoc} from 'firebase/firestore';
-import {db} from '../firebase/config';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import StudentRepository from '../repositories/StudentRepository';
 import Student from '../models/Student';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
+import { useStudents } from '../context/StudentContext';
 export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
   const studentRepo = StudentRepository.getInstance();
-
+  const {students,setStudents,addStudent} = useStudents()
   const [loading, setLoading] = useState(true);
 
-  const [students, setStudents] = useState([] as Student[]);
 
   useEffect(() => {
     loadStudents();
@@ -53,13 +42,23 @@ export default function StudentsScreen(
         setLoading(false);
       });
   };
-  const RenderItem = ({item, index}: {item: Student; index: number}) => {
+
+  const RenderItem = ({ item, index }: { item: Student; index: number }) => {
     return (
-      <ListItem key={index}>
-        <CustomText color="grey">Öğrenci Adı:</CustomText>
-        <CustomText color="grey">
-          {item.firstName} {item.lastName}
-        </CustomText>
+      <ListItem onPress={() => props.navigation.navigate('StudentDetailScreen', { studentId: item.id as string })}
+        key={index}>
+        <ListItemContainer>
+          <CustomText color="grey" >Öğrenci Adı:</CustomText>
+          <CustomText color="grey" >{item.firstName} {item.lastName}</CustomText>
+        </ListItemContainer>
+        <ListItemContainer>
+          <CustomText color="grey" >Öğrenci Numarası:</CustomText>
+          <CustomText color="grey" >{item.studentNo}</CustomText>
+        </ListItemContainer>
+        <ListItemContainer>
+          <CustomText color="grey" >Veli Adı:</CustomText>
+          <CustomText color="grey" >{item.parentFirstName} {item.parentLastName}</CustomText>
+        </ListItemContainer>
       </ListItem>
     );
   };
@@ -98,14 +97,28 @@ const ListContainer = styled(View)`
 `;
 const ButtonContainer = styled(View)`
   flex: 0.2;
+  max-height:50px;
+  margin-bottom:20px;
   justify-content: center;
   padding-horizontal: 10px;
 `;
 const ListItem = styled(TouchableOpacity)`
   background-color: #fff;
-  padding: 10px;
-  border-radius: 10px;
-  flex-direction: row;
+  padding: 15px;
+  margin-horizontal: 2px;
+  border-radius: 8px;
+  flex-direction: column;
   margin-bottom: 10px;
-  justify-content: space-between;
+  elevation: 2;
+  shadow-color: #000;
+  shadow-opacity: 0.1;
+  shadow-radius: 5px;
 `;
+
+const ListItemContainer = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
+

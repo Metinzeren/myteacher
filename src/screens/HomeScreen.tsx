@@ -22,6 +22,7 @@ import Button from '../components/Button/Button';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import HomeWidgets from '../components/HomeWidgets/HomeWidgets';
+import { ScrollView } from 'react-native-gesture-handler';
 
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
@@ -29,6 +30,10 @@ const HomeScreen = (
   const [loading, setLoading] = useState(false);
   return (
     <Container title="Anasayfa" header showNotification>
+      <ScrollView 
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      >
       <HomeTopContainer>
         <HomeWidgets />
       </HomeTopContainer>
@@ -54,9 +59,10 @@ const HomeScreen = (
             </MenuItem>
           </TouchableOpacity>
         ))}
+        <LogoutButton>
         <Button
           loading={loading}
-          text="Çıkış Yap"
+          text="Çıkış Yapp"
           onPress={() => {
             setLoading(true);
             signOut(auth)
@@ -68,15 +74,16 @@ const HomeScreen = (
               });
           }}
         />
+        </LogoutButton>
+      
       </HomeBottomContainer>
+      </ScrollView>
+ 
     </Container>
   );
 };
 const HomeBottomContainer = styled(View)``;
 const HomeTopContainer = styled(View)`
-  margin-horizontal: 10px;
-  margin-top: 10px;
-  padding-right: 10px;
 `;
 const MenuItem = styled(View)`
   flex-direction: row;
@@ -92,6 +99,11 @@ const MenuItem = styled(View)`
   border-width: 1px;
   border-color: #ddd;
 `;
-const MenuItemButton = styled(TouchableOpacity)``;
+const MenuItemButton = styled(TouchableOpacity)`
 
+`;
+const LogoutButton = styled(View)`
+  margin-vertical:10px;
+  margin-horizontal:10px;
+`
 export default HomeScreen;

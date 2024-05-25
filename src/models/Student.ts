@@ -2,7 +2,7 @@ interface Student {
   id?: string;
   firstName: string;
   lastName: string;
-  studentNo: number;
+  studentNo: number | string;
   parentFirstName: string;
   parentLastName: string;
   parent: 'Mother' | 'Father';

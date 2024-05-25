@@ -28,7 +28,6 @@ export default function LoginScreen(props: any) {
       .catch(error => {
         const errorCode = error.code;
         const errorMessage = error.message;
-        console.log(errorMessage);
         AlertDialog.showModal({
           title: errorCode,
           message: errorMessage,
@@ -42,10 +41,10 @@ export default function LoginScreen(props: any) {
   return (
     <Container>
       <LoginTopContainer>
-        <CustomText color="textBlack" center fontSizes='h1'>
+        <CustomText color="textBlack" center fontSizes="h1">
           Welcome To
         </CustomText>
-        <CustomText color="textLink" center fontSizes='h1'>
+        <CustomText color="textLink" center fontSizes="h1">
           Teacher Application
         </CustomText>
       </LoginTopContainer>

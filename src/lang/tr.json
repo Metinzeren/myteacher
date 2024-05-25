@@ -1,7 +1,16 @@
 {
   "translation": {
     "LOGIN": "Giriş yap",
-    "REGISTER":"Kayıt Ol",
-    "SEND":"Gönder"
+    "REGISTER": "Kayıt Ol",
+    "SEND": "Gönder"
+  },
+  "addStudentForm": {
+    "firstName": "Lütfen adınızı giriniz",
+    "lastName": "Lütfen soyadınızı giriniz",
+    "studentNo": "Lütfen öğrenci numaranızı giriniz",
+    "parentFirstName": "Lütfen ebeveyninizin adını giriniz",
+    "parentLastName": "Lütfen ebeveyninizin soyadını giriniz",
+    "parentPhone": "Lütfen ebeveyninizin telefon numarasını giriniz",
+    "parentEmail": "Lütfen ebeveyninizin e-posta adresini giriniz"
   }
 }

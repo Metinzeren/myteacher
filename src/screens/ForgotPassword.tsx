@@ -30,7 +30,7 @@ export default function ForgotPassword(props: any) {
       </TouchableOpacity>
 
       <FormContainer>
-        <CustomText color={'textBlack'} title center>
+        <CustomText color={'textBlack'} center>
           Şifre yenilemek için lütfen kayıtlı e-posta adresini girin
         </CustomText>
         <Input
@@ -45,7 +45,6 @@ export default function ForgotPassword(props: any) {
           onPress={() => {
             sendPasswordResetEmail(auth, email)
               .then(res => {
-                console.log(res);
                 AlertDialog.showModal({
                   title: 'Success',
                   message: 'Email sent',

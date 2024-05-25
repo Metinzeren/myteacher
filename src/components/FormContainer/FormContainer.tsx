@@ -8,36 +8,38 @@ import React, {
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {View} from 'react-native';
 import styled from 'styled-components';
+import {useTranslation} from 'react-i18next';
 
 export interface FormContainerProps {
   children: ReactNode;
   gap?: number;
+  formId?: string;
+  autoErrorMessages?: boolean;
   formContainerRef?: MutableRefObject<FormContainerRef | null>;
 }
 
 export interface FormContainerRef {
-  setErrorDataFiels: (errorData: any) => void;
-  validate: () => boolean;
+  validate: (errorData?: any) => boolean;
 }
 
 export default function FormContainer(props: FormContainerProps) {
-  const {children: initialChildren, gap = 10, formContainerRef} = props;
+  const {children: initialChildren, gap = 10, formContainerRef, formId} = props;
+  const {t} = useTranslation(formId);
   const [children, setChildren] = useState<ReactNode[] | any>(
     React.Children.toArray(initialChildren),
   );
   const [errors, setErrors] = useState<{[key: string]: string | undefined}>({});
   const checkValidation = useCallback((errorData: any) => {
-    setErrors(errorData);
+    handleErrorMessage(errorData);
   }, []);
 
   const inputCheckValidation = useCallback((): boolean => {
     let isEmpty = false;
-
     React.Children.forEach(initialChildren, child => {
       if (React.isValidElement(child)) {
         const childProps = {...child.props};
         if (childProps.id) {
-          if (childProps.type === 'text' && childProps.value === '') {
+          if (childProps.required && childProps.value === '') {
             isEmpty = true;
           }
         }
@@ -49,30 +51,58 @@ export default function FormContainer(props: FormContainerProps) {
   useEffect(() => {
     if (formContainerRef) {
       formContainerRef.current = {
-        setErrorDataFiels: (errorData: any) => {
+        validate: (errorData: any) => {
           checkValidation(errorData);
+          return inputCheckValidation();
         },
-        validate: inputCheckValidation,
       };
     }
   }, [formContainerRef, inputCheckValidation]);
+
+  const handleErrorMessage = useCallback((errorData?: any) => {
+    let errorFields = {} as any;
+    if (props.autoErrorMessages && !errorData) {
+      React.Children.forEach(initialChildren, child => {
+        if (React.isValidElement(child)) {
+          const childProps = {...child.props};
+          if (childProps.required && childProps?.id) {
+            errorFields[childProps.id] = t(childProps.id);
+          }
+        }
+      });
+
+      setErrors(errorFields);
+    } else {
+      setErrors(errorData);
+    }
+  }, []);
   useEffect(() => {
     setChildren(
       React.Children.map(initialChildren, child => {
         if (React.isValidElement(child)) {
           const childProps = {...child.props};
-          const error = errors[childProps.id];
-          if (error && error !== '') {
-            if (childProps.type === 'text') {
-              if (childProps.value === '') {
-                childProps.errorMessage = error;
+
+          if (childProps.id) {
+            if (childProps.required) {
+              let error = errors[childProps.id];
+
+              if (childProps.value === '' && error) {
+                if (props.autoErrorMessages) {
+                  if (error) {
+                    childProps.errorMessage = error;
+                  } else {
+                    childProps.errorMessage = t(childProps.id);
+                  }
+                }
               } else {
                 delete childProps.errorMessage;
               }
             }
             if (childProps.type === 'checkbox') {
               if (!childProps.checked) {
-                childProps.errorMessage = error;
+                if (props.autoErrorMessages) {
+                  childProps.errorMessage = t(childProps.id);
+                }
               } else {
                 delete childProps.errorMessage;
               }

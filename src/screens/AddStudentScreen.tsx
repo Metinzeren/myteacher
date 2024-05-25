@@ -24,13 +24,13 @@ import ValidationHelper from '../components/Utils/ValidationHelper';
 export default function AddStudentScreen(
   props: NativeStackScreenProps<RootStackParamList>,
 ) {
-  const {t} = useTranslation();
+  const t = useTranslation().t;
   const studentRepo = StudentRepository.getInstance();
   const {addStudent} = useStudents();
   const [registerDto, setRegisterDto] = useState<Student>({
     firstName: '',
     lastName: '',
-    studentNo: 1,
+    studentNo: '',
     parent: 'Father',
     parentEmail: '',
     parentFirstName: '',
@@ -58,16 +58,16 @@ export default function AddStudentScreen(
           props.navigation.goBack();
         },
       });
-    } else {
-      let errorFields = ValidationHelper.createErrorMessageByField(registerDto);
-      formRef.current?.setErrorDataFiels(errorFields);
     }
   };
   return (
     <Container isGoBack header title="Öğrenci Ekle">
-      <FormContainer formContainerRef={formRef}>
+      <FormContainer
+        autoErrorMessages
+        formId="addStudentForm"
+        formContainerRef={formRef}>
         <Input
-          type="text"
+          required
           id="firstName"
           errorMessage=""
           placeholder="Ad"
@@ -76,7 +76,7 @@ export default function AddStudentScreen(
           onChangeText={e => handleChange('firstName', e)}
         />
         <Input
-          type="text"
+          required
           id="lastName"
           errorMessage=""
           placeholder="Soyad"
@@ -85,7 +85,7 @@ export default function AddStudentScreen(
           onChangeText={e => handleChange('lastName', e)}
         />
         <Input
-          type="text"
+          required
           errorMessage=""
           id="studentNo"
           placeholder="Öğrenci okul numarası"
@@ -95,8 +95,8 @@ export default function AddStudentScreen(
           onChangeText={e => handleChange('studentNo', e)}
         />
         <Input
+          required
           errorMessage=""
-          type="text"
           id="parentFirstName"
           placeholder="Veli adı"
           icon={faUser}
@@ -104,7 +104,7 @@ export default function AddStudentScreen(
           onChangeText={e => handleChange('parentFirstName', e)}
         />
         <Input
-          type="text"
+          required
           id="parentPhone"
           placeholder="Veli telefon numarası"
           icon={faPhone}
@@ -114,7 +114,7 @@ export default function AddStudentScreen(
           onChangeText={e => handleChange('parentPhone', e)}
         />
         <Input
-          type="text"
+          required
           id="parentEmail"
           errorMessage=""
           autoCapitalize="none"

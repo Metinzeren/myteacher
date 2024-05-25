@@ -22,6 +22,7 @@ interface InputProps extends TextInputProps {
   inputSize?: 'sm' | 'md';
   enableFocusBorder?: boolean;
   errorMessage?: string;
+  required?: boolean;
   type?: 'checkbox' | 'radio' | 'text' | 'password' | 'email' | 'number';
 }
 export default function Input({
@@ -32,6 +33,7 @@ export default function Input({
   enableFocusBorder = true,
   errorMessage,
   type = 'text',
+  required = false,
   ...props
 }: InputProps) {
   const colors = useThemeColors();
@@ -75,6 +77,9 @@ export default function Input({
         secureTextEntry={props.secureTextEntry && !passwordShow}
         onFocus={handleFocus}
         onBlur={handleBlur}
+        placeholder={
+          required ? `${props.placeholder} *` : `${props.placeholder}`
+        }
         theme={{
           size:
             inputSize === 'sm'

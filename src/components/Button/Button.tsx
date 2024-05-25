@@ -61,7 +61,7 @@ export default function Button({
       ) : (
         <ButtonText
           theme={{
-            color: outline ? colors.primary :  textColor || colors.text,
+            color: outline ? colors.primary : textColor || colors.text,
           }}>
           {text}
         </ButtonText>

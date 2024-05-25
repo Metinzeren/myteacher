@@ -90,27 +90,32 @@ class AlertDialog {
               {
                 <ButtonContainer>
                   {props.onCancel && (
-                    <Button
-                      outline
-                      text={props.onCancelText || 'İptal'}
-                      onPress={() => {
-                        ModalPortal.dismiss(id);
-                        this.ids.pop();
-                        resolve(false);
-                        props.onCancel && props.onCancel();
-                      }}
-                    />
+                    <ButtonView>
+                      <Button
+                        outline
+                        text={props.onCancelText || 'İptal'}
+                        onPress={() => {
+                          ModalPortal.dismiss(id);
+                          this.ids.pop();
+                          resolve(false);
+                          props.onCancel && props.onCancel();
+                        }}
+                      />
+                    </ButtonView>
                   )}
+
                   {props.onConfirm && (
-                    <Button
-                      text={props.onConfirmText || 'Onayla'}
-                      onPress={() => {
-                        ModalPortal.dismiss(id);
-                        this.ids.pop();
-                        resolve(false);
-                        props.onConfirm && props.onConfirm();
-                      }}
-                    />
+                    <ButtonView>
+                      <Button
+                        text={props.onConfirmText || 'Onayla'}
+                        onPress={() => {
+                          ModalPortal.dismiss(id);
+                          this.ids.pop();
+                          resolve(false);
+                          props.onConfirm && props.onConfirm();
+                        }}
+                      />
+                    </ButtonView>
                   )}
                 </ButtonContainer>
               }
@@ -159,11 +164,13 @@ const TitleContainer = styled(View)`
   justify-items: center;
 `;
 const ButtonContainer = styled(View)`
-  flex-direction: row;
   justify-content: space-between;
+  flex-direction: row;
   margin-top: 10px;
   gap: 10px;
-  
+`;
+const ButtonView = styled(View)`
+  flex: 1;
 `;
 const IconContainer = styled(View)`
   align-items: center;

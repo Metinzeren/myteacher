@@ -123,9 +123,9 @@ export default function Input({
         />
       )}
       {errorMessage && (
-        <CustomText style={{color: colors.primary, marginTop: 5}}>
-          {errorMessage}
-        </CustomText>
+        <View style={{marginTop: 7}}>
+          <CustomText color="error">{errorMessage}</CustomText>
+        </View>
       )}
     </View>
   );

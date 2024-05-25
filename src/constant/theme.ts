@@ -32,7 +32,7 @@ export const SIZES = {
 };
 export const FONTSIZES = {
   default: 14,
-  hGiant:60,
+  hGiant: 60,
   h1: 40,
   h2: 28,
   h3: 24,
@@ -56,4 +56,5 @@ export const COLORS = {
   textBlack: '#000',
   textLink: '#e78577',
   grey: 'grey',
+  error: '#ff0000',
 };

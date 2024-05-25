@@ -37,7 +37,7 @@ export default function RegisterScreen(props: any) {
   return (
     <Container>
       <RegisterTopContainer>
-        <CustomText color={'textLink'} center title>
+        <CustomText color={'textLink'} center>
           Kayıt Ol
         </CustomText>
         <CustomText color={'grey'} center>

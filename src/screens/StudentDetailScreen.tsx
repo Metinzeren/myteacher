@@ -12,7 +12,7 @@ import CustomText from '../components/Text/Text';
 import Button from '../components/Button/Button';
 import {useStudents} from '../context/StudentContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-
+import UpdateStudentScreen from './UpdateStudentScreen';
 export default function StudentDetailScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentDetailScreen'>,
 ) {
@@ -104,7 +104,7 @@ export default function StudentDetailScreen(
     );
   };
   return (
-    <Container isGoBack header title="Öğrenci Bilgisi">
+    <Container goBackShow header title="Öğrenci Bilgisi">
       <Loading loading={loading}>
         <ListContainer>
           <CustomFlatList
@@ -128,7 +128,9 @@ export default function StudentDetailScreen(
             />
           </ButtonView>
           <ButtonView>
-            <Button text="Öğrenciyi Güncelle" />
+            <Button  onPress={() =>
+              props.navigation.navigate('UpdateStudentScreen', {studentId:studentId})
+            } text="Öğrenciyi Güncelle" />
           </ButtonView>
         </ButtonContainer>
       </Loading>

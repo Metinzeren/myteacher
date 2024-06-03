@@ -63,7 +63,7 @@ export default function StudentsScreen(
     );
   };
   return (
-    <Container isGoBack header title="Öğrenciler">
+    <Container goBackShow header title="Öğrenciler">
       <Loading loading={loading}>
         <ListContainer>
           <CustomFlatList

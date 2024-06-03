@@ -7,4 +7,5 @@ export type RootStackParamList = {
   AddStudentScreen: undefined;
   CalendarScreen:undefined;
   StudentDetailScreen:{studentId:string};
+  UpdateStudentScreen:{studentId:string};
 };

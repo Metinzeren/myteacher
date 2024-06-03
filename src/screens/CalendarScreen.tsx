@@ -10,10 +10,10 @@ import Container from '../components/Container/Container';
 export default function CalendarScreen() {
     const [selectedDay, setSelectedDay] = useState(dayjs().format('YYYY-MM-DD'));
     const [search, setSearch] = useState('')
-    return (
-            <SafeAreaView
+    return (<Container goBackShow header title='Ödev Takvimi'>
+         <SafeAreaView
                 style={{
-                    flex: 0.18,
+                    height:140,
                     backgroundColor: '#E78577',
                 }}>
                 <CalendarProvider date={selectedDay}>
@@ -29,7 +29,7 @@ export default function CalendarScreen() {
                                 backgroundColor: 'transparent',
                                 dayTextColor: '#fff',
                                 textSectionTitleColor: '#fff',
-                                selectedDayBackgroundColor: '#72B262',
+                                selectedDayBackgroundColor: '#34495b',
                             }}
                         />
                     </View>
@@ -46,6 +46,7 @@ export default function CalendarScreen() {
                     />
                 </View>
             </SafeAreaView>
+    </Container>
 
     )
 }

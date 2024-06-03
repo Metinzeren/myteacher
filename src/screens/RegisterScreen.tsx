@@ -1,7 +1,7 @@
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import Container from '../components/Container/Container';
 import CustomText from '../components/Text/Text';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Input from '../components/Input/Input';
 import {
@@ -12,15 +12,16 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import {t} from 'i18next';
-import {useTranslation} from 'react-i18next';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../firebase/config';
-import {useState} from 'react';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import { useRef, useState } from 'react';
+import FormContainer, { FormContainerRef } from '../components/FormContainer/FormContainer';
 
 export default function RegisterScreen(props: any) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [registerDto, setRegisterDto] = useState({
     firstName: '',
     lastName: '',
@@ -34,6 +35,38 @@ export default function RegisterScreen(props: any) {
       [key]: value,
     });
   };
+  const formRef = useRef<FormContainerRef>(null);
+
+  const register = () => {
+    let isEmpty = formRef.current?.validate();
+    if (!isEmpty) {
+      createUserWithEmailAndPassword(
+        auth,
+        registerDto.email,
+        registerDto.password,
+      )
+        .then(userCredential => {
+          const user = userCredential.user;
+          AlertDialog.showModal({
+            title: 'Başarılı',
+            message: 'Kullanıcı başarıyla oluşturuldu',
+            onConfirm() {
+              props.navigation.goBack();
+            },
+          });
+          
+        })
+        .catch(error => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          AlertDialog.showModal({
+            title: errorCode,
+            message: errorMessage,
+          });
+        });
+    }
+
+  }
   return (
     <Container>
       <RegisterTopContainer>
@@ -45,20 +78,30 @@ export default function RegisterScreen(props: any) {
         </CustomText>
       </RegisterTopContainer>
 
-      <FormContainer>
+      <FormContainer
+        autoErrorMessages
+        formId="addStudentForm"
+        formContainerRef={formRef}
+      >
         <Input
           placeholder="Ad"
+          required
+          id='firstName'
           icon={faUser}
           value={registerDto.firstName}
           onChangeText={e => handleChange('firstName', e)}
         />
         <Input
+          id='lastName'
+          required
           placeholder="Soyad"
           icon={faUser}
           value={registerDto.lastName}
           onChangeText={e => handleChange('lastName', e)}
         />
         <Input
+          required
+          id='email'
           autoCapitalize="none"
           autoCorrect={false}
           placeholder="E-mail"
@@ -67,6 +110,8 @@ export default function RegisterScreen(props: any) {
           onChangeText={e => handleChange('email', e)}
         />
         <Input
+          required
+          id='password'
           placeholder="Şifre"
           icon={faLock}
           secureTextEntry={true}
@@ -74,6 +119,8 @@ export default function RegisterScreen(props: any) {
           onChangeText={e => handleChange('password', e)}
         />
         <Input
+          required
+          id='password'
           placeholder="Şifre (Tekrar)"
           icon={faLock}
           secureTextEntry={true}
@@ -82,28 +129,7 @@ export default function RegisterScreen(props: any) {
         />
 
         <Button
-          onPress={() => {
-            createUserWithEmailAndPassword(
-              auth,
-              registerDto.email,
-              registerDto.password,
-            )
-              .then(userCredential => {
-                const user = userCredential.user;
-                AlertDialog.showModal({
-                  title: 'Başarılı',
-                  message: 'Kullanıcı başarıyla oluşturuldu',
-                });
-              })
-              .catch(error => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                AlertDialog.showModal({
-                  title: errorCode,
-                  message: errorMessage,
-                });
-              });
-          }}
+          onPress={() => register()}
           borderRadius={10}
           text={t('KAYITOL')}
         />
@@ -127,10 +153,7 @@ const RegisterTopContainer = styled(View)`
   gap: 15px;
 `;
 
-const FormContainer = styled(View)`
-  margin: 20px;
-  gap: 20px;
-`;
+
 
 const LoginContainer = styled(View)`
   margin-top: 15px;

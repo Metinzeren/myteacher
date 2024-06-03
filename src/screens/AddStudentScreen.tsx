@@ -1,11 +1,9 @@
 import {View, Text} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Container from '../components/Container/Container';
-import FormContainer, {
-  FormContainerRef,
-} from '../components/FormContainer/FormContainer';
 import Input from '../components/Input/Input';
 import Student from '../models/Student';
+import FormContainer, {FormContainerRef} from '../components/FormContainer';
 import StudentRepository from '../repositories/StudentRepository';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import {
@@ -19,7 +17,6 @@ import {useTranslation} from 'react-i18next';
 import {useStudents} from '../context/StudentContext';
 import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
 import {RootStackParamList} from '../types/Navigation';
-import ValidationHelper from '../components/Utils/ValidationHelper';
 
 export default function AddStudentScreen(
   props: NativeStackScreenProps<RootStackParamList>,
@@ -61,8 +58,9 @@ export default function AddStudentScreen(
     }
   };
   return (
-    <Container isGoBack header title="Öğrenci Ekle">
+    <Container p={10}  goBackShow header title="Öğrenci Ekle">
       <FormContainer
+        gap={10}
         autoErrorMessages
         formId="addStudentForm"
         formContainerRef={formRef}>

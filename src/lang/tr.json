@@ -8,6 +8,8 @@
     "firstName": "Lütfen adınızı giriniz",
     "lastName": "Lütfen soyadınızı giriniz",
     "studentNo": "Lütfen öğrenci numaranızı giriniz",
+    "email":"Lütfen e-mail giriniz",
+    "password":"Lütfen geçerli bir şifre giriniz",
     "parentFirstName": "Lütfen ebeveyninizin adını giriniz",
     "parentLastName": "Lütfen ebeveyninizin soyadını giriniz",
     "parentPhone": "Lütfen ebeveyninizin telefon numarasını giriniz",

@@ -15,41 +15,33 @@ import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import { useStudents } from '../context/StudentContext';
+import ClassRoomRepository from '../repositories/ClassRoomRepository';
 export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
-  const studentRepo = StudentRepository.getInstance();
+  const classRoomStudents = props.route.params.students;
+  const classRoomId = props.route.params.classRoomId;
   const {students,setStudents,addStudent} = useStudents()
-  const [loading, setLoading] = useState(true);
+
 
 
   useEffect(() => {
-    loadStudents();
+    setStudents(classRoomStudents);
     return () => {
       setStudents([] as Student[]);
-      setLoading(true);
+       
     };
-  }, []);
+  }, [classRoomStudents]);
+   
 
-  const loadStudents = () => {
-    setLoading(true);
-    studentRepo
-      .getAllStudents()
-      .then(res => {
-        setStudents(res);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
 
   const RenderItem = ({ item, index }: { item: Student; index: number }) => {
     return (
-      <ListItem onPress={() => props.navigation.navigate('StudentDetailScreen', { studentId: item.id as string })}
+      <ListItem onPress={() => props.navigation.navigate('StudentDetailScreen', { student:item,classRoomId:classRoomId })}
         key={index}>
         <ListItemContainer>
           <CustomText color="grey" >Öğrenci Adı:</CustomText>
-          <CustomText color="grey" >{item.firstName} {item.lastName}</CustomText>
+          <CustomText color="grey" >{item?.firstName} {item.lastName}</CustomText>
         </ListItemContainer>
         <ListItemContainer>
           <CustomText color="grey" >Öğrenci Numarası:</CustomText>
@@ -64,7 +56,7 @@ export default function StudentsScreen(
   };
   return (
     <Container goBackShow header title="Öğrenciler">
-      <Loading loading={loading}>
+      <Loading >
         <ListContainer>
           <CustomFlatList
             notFoundText="Öğrenci Bulunamadı."
@@ -84,7 +76,7 @@ export default function StudentsScreen(
             borderRadius={10}
             text="Öğrenci Ekle"
             onPress={() =>
-              props.navigation.navigate('AddStudentScreen')
+              props.navigation.navigate('AddStudentScreen',{classRoomId:classRoomId})
             }></Button>
         </ButtonContainer>
       </Loading>

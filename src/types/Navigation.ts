@@ -1,11 +1,14 @@
+import Student from "../models/Student";
+
 export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   ForgotPasswordScreen: undefined;
   HomeScreen: undefined;
-  StudentsScreen: undefined;
-  AddStudentScreen: undefined;
+  StudentsScreen: {students:Array<Student>,classRoomId:string};
+  AddStudentScreen: {classRoomId:string};
   CalendarScreen:undefined;
-  StudentDetailScreen:{studentId:string};
-  UpdateStudentScreen:{studentId:string};
+  StudentDetailScreen:{student:Student,classRoomId:string};
+  UpdateStudentScreen:undefined; //burayı sen yaparsın boş eçiyorm
+  ClassRoomScreen:undefined
 };

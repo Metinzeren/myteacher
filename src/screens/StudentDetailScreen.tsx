@@ -1,135 +1,104 @@
-import {View, TouchableOpacity, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Container from '../components/Container/Container';
 import StudentRepository from '../repositories/StudentRepository';
 import Student from '../models/Student';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
 import Button from '../components/Button/Button';
-import {useStudents} from '../context/StudentContext';
+import { useStudents } from '../context/StudentContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import UpdateStudentScreen from './UpdateStudentScreen';
+import ClassRoomRepository from '../repositories/ClassRoomRepository';
+import { useClassRooms } from '../context/ClassRoomContext';
 export default function StudentDetailScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentDetailScreen'>,
 ) {
-  const studentId = props.route.params.studentId;
-  const studentRepo = StudentRepository.getInstance();
-  const {deleteStudent} = useStudents();
+  const student = props.route.params.student;
+  const classRoomId = props.route.params.classRoomId;
+  const classRoomRepo = ClassRoomRepository.getInstance();
+  const { deleteStudentFromClassRoom } = useClassRooms();
 
-  const [loading, setLoading] = useState(true);
 
-  const [student, setStudent] = useState([] as Student[]);
-
-  useEffect(() => {
-    loadStudents();
-    return () => {
-      setStudent([] as Student[]);
-      setLoading(true);
-    };
-  }, []);
-
-  const loadStudents = () => {
-    setLoading(true);
-    studentRepo
-      .getStudent(studentId)
-      .then(res => {
-        setStudent([res]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  };
 
   const pressToDelete = () => {
-    setLoading(true);
-    studentRepo
-      .deleteStudent(studentId)
-      .then(res => {
-        deleteStudent(studentId);
+    AlertDialog.showModal({
+      title: "Uyarı",
+      message: `${student.firstName} ${student.lastName} öğrenciyi silicek misiniz?`,
+      onConfirm() {
+        classRoomRepo.removeStudentFromClassRoom(classRoomId, student.id as string)
+        deleteStudentFromClassRoom(classRoomId, student.id as string);
+        AlertDialog.dismiss();
         props.navigation.goBack();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+
+      },
+    });
   };
-  const RenderItem = ({item, index}: {item: Student; index: number}) => {
-    return (
-      <ListItem key={index}>
-        <ListItemPhoto>
-          <Image
-            height={200}
-            width={200}
-            source={
-              item.photo
-                ? {uri: item.photo}
-                : {
-                    uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7ZLUi-ge0TEHx5zB1ZVNfTaAPDw5FSfpr3oR67ZkQmg&s',
-                  }
-            }
-          />
-        </ListItemPhoto>
-        <ListItemContainer>
-          <CustomText color="grey">Öğrenci Adı:</CustomText>
-          <CustomText color="grey">{item.firstName}</CustomText>
-        </ListItemContainer>
-        <ListItemContainer>
-          <CustomText color="grey">Öğrenci Soyadı:</CustomText>
-          <CustomText color="grey">{item.lastName}</CustomText>
-        </ListItemContainer>
-        <ListItemContainer>
-          <CustomText color="grey">Öğrenci Numarası:</CustomText>
-          <CustomText color="grey">{item.studentNo}</CustomText>
-        </ListItemContainer>
-        <ListItemContainer>
-          <CustomText color="grey">Veli Adı:</CustomText>
-          <CustomText color="grey">{item.parentFirstName}</CustomText>
-        </ListItemContainer>
-        <ListItemContainer>
-          <CustomText color="grey">Veli Soyadı:</CustomText>
-          <CustomText color="grey">{item.parentLastName}</CustomText>
-        </ListItemContainer>
-        <ListItemContainer>
-          <CustomText color="grey">Veli E-mail:</CustomText>
-          <CustomText color="grey">{item.parentEmail}</CustomText>
-        </ListItemContainer>
-        <ListItemContainer>
-          <CustomText color="grey">Veli Telefon Numarası:</CustomText>
-          <CustomText color="grey">{item.parentPhone}</CustomText>
-        </ListItemContainer>
-      </ListItem>
-    );
-  };
+
   return (
     <Container goBackShow header title="Öğrenci Bilgisi">
-      <Loading loading={loading}>
+      <Loading >
         <ListContainer>
-          <CustomFlatList
-            notFoundText="Öğrenci Bulunamadı."
-            data={student}
-            renderItem={RenderItem}
-          />
+          <ListItem>
+            <ListItemPhoto>
+              <Image
+                height={200}
+                width={200}
+                source={
+                  student?.photo
+                    ? { uri: student?.photo }
+                    : {
+                      uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7ZLUi-ge0TEHx5zB1ZVNfTaAPDw5FSfpr3oR67ZkQmg&s',
+                    }
+                }
+              />
+            </ListItemPhoto>
+            <ListItemContainer>
+              <CustomText color="grey">Öğrenci Adı:</CustomText>
+              <CustomText color="grey">{student.firstName}</CustomText>
+            </ListItemContainer>
+            <ListItemContainer>
+              <CustomText color="grey">Öğrenci Soyadı:</CustomText>
+              <CustomText color="grey">{student.lastName}</CustomText>
+            </ListItemContainer>
+            <ListItemContainer>
+              <CustomText color="grey">Öğrenci Numarası:</CustomText>
+              <CustomText color="grey">{student.studentNo}</CustomText>
+            </ListItemContainer>
+            <ListItemContainer>
+              <CustomText color="grey">Veli Adı:</CustomText>
+              <CustomText color="grey">{student.parentFirstName}</CustomText>
+            </ListItemContainer>
+            <ListItemContainer>
+              <CustomText color="grey">Veli Soyadı:</CustomText>
+              <CustomText color="grey">{student.parentLastName}</CustomText>
+            </ListItemContainer>
+            <ListItemContainer>
+              <CustomText color="grey">Veli E-mail:</CustomText>
+              <CustomText color="grey">{student.parentEmail}</CustomText>
+            </ListItemContainer>
+            <ListItemContainer>
+              <CustomText color="grey">Veli Telefon Numarası:</CustomText>
+              <CustomText color="grey">{student.parentPhone}</CustomText>
+            </ListItemContainer>
+          </ListItem>
         </ListContainer>
         <ButtonContainer>
           <ButtonView>
             <Button
               onPress={() => {
-                AlertDialog.showModal({
-                  title: 'Öğrenci Silme',
-                  message: 'Öğrenciyi silmek istediğinize emin misiniz?',
-                  onConfirm: pressToDelete,
-                  onCancel() {},
-                });
+                pressToDelete();
               }}
               text="Öğrenciyi Sil"
             />
           </ButtonView>
           <ButtonView>
-            <Button  onPress={() =>
-              props.navigation.navigate('UpdateStudentScreen', {studentId:studentId})
+            <Button onPress={() =>
+              props.navigation.navigate('UpdateStudentScreen')
             } text="Öğrenciyi Güncelle" />
           </ButtonView>
         </ButtonContainer>

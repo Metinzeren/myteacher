@@ -3,6 +3,11 @@ import GroupSvgIcon from "../assets/icons/GroupSvgIcon";
 import ScheduleSvgIcon from "../assets/icons/ScheduleSvgIcon";
 
 export const homeMenu = [
+  {
+    name: 'Sınıflar',
+    icon: <BookSvgIcon height={35} width={50} />,
+    link: 'ClassRoomScreen',
+  },
     {
       name: 'Öğrenciler',
       icon: <BookSvgIcon height={35} width={50} />,

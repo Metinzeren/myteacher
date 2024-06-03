@@ -82,7 +82,7 @@ export default function Header({
 }
 const HeaderContainer = styled(SafeAreaView)`
   background-color: ${props => props.theme.background};
-  height:${Platform.OS === 'android' ? 55 : 'auto'};
+  height:${Platform.OS === 'android' ? "55px" : 'auto'};
   justify-content:center;
 `;
 const Container = styled(View)`

@@ -14,6 +14,7 @@ import AddStudentScreen from '../screens/AddStudentScreen';
 import CalendarScreen from '../screens/CalendarScreen';
 import StudentDetailScreen from '../screens/StudentDetailScreen';
 import UpdateStudentScreen from '../screens/UpdateStudentScreen';
+import ClassRoomScreen from '../screens/ClassRoomScreen';
 
 const RootNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -28,6 +29,7 @@ const RootNavigator = () => {
     });
     return unsubscribe;
   }, []);
+
   return (
     <Stack.Navigator
       initialRouteName="LoginScreen"
@@ -82,25 +84,32 @@ const RootNavigator = () => {
             }}
           />
           <Stack.Screen
-          name='CalendarScreen'
-          component={CalendarScreen}
-          options={{
-            headerShown: false,
-          }}
+            name="CalendarScreen"
+            component={CalendarScreen}
+            options={{
+              headerShown: false,
+            }}
           />
           <Stack.Screen
-          name='StudentDetailScreen'
-          component={StudentDetailScreen}
-          options={{
-            headerShown: false,
-          }}
+            name="StudentDetailScreen"
+            component={StudentDetailScreen}
+            options={{
+              headerShown: false,
+            }}
           />
           <Stack.Screen
-          name='UpdateStudentScreen'
-          component={UpdateStudentScreen}
-          options={{
-            headerShown: false,
-          }}
+            name="UpdateStudentScreen"
+            component={UpdateStudentScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="ClassRoomScreen"
+            component={ClassRoomScreen}
+            options={{
+              headerShown: false,
+            }}
           />
         </>
       )}

@@ -1,4 +1,4 @@
-import {AppRegistry, LogBox} from 'react-native';
+import {AppRegistry, LogBox, Platform} from 'react-native';
 import {name as appName} from './app.json';
 import RootNavigator from './src/navigation/RootNavigator';
 import 'react-native-gesture-handler';
@@ -7,6 +7,11 @@ import {ModalPortal} from 'react-native-modals';
 import KeyboardManager from 'react-native-keyboard-manager';
 import './src/lang/i18n';
 import StudentProvider from './src/context/StudentContext';
+import ClassRoom from './src/models/ClassRoom';
+import FirebaseCollections from './src/firebase/Collection/FirebaseCollections';
+import InitCollection from './src/firebase/Collection/InitCollection';
+import ClassRoomProvider from './src/context/ClassRoomContext';
+
 LogBox.ignoreAllLogs();
 const MyTeacher = () => {
   if (Platform.OS === 'ios') {
@@ -28,12 +33,27 @@ const MyTeacher = () => {
     KeyboardManager.resignFirstResponder();
     KeyboardManager.isKeyboardShowing().then(isShowing => {});
   }
+
+  const initDb = () => {
+    const classRoomModel: ClassRoom = {
+      name: 'Sınıf Adı',
+      students: [],
+      teachers: [],
+    };
+    new InitCollection(classRoomModel, FirebaseCollections.CLASSROOMS);
+  };
+  if (process.env.NODE_ENV === 'development') {
+    initDb();
+  }
+
   return (
     <NavigationContainer>
-      <StudentProvider>
-         <RootNavigator />
-         <ModalPortal />
-      </StudentProvider>
+      <ClassRoomProvider>
+        <StudentProvider>
+          <RootNavigator />
+          <ModalPortal />
+        </StudentProvider>
+      </ClassRoomProvider>
     </NavigationContainer>
   );
 };

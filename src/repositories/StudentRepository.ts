@@ -7,7 +7,7 @@ import {
   setDoc,
 } from 'firebase/firestore';
 import {db} from '../firebase/config';
-import FirebaseCollections from '../firebase/FirebaseCollections';
+import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import Student from '../models/Student';
 
 class StudentRepository {

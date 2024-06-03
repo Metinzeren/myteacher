@@ -4,7 +4,6 @@ import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
 import Student from '../models/Student';
 import FormContainer, {FormContainerRef} from '../components/FormContainer';
-import StudentRepository from '../repositories/StudentRepository';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import {
   faEnvelope,
@@ -15,14 +14,17 @@ import {
 import Button from '../components/Button/Button';
 import {useTranslation} from 'react-i18next';
 import {useStudents} from '../context/StudentContext';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+
 import {RootStackParamList} from '../types/Navigation';
+import ClassRoomRepository from '../repositories/ClassRoomRepository';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 
 export default function AddStudentScreen(
-  props: NativeStackScreenProps<RootStackParamList>,
+  props: NativeStackScreenProps<RootStackParamList,"AddStudentScreen">,
 ) {
   const t = useTranslation().t;
-  const studentRepo = StudentRepository.getInstance();
+  const classRoomId = props.route.params.classRoomId;
+  const classRoomRepo = ClassRoomRepository.getInstance();
   const {addStudent} = useStudents();
   const [registerDto, setRegisterDto] = useState<Student>({
     firstName: '',
@@ -46,7 +48,7 @@ export default function AddStudentScreen(
   const handleAddStudent = async () => {
     let isEmpty = formRef.current?.validate();
     if (!isEmpty) {
-      const entity = await studentRepo.addStudent(registerDto);
+      const entity = await classRoomRepo.addStudentToClassRoom(classRoomId,registerDto)
       addStudent(entity);
       AlertDialog.showModal({
         title: 'Başarılı',

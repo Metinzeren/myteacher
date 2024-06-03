@@ -1,8 +1,8 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import ClassRoom from '../models/ClassRoom';
 import Container from '../components/Container/Container';
 import Loading from '../components/Loading/Loading';
@@ -10,13 +10,14 @@ import styled from 'styled-components';
 import Button from '../components/Button/Button';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import CustomText from '../components/Text/Text';
+import { useClassRooms } from '../context/ClassRoomContext';
 
 export default function ClassRoomScreen(
   props: NativeStackScreenProps<RootStackParamList>,
 ) {
   const classRoomRepo = ClassRoomRepository.getInstance();
   const [loading, setLoading] = useState(true);
-  const [classRooms, setClassRooms] = useState<Array<ClassRoom>>([]);
+  const { setClassRooms, classRooms } = useClassRooms();
   useEffect(() => {
     props.navigation.addListener('focus', () => {
       loadClassRoom();
@@ -36,7 +37,7 @@ export default function ClassRoomScreen(
         setLoading(false);
       });
   };
-  const RenderItem = ({item, index}: {item: ClassRoom; index: number}) => {
+  const RenderItem = ({ item, index }: { item: ClassRoom; index: number }) => {
     return (
       <ListItem
         onPress={() => {
@@ -57,23 +58,6 @@ export default function ClassRoomScreen(
       </ListItem>
     );
   };
-  const temp = classRooms;
-  const removeStudents = [];
-  const selectedClassRoomId = '1';
-  const deletedStudentId = '2113';
-  const deleteRemove = classRooms.filter(x => {
-    let findClassRoomId = x.id === selectedClassRoomId;
-    if (findClassRoomId) {
-      var tempStudents = [...x.students];
-      let newStudents = tempStudents.filter(d => d.id !== deletedStudentId);
-      return {
-        ...x,
-        students: newStudents,
-      };
-    }
-    return x;
-  });
-  console.log('orjinal data', temp);
   return (
     <Container goBackShow header title="Sınıflar">
       <Loading loading={loading}>

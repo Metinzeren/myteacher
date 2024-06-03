@@ -6,14 +6,14 @@ interface ClassRoomContextProps {
     classRooms: Array<ClassRoom>;
     setClassRooms: React.Dispatch<React.SetStateAction<Array<ClassRoom>>>;
     deleteStudentFromClassRoom: (classRoomId: string, studentId: string) => void;
-    addStudent: (classRoom: ClassRoom) => void;
+    addStudentFromClassRoom: (classRoomId: string, student: Student) => void;
 }
 
 const initialState: ClassRoomContextProps = {
     classRooms: [],
-    setClassRooms: () => {},
-    deleteStudentFromClassRoom: () => {},
-    addStudent: () => {},
+    setClassRooms: () => { },
+    deleteStudentFromClassRoom: (classRoomId: string, studentId: string) => { },
+    addStudentFromClassRoom: () => { },
 }
 
 const ClassRoomContext = createContext<ClassRoomContextProps>(initialState);
@@ -26,25 +26,29 @@ const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
     const [classRooms, setClassRooms] = useState<Array<ClassRoom>>([]);
 
     const deleteStudentFromClassRoom = (classRoomId: string, studentId: string) => {
-        setClassRooms(prevClassRooms => {
-            return prevClassRooms.map(classRoom => {
-                if (classRoom.id === classRoomId) {
-                    return {
-                        ...classRoom,
-                        students: classRoom.students.filter(student => student.id !== studentId),
-                    };
-                }
-                return classRoom;
-            });
+        const newClassRooms = classRooms.map((classRoom) => {
+            if (classRoom.id === classRoomId) {
+                const newStudents = classRoom.students.filter((student) => student.id !== studentId);
+                return { ...classRoom, students: newStudents };
+            }
+            return classRoom;
         });
-    };
-
-    const value = useMemo(() => ({
-        classRooms,
-        setClassRooms,
-        deleteStudentFromClassRoom,
-        addStudent: (classRoom: ClassRoom) => setClassRooms(prev => [...prev, classRoom]),
-    }), [classRooms]);
+        setClassRooms(newClassRooms);
+    }
+    const addStudentFromClassRoom = (classRoomId: string, student: Student) => {
+        const newClassRooms = classRooms.map((classRoom) => {
+            if (classRoom.id === classRoomId) {
+                return { ...classRoom, students: [...classRoom.students, student] };
+            }
+            return classRoom;
+        });
+        setClassRooms(newClassRooms);
+    }
+    const value = useMemo(() => {
+        return {
+            classRooms, setClassRooms, deleteStudentFromClassRoom, addStudentFromClassRoom
+        }
+    }, [classRooms])
 
     return (
         <ClassRoomContext.Provider value={value}>

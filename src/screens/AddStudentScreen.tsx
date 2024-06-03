@@ -1,9 +1,9 @@
-import {View, Text} from 'react-native';
-import React, {useRef, useState} from 'react';
+import { View, Text } from 'react-native';
+import React, { useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
 import Student from '../models/Student';
-import FormContainer, {FormContainerRef} from '../components/FormContainer';
+import FormContainer, { FormContainerRef } from '../components/FormContainer';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import {
   faEnvelope,
@@ -12,20 +12,20 @@ import {
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
-import {useTranslation} from 'react-i18next';
-import {useStudents} from '../context/StudentContext';
+import { useTranslation } from 'react-i18next';
 
-import {RootStackParamList} from '../types/Navigation';
+import { RootStackParamList } from '../types/Navigation';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { useClassRooms } from '../context/ClassRoomContext';
 
 export default function AddStudentScreen(
-  props: NativeStackScreenProps<RootStackParamList,"AddStudentScreen">,
+  props: NativeStackScreenProps<RootStackParamList, "AddStudentScreen">,
 ) {
   const t = useTranslation().t;
   const classRoomId = props.route.params.classRoomId;
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const {addStudent} = useStudents();
+  const { addStudentFromClassRoom } = useClassRooms();
   const [registerDto, setRegisterDto] = useState<Student>({
     firstName: '',
     lastName: '',
@@ -48,8 +48,8 @@ export default function AddStudentScreen(
   const handleAddStudent = async () => {
     let isEmpty = formRef.current?.validate();
     if (!isEmpty) {
-      const entity = await classRoomRepo.addStudentToClassRoom(classRoomId,registerDto)
-      addStudent(entity);
+      const entity = await classRoomRepo.addStudentToClassRoom(classRoomId, registerDto)
+      addStudentFromClassRoom(classRoomId, entity)
       AlertDialog.showModal({
         title: 'Başarılı',
         message: 'Öğrenci başarıyla eklendi',
@@ -60,7 +60,7 @@ export default function AddStudentScreen(
     }
   };
   return (
-    <Container p={10}  goBackShow header title="Öğrenci Ekle">
+    <Container p={10} goBackShow header title="Öğrenci Ekle">
       <FormContainer
         gap={10}
         autoErrorMessages

@@ -13,7 +13,7 @@ import {
   import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
   import ClassRoom from '../models/ClassRoom';
   import Student from '../models/Student';
-  
+
   class ClassRoomRepository {
     private static instance: ClassRoomRepository;
     private classRoomCollection = collection(db, FirebaseCollections.CLASSROOMS);
@@ -57,7 +57,6 @@ import {
   
     async addStudentToClassRoom(classRoomId: string, student: Student) {
       const classRoomDoc = doc(this.classRoomCollection, classRoomId);
-      student.id = classRoomDoc.id;
       await updateDoc(classRoomDoc, {
         students: arrayUnion(student),
       });

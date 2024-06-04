@@ -38,6 +38,9 @@ export default function Button({
   return (
     <CustomButton
       onPress={event => {
+        if(loading){
+          return true;
+        }
         if (lockPressed) {
           return;
         }
@@ -50,10 +53,10 @@ export default function Button({
       activeOpacity={props.activeOpacity || 0.7}
       theme={{
         borderRadius: borderRadius,
-        borderColor: backgroundColor || colors.primary,
+        borderColor: loading ? "#ddd" : backgroundColor || colors.primary,
         backgroundColor: outline
           ? 'transparent'
-          : backgroundColor || colors.primary,
+          : loading ? "#ddd": backgroundColor || colors.primary,
       }}>
       {icon && <IconLeft icon={icon} color={colors.text} />}
       {loading ? (

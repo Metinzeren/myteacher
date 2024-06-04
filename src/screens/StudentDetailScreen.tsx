@@ -18,12 +18,12 @@ import { useClassRooms } from '../context/ClassRoomContext';
 export default function StudentDetailScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentDetailScreen'>,
 ) {
-  const student = props.route.params.student;
+  const {classRooms} = useClassRooms();
+  const studentId = props.route.params.studentId;
   const classRoomId = props.route.params.classRoomId;
+  const student = classRooms?.find?.(x=>x.id === classRoomId)?.students?.find((c)=>c.id === studentId) as Student ; 
   const classRoomRepo = ClassRoomRepository.getInstance();
   const { deleteStudentFromClassRoom } = useClassRooms();
-
-
 
   const pressToDelete = () => {
     AlertDialog.showModal({
@@ -59,31 +59,31 @@ export default function StudentDetailScreen(
             </ListItemPhoto>
             <ListItemContainer>
               <CustomText color="grey">Öğrenci Adı:</CustomText>
-              <CustomText color="grey">{student.firstName}</CustomText>
+              <CustomText color="grey">{student?.firstName}</CustomText>
             </ListItemContainer>
             <ListItemContainer>
               <CustomText color="grey">Öğrenci Soyadı:</CustomText>
-              <CustomText color="grey">{student.lastName}</CustomText>
+              <CustomText color="grey">{student?.lastName}</CustomText>
             </ListItemContainer>
             <ListItemContainer>
               <CustomText color="grey">Öğrenci Numarası:</CustomText>
-              <CustomText color="grey">{student.studentNo}</CustomText>
+              <CustomText color="grey">{student?.studentNo}</CustomText>
             </ListItemContainer>
             <ListItemContainer>
               <CustomText color="grey">Veli Adı:</CustomText>
-              <CustomText color="grey">{student.parentFirstName}</CustomText>
+              <CustomText color="grey">{student?.parentFirstName}</CustomText>
             </ListItemContainer>
             <ListItemContainer>
               <CustomText color="grey">Veli Soyadı:</CustomText>
-              <CustomText color="grey">{student.parentLastName}</CustomText>
+              <CustomText color="grey">{student?.parentLastName}</CustomText>
             </ListItemContainer>
             <ListItemContainer>
               <CustomText color="grey">Veli E-mail:</CustomText>
-              <CustomText color="grey">{student.parentEmail}</CustomText>
+              <CustomText color="grey">{student?.parentEmail}</CustomText>
             </ListItemContainer>
             <ListItemContainer>
               <CustomText color="grey">Veli Telefon Numarası:</CustomText>
-              <CustomText color="grey">{student.parentPhone}</CustomText>
+              <CustomText color="grey">{student?.parentPhone}</CustomText>
             </ListItemContainer>
           </ListItem>
         </ListContainer>
@@ -97,9 +97,8 @@ export default function StudentDetailScreen(
             />
           </ButtonView>
           <ButtonView>
-            <Button onPress={() =>
-              props.navigation.navigate('UpdateStudentScreen')
-            } text="Öğrenciyi Güncelle" />
+            <Button
+              onPress={() => props.navigation.navigate('UpdateStudentScreen', { studentId:student.id as string, classRoomId })} text="Öğrenciyi Güncelle" />
           </ButtonView>
         </ButtonContainer>
       </Loading>

@@ -18,7 +18,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import { useRef, useState } from 'react';
-import FormContainer, { FormContainerRef } from '../components/FormContainer/FormContainer';
+import FormContainer, { FormContainerRef } from '../components/FormContainer';
 
 export default function RegisterScreen(props: any) {
   const { t } = useTranslation();
@@ -79,7 +79,7 @@ export default function RegisterScreen(props: any) {
       </RegisterTopContainer>
 
       <FormContainer
-        autoErrorMessages
+        
         formId="addStudentForm"
         formContainerRef={formRef}
       >

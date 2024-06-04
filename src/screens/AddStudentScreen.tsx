@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Keyboard } from 'react-native';
 import React, { useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
@@ -18,7 +18,7 @@ import { RootStackParamList } from '../types/Navigation';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { useClassRooms } from '../context/ClassRoomContext';
-
+import uuid from 'react-native-uuid';
 export default function AddStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, "AddStudentScreen">,
 ) {
@@ -26,7 +26,9 @@ export default function AddStudentScreen(
   const classRoomId = props.route.params.classRoomId;
   const classRoomRepo = ClassRoomRepository.getInstance();
   const { addStudentFromClassRoom } = useClassRooms();
+  const [loading, setLoading] = useState(false);
   const [registerDto, setRegisterDto] = useState<Student>({
+    id: uuid.v4().toString(),
     firstName: '',
     lastName: '',
     studentNo: '',
@@ -35,6 +37,7 @@ export default function AddStudentScreen(
     parentFirstName: '',
     parentLastName: '',
     parentPhone: '',
+    absenteeism: []
   });
 
   const formRef = useRef<FormContainerRef>(null);
@@ -47,8 +50,14 @@ export default function AddStudentScreen(
 
   const handleAddStudent = async () => {
     let isEmpty = formRef.current?.validate();
-    if (!isEmpty) {
-      const entity = await classRoomRepo.addStudentToClassRoom(classRoomId, registerDto)
+
+    console.log(isEmpty);
+    return;
+    if (isEmpty) {
+      Keyboard.dismiss();
+      setLoading(true);
+      const entity = await classRoomRepo.addStudentToClassRoom(classRoomId, registerDto);
+      setLoading(false);
       addStudentFromClassRoom(classRoomId, entity)
       AlertDialog.showModal({
         title: 'Başarılı',
@@ -62,26 +71,24 @@ export default function AddStudentScreen(
   return (
     <Container p={10} goBackShow header title="Öğrenci Ekle">
       <FormContainer
-        gap={10}
-        autoErrorMessages
-        formId="addStudentForm"
+        style={{ gap: 10 }}
+        formId='addStudentForm'
         formContainerRef={formRef}>
         <Input
           required
           id="firstName"
-          errorMessage=""
           placeholder="Ad"
           icon={faUser}
-          value={registerDto.firstName}
+          value={registerDto?.firstName}
           onChangeText={e => handleChange('firstName', e)}
         />
         <Input
           required
           id="lastName"
-          errorMessage=""
+
           placeholder="Soyad"
           icon={faUser}
-          value={registerDto.lastName}
+          value={registerDto?.lastName}
           onChangeText={e => handleChange('lastName', e)}
         />
         <Input
@@ -91,7 +98,7 @@ export default function AddStudentScreen(
           placeholder="Öğrenci okul numarası"
           icon={faSortNumericDesc}
           keyboardType="numeric"
-          value={registerDto.studentNo.toString()}
+          value={registerDto?.studentNo.toString()}
           onChangeText={e => handleChange('studentNo', e)}
         />
         <Input
@@ -100,7 +107,7 @@ export default function AddStudentScreen(
           id="parentFirstName"
           placeholder="Veli adı"
           icon={faUser}
-          value={registerDto.parentFirstName}
+          value={registerDto?.parentFirstName}
           onChangeText={e => handleChange('parentFirstName', e)}
         />
         <Input
@@ -110,7 +117,7 @@ export default function AddStudentScreen(
           icon={faPhone}
           keyboardType="numeric"
           maxLength={11}
-          value={registerDto.parentPhone}
+          value={registerDto?.parentPhone}
           onChangeText={e => handleChange('parentPhone', e)}
         />
         <Input
@@ -121,10 +128,11 @@ export default function AddStudentScreen(
           autoCorrect={false}
           placeholder="Veli e-mail"
           icon={faEnvelope}
-          value={registerDto.parentEmail}
+          value={registerDto?.parentEmail}
           onChangeText={e => handleChange('parentEmail', e)}
         />
         <Button
+          loading={loading}
           borderRadius={10}
           onPress={() => {
             handleAddStudent();
@@ -132,6 +140,7 @@ export default function AddStudentScreen(
           text={t('KAYDET')}
         />
       </FormContainer>
+
     </Container>
   );
 }

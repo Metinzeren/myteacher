@@ -14,28 +14,20 @@ import useThemeColors from '../../constant/useColor';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {useState} from 'react';
 import CustomText from '../Text/Text';
+import { FormInputProps } from 'react-native-form-container';
 
-interface InputProps extends TextInputProps {
-  iconPosition?: 'left' | 'right';
-  icon?: IconProp;
-  loading?: boolean;
-  inputSize?: 'sm' | 'md';
-  enableFocusBorder?: boolean;
-  errorMessage?: string;
-  required?: boolean;
-  type?: 'checkbox' | 'radio' | 'text' | 'password' | 'email' | 'number';
-}
+ 
 export default function Input({
   iconPosition = 'left',
   icon = undefined,
-  loading = false,
+   
   inputSize = 'md',
   enableFocusBorder = true,
   errorMessage,
-  type = 'text',
+ 
   required = false,
   ...props
-}: InputProps) {
+}: FormInputProps) {
   const colors = useThemeColors();
   const [passwordShow, setPasswordShow] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -111,12 +103,7 @@ export default function Input({
           />
         </PasswordIconButton>
       )}
-      {loading && (
-        <ActivityIndicator
-          style={{position: 'absolute', right: 10, top: 15}}
-          color={colors.primary}
-        />
-      )}
+      
       {iconPosition === 'right' && icon !== undefined && (
         <IconRight
           theme={{

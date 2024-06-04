@@ -2,7 +2,8 @@
   "translation": {
     "LOGIN": "Giriş yap",
     "REGISTER": "Kayıt Ol",
-    "SEND": "Gönder"
+    "SEND": "Gönder",
+    "UPDATE":"Güncelle"
   },
   "addStudentForm": {
     "firstName": "Lütfen adınızı giriniz",

@@ -1,3 +1,5 @@
+import Absenteeism from "./Absenteeism";
+
 interface Student {
   id?: string;
   firstName: string;
@@ -10,6 +12,7 @@ interface Student {
   parentPhone: string;
   createdAt?: Date;
   photo?: string;
+  absenteeism:Array<Absenteeism>
 }
 
 export default Student;

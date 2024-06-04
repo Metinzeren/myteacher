@@ -42,7 +42,6 @@ export default function ClassRoomScreen(
       <ListItem
         onPress={() => {
           props.navigation.navigate('StudentsScreen', {
-            students: item.students,
             classRoomId: item.id as string,
           });
         }}
@@ -74,10 +73,11 @@ export default function ClassRoomScreen(
         </ListContainer>
         <ButtonContainer>
           <Button
+          
             borderRadius={10}
             text="Sınıf Ekle"
             onPress={() => {
-              //Sınıf ekleme sayfaısna yönlendir
+              props.navigation.navigate("AddClassScreen")
             }}></Button>
         </ButtonContainer>
       </Loading>

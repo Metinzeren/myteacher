@@ -5,10 +5,11 @@ export type RootStackParamList = {
   RegisterScreen: undefined;
   ForgotPasswordScreen: undefined;
   HomeScreen: undefined;
-  StudentsScreen: {students:Array<Student>,classRoomId:string};
+  StudentsScreen: {classRoomId:string};
   AddStudentScreen: {classRoomId:string};
   CalendarScreen:undefined;
-  StudentDetailScreen:{student:Student,classRoomId:string};
-  UpdateStudentScreen:undefined; //burayı sen yaparsın boş eçiyorm
-  ClassRoomScreen:undefined
+  StudentDetailScreen:{studentId:string,classRoomId:string};
+  UpdateStudentScreen:{studentId:string,classRoomId:string};
+  ClassRoomScreen:undefined;
+  AddClassScreen:undefined;
 };

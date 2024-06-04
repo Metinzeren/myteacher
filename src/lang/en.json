@@ -2,7 +2,8 @@
     "translation": {
       "LOGIN": "Login",
       "KAYITOL": "Register",
-      "GONDER": "Send"
+      "GONDER": "Send",
+      "GÜNCELLE":"Update"
     }
   }
   

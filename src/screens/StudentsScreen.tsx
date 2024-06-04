@@ -16,28 +16,21 @@ import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import { useStudents } from '../context/StudentContext';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
+import { useClassRooms } from '../context/ClassRoomContext';
 export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
-  const classRoomStudents = props.route.params.students;
-  const classRoomId = props.route.params.classRoomId;
-  const {students,setStudents,addStudent} = useStudents()
+  
+  const {classRooms} = useClassRooms();
+  const classRoomId = props.route.params?.classRoomId;
+  const students = classRooms?.find?.(x=>x.id == classRoomId)?.students || [];
 
-
-
-  useEffect(() => {
-    setStudents(classRoomStudents);
-    return () => {
-      setStudents([] as Student[]);
-       
-    };
-  }, [classRoomStudents]);
-   
-
+  
+ 
 
   const RenderItem = ({ item, index }: { item: Student; index: number }) => {
     return (
-      <ListItem onPress={() => props.navigation.navigate('StudentDetailScreen', { student:item,classRoomId:classRoomId })}
+      <ListItem onPress={() => props.navigation.navigate('StudentDetailScreen', { studentId:item.id as string,classRoomId:classRoomId })}
         key={index}>
         <ListItemContainer>
           <CustomText color="grey" >Öğrenci Adı:</CustomText>

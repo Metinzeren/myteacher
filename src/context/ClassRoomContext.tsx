@@ -7,6 +7,9 @@ interface ClassRoomContextProps {
     setClassRooms: React.Dispatch<React.SetStateAction<Array<ClassRoom>>>;
     deleteStudentFromClassRoom: (classRoomId: string, studentId: string) => void;
     addStudentFromClassRoom: (classRoomId: string, student: Student) => void;
+    updateStudentInClassRoom: (classRoomId: string, student: Student) => void;
+    addClassRoom:(classRoom:ClassRoom)=>void
+
 }
 
 const initialState: ClassRoomContextProps = {
@@ -14,6 +17,9 @@ const initialState: ClassRoomContextProps = {
     setClassRooms: () => { },
     deleteStudentFromClassRoom: (classRoomId: string, studentId: string) => { },
     addStudentFromClassRoom: () => { },
+    updateStudentInClassRoom: () => { },
+    addClassRoom:(classRoom)=>{},
+
 }
 
 const ClassRoomContext = createContext<ClassRoomContextProps>(initialState);
@@ -24,6 +30,12 @@ interface ClassRoomProviderProps {
 
 const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
     const [classRooms, setClassRooms] = useState<Array<ClassRoom>>([]);
+
+
+    const addClassRoom = (classRoom:ClassRoom)=>{
+        setClassRooms([...classRooms,classRoom])
+    }
+
 
     const deleteStudentFromClassRoom = (classRoomId: string, studentId: string) => {
         const newClassRooms = classRooms.map((classRoom) => {
@@ -44,9 +56,23 @@ const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
         });
         setClassRooms(newClassRooms);
     }
+    const updateStudentInClassRoom = (classRoomId: string, updatedStudent: Student) => {
+    
+        const newClassRooms = classRooms.map((classRoom) => {
+            if (classRoom.id === classRoomId) {
+                console.log("sinif bulundu:studeno id: "+updatedStudent.id);
+                const newStudents = classRoom.students.map((student) => 
+                    student.id === updatedStudent.id ? updatedStudent : student
+                );
+                return { ...classRoom, students: newStudents };
+            }
+            return classRoom;
+        });
+        setClassRooms(newClassRooms);
+    }
     const value = useMemo(() => {
         return {
-            classRooms, setClassRooms, deleteStudentFromClassRoom, addStudentFromClassRoom
+            classRooms, setClassRooms,addClassRoom, deleteStudentFromClassRoom, addStudentFromClassRoom,updateStudentInClassRoom
         }
     }, [classRooms])
 

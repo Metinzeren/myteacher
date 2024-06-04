@@ -50,6 +50,7 @@ export default function ClassRoomScreen(
     });
   }
   const RenderItem = ({ item, index }: { item: ClassRoom; index: number }) => {
+    
     return (
       <ListItem
         onPress={() => {
@@ -59,12 +60,12 @@ export default function ClassRoomScreen(
         }}
         key={index}>
         <ListItemContainer>
-          <CustomText color="grey">Sınıf Adı:</CustomText>
-          <CustomText color="grey">{item.name}</CustomText>
+          <CustomText  color="grey">Sınıf Adı:</CustomText>
+          <CustomText  color="grey">{item.name}</CustomText>
         </ListItemContainer>
         <ListItemContainer>
-          <CustomText color="grey">Öğrenciler</CustomText>
-          <CustomText color="grey">Git</CustomText>
+          <CustomText  color="grey">Öğrenci Sayısı:</CustomText>
+          <CustomText  color="grey">{item.students.length}</CustomText>
         </ListItemContainer>
         <DeleteItemContainer>
         <Button

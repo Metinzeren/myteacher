@@ -11,13 +11,14 @@ import Button from '../components/Button/Button';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import CustomText from '../components/Text/Text';
 import { useClassRooms } from '../context/ClassRoomContext';
+import AlertDialog from '../components/AlertDialog/AlertDialog';
 
 export default function ClassRoomScreen(
   props: NativeStackScreenProps<RootStackParamList>,
 ) {
   const classRoomRepo = ClassRoomRepository.getInstance();
   const [loading, setLoading] = useState(true);
-  const { setClassRooms, classRooms } = useClassRooms();
+  const { setClassRooms, classRooms , deleteClassRoom} = useClassRooms();
   useEffect(() => {
     props.navigation.addListener('focus', () => {
       loadClassRoom();
@@ -37,6 +38,17 @@ export default function ClassRoomScreen(
         setLoading(false);
       });
   };
+  const deleteClass = (id:string)=>{
+    AlertDialog.showModal({
+      title: "Uyarı",
+      message:'Sınıfı kalıcı olarak silmeye emin misiniz?',
+      onConfirm() {
+        classRoomRepo.deleteClassRoom(id as string)
+        deleteClassRoom(id as string);
+        AlertDialog.dismiss();
+      },
+    });
+  }
   const RenderItem = ({ item, index }: { item: ClassRoom; index: number }) => {
     return (
       <ListItem
@@ -54,6 +66,14 @@ export default function ClassRoomScreen(
           <CustomText color="grey">Öğrenciler</CustomText>
           <CustomText color="grey">Git</CustomText>
         </ListItemContainer>
+        <DeleteItemContainer>
+        <Button
+          borderRadius={10}
+          text="Sınıfı Sil"
+          onPress={() => {
+            deleteClass(item.id as string)
+          }}></Button>
+        </DeleteItemContainer>
       </ListItem>
     );
   };
@@ -113,3 +133,8 @@ const ListItemContainer = styled(View)`
   justify-content: space-between;
   margin-bottom: 8px;
 `;
+
+const DeleteItemContainer = styled(View)`
+  justify-content:flex-end;
+  flex:1;
+`

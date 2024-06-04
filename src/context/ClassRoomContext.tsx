@@ -9,6 +9,7 @@ interface ClassRoomContextProps {
     addStudentFromClassRoom: (classRoomId: string, student: Student) => void;
     updateStudentInClassRoom: (classRoomId: string, student: Student) => void;
     addClassRoom:(classRoom:ClassRoom)=>void
+    deleteClassRoom:(id:string)=>void,
 
 }
 
@@ -19,7 +20,7 @@ const initialState: ClassRoomContextProps = {
     addStudentFromClassRoom: () => { },
     updateStudentInClassRoom: () => { },
     addClassRoom:(classRoom)=>{},
-
+    deleteClassRoom:(id)=>{}
 }
 
 const ClassRoomContext = createContext<ClassRoomContextProps>(initialState);
@@ -35,7 +36,10 @@ const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
     const addClassRoom = (classRoom:ClassRoom)=>{
         setClassRooms([...classRooms,classRoom])
     }
-
+    const deleteClassRoom=(id:string)=>{
+        const newStudentsArray = classRooms.filter((element)=>element.id !== id);
+        setClassRooms(newStudentsArray)
+      }
 
     const deleteStudentFromClassRoom = (classRoomId: string, studentId: string) => {
         const newClassRooms = classRooms.map((classRoom) => {
@@ -72,7 +76,7 @@ const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
     }
     const value = useMemo(() => {
         return {
-            classRooms, setClassRooms,addClassRoom, deleteStudentFromClassRoom, addStudentFromClassRoom,updateStudentInClassRoom
+            classRooms,deleteClassRoom, setClassRooms,addClassRoom, deleteStudentFromClassRoom, addStudentFromClassRoom,updateStudentInClassRoom
         }
     }, [classRooms])
 

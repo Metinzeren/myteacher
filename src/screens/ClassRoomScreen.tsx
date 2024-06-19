@@ -1,8 +1,8 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import {View, Text, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
 import ClassRoom from '../models/ClassRoom';
 import Container from '../components/Container/Container';
 import Loading from '../components/Loading/Loading';
@@ -10,7 +10,7 @@ import styled from 'styled-components';
 import Button from '../components/Button/Button';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import CustomText from '../components/Text/Text';
-import { useClassRooms } from '../context/ClassRoomContext';
+import {useClassRooms} from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Input from '../components/Input/Input';
 
@@ -19,7 +19,8 @@ export default function ClassRoomScreen(
 ) {
   const classRoomRepo = ClassRoomRepository.getInstance();
   const [loading, setLoading] = useState(true);
-  const { setClassRooms, classRooms , deleteClassRoom, updateClassRoom} = useClassRooms();
+  const {setClassRooms, classRooms, deleteClassRoom, updateClassRoom} =
+    useClassRooms();
   useEffect(() => {
     props.navigation.addListener('focus', () => {
       loadClassRoom();
@@ -39,22 +40,19 @@ export default function ClassRoomScreen(
         setLoading(false);
       });
   };
-  const deleteClass = (id:string)=>{
+  const deleteClass = (id: string) => {
     AlertDialog.showModal({
-      title: "Uyarı",
-      message:'Sınıfı kalıcı olarak silmeye emin misiniz?',
+      title: 'Uyarı',
+      message: 'Sınıfı kalıcı olarak silmeye emin misiniz?',
       onConfirm() {
-        classRoomRepo.deleteClassRoom(id as string)
+        classRoomRepo.deleteClassRoom(id as string);
         deleteClassRoom(id as string);
         AlertDialog.dismiss();
       },
     });
-  }
-  
+  };
 
-  
-  const RenderItem = ({ item, index }: { item: ClassRoom; index: number }) => {
-    
+  const RenderItem = ({item, index}: {item: ClassRoom; index: number}) => {
     return (
       <ListItem
         onPress={() => {
@@ -64,28 +62,28 @@ export default function ClassRoomScreen(
         }}
         key={index}>
         <ListItemContainer>
-          <CustomText  color="grey">Sınıf Adı:</CustomText>
-          <CustomText  color="grey">{item.name}</CustomText>
+          <CustomText color="grey">Sınıf Adı:</CustomText>
+          <CustomText color="grey">{item.name}</CustomText>
         </ListItemContainer>
         <ListItemContainer>
-          <CustomText  color="grey">Öğrenci Sayısı:</CustomText>
-          <CustomText  color="grey">{item.students.length}</CustomText>
+          <CustomText color="grey">Öğrenci Sayısı:</CustomText>
+          <CustomText color="grey">{item.students.length}</CustomText>
         </ListItemContainer>
         <ListItemButtonContainer>
-        <Button
-          borderRadius={10}
-          text="Sınıfı Sil"
-          onPress={() => {
-            deleteClass(item.id as string)
-          }}></Button>
           <Button
-             borderRadius={10}
-             text="Sınıf Adını Güncelle"
-             onPress={()=>{
-              props.navigation.navigate('UpdateClassScreen', {classRoom: item as ClassRoom})
-             }}
-          >
-          </Button>
+            borderRadius={10}
+            text="Sınıfı Sil"
+            onPress={() => {
+              deleteClass(item.id as string);
+            }}></Button>
+          <Button
+            borderRadius={10}
+            text="Sınıf Adını Güncelle"
+            onPress={() => {
+              props.navigation.navigate('UpdateClassScreen', {
+                classRoom: item as ClassRoom,
+              });
+            }}></Button>
         </ListItemButtonContainer>
       </ListItem>
     );
@@ -106,11 +104,10 @@ export default function ClassRoomScreen(
         </ListContainer>
         <ButtonContainer>
           <Button
-          
             borderRadius={10}
             text="Sınıf Ekle"
             onPress={() => {
-              props.navigation.navigate("AddClassScreen")
+              props.navigation.navigate('AddClassScreen');
             }}></Button>
         </ButtonContainer>
       </Loading>
@@ -148,8 +145,7 @@ const ListItemContainer = styled(View)`
 `;
 
 const ListItemButtonContainer = styled(View)`
-  flex-direction:column;
-  justify-content:space-between;
-  gap:10;
-`
-
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+`;

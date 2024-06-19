@@ -14,6 +14,7 @@ import {useClassRooms} from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Input from '../components/Input/Input';
 import { faDeleteLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import IconButton from '../components/IconButton/IconButton';
 
 export default function ClassRoomScreen(
   props: NativeStackScreenProps<RootStackParamList>,
@@ -72,20 +73,20 @@ export default function ClassRoomScreen(
           <CustomText color="grey">{item.students.length}</CustomText>
         </ListItemContainer>
         <ListItemButtonContainer>
-          <Button
+          <IconButton
             borderRadius={10}
             icon={faTrash}
             onPress={() => {
               deleteClass(item.id as string);
-            }}></Button>
-          <Button
+            }}></IconButton>
+          <IconButton
             borderRadius={10}
             icon={faPen}
             onPress={() => {
               props.navigation.navigate('UpdateClassScreen', {
                 classRoom: item as ClassRoom,
               });
-            }}></Button>
+            }}></IconButton>
         </ListItemButtonContainer>
       </ListItem>
     );

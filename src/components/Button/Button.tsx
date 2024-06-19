@@ -74,7 +74,7 @@ export default function Button({
 }
 
 const IconLeft = styled(FontAwesomeIcon)`
-  margin-right: 10px;
+  margin-right: 0px;
 `;
 const CustomButton = styled(TouchableOpacity)`
   background-color: ${props => props.theme.backgroundColor};

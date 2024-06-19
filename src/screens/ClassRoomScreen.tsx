@@ -13,6 +13,7 @@ import CustomText from '../components/Text/Text';
 import {useClassRooms} from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Input from '../components/Input/Input';
+import { faDeleteLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 
 export default function ClassRoomScreen(
   props: NativeStackScreenProps<RootStackParamList>,
@@ -49,6 +50,7 @@ export default function ClassRoomScreen(
         deleteClassRoom(id as string);
         AlertDialog.dismiss();
       },
+      onCancel() {},
     });
   };
 
@@ -72,13 +74,13 @@ export default function ClassRoomScreen(
         <ListItemButtonContainer>
           <Button
             borderRadius={10}
-            text="Sınıfı Sil"
+            icon={faTrash}
             onPress={() => {
               deleteClass(item.id as string);
             }}></Button>
           <Button
             borderRadius={10}
-            text="Sınıf Adını Güncelle"
+            icon={faPen}
             onPress={() => {
               props.navigation.navigate('UpdateClassScreen', {
                 classRoom: item as ClassRoom,
@@ -145,7 +147,7 @@ const ListItemContainer = styled(View)`
 `;
 
 const ListItemButtonContainer = styled(View)`
-  flex-direction: column;
-  justify-content: space-between;
+  flex-direction: row;
+  justify-content: flex-end;
   gap: 10px;
 `;

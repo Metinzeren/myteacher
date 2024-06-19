@@ -30,7 +30,6 @@ export default function UpdateClassScreen(
     }));
   };
   const updateClass = () => {
-    console.log(className, "classname logladım");
     const result = formRef.current?.validate({ className: "Bu alanı boş bırakamazsınız." })
     if (result) {
       classRoomRepo
@@ -59,7 +58,7 @@ export default function UpdateClassScreen(
 
   };
   return (
-    <Container p={10} header title="Sınıf Güncelle" goBackShow>
+    <Container p={10} header title="Sınıf Bilgisi Güncelle" goBackShow>
       <FormContainer
         style={{ gap: 10 }}
         formContainerRef={formRef}>
@@ -72,7 +71,7 @@ export default function UpdateClassScreen(
           value={className.name}
           onChangeText={e => handleChange('name', e)}
         />
-        <Button borderRadius={10} onPress={updateClass} text={t('GÜNCELLE')} />
+        <Button borderRadius={10} onPress={updateClass} text={t('KAYDET')} />
       </FormContainer>
     </Container>
   );

@@ -16,6 +16,7 @@ import StudentDetailScreen from '../screens/StudentDetailScreen';
 import UpdateStudentScreen from '../screens/UpdateStudentScreen';
 import ClassRoomScreen from '../screens/ClassRoomScreen';
 import AddClassScreen from '../screens/AddClassScreen';
+import UpdateClassScreen from '../screens/UpdateClassScreen';
 
 const RootNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
@@ -115,6 +116,13 @@ const RootNavigator = () => {
           <Stack.Screen
             name="AddClassScreen"
             component={AddClassScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+            <Stack.Screen
+            name="UpdateClassScreen"
+            component={UpdateClassScreen}
             options={{
               headerShown: false,
             }}

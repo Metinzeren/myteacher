@@ -8,9 +8,9 @@ interface ClassRoomContextProps {
     deleteStudentFromClassRoom: (classRoomId: string, studentId: string) => void;
     addStudentFromClassRoom: (classRoomId: string, student: Student) => void;
     updateStudentInClassRoom: (classRoomId: string, student: Student) => void;
-    addClassRoom:(classRoom:ClassRoom)=>void
-    deleteClassRoom:(id:string)=>void,
-
+    addClassRoom: (classRoom: ClassRoom) => void;
+    deleteClassRoom: (id: string) => void;
+    updateClassRoom: (updatedClassRoom: ClassRoom) => void;
 }
 
 const initialState: ClassRoomContextProps = {
@@ -19,8 +19,9 @@ const initialState: ClassRoomContextProps = {
     deleteStudentFromClassRoom: (classRoomId: string, studentId: string) => { },
     addStudentFromClassRoom: () => { },
     updateStudentInClassRoom: () => { },
-    addClassRoom:(classRoom)=>{},
-    deleteClassRoom:(id)=>{}
+    addClassRoom: (classRoom) => { },
+    deleteClassRoom: (id) => { },
+    updateClassRoom: (updatedClassRoom) => { },
 }
 
 const ClassRoomContext = createContext<ClassRoomContextProps>(initialState);
@@ -32,14 +33,14 @@ interface ClassRoomProviderProps {
 const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
     const [classRooms, setClassRooms] = useState<Array<ClassRoom>>([]);
 
-
-    const addClassRoom = (classRoom:ClassRoom)=>{
-        setClassRooms([...classRooms,classRoom])
+    const addClassRoom = (classRoom: ClassRoom) => {
+        setClassRooms([...classRooms, classRoom]);
     }
-    const deleteClassRoom=(id:string)=>{
-        const newStudentsArray = classRooms.filter((element)=>element.id !== id);
-        setClassRooms(newStudentsArray)
-      }
+
+    const deleteClassRoom = (id: string) => {
+        const newClassRoomsArray = classRooms.filter((element) => element.id !== id);
+        setClassRooms(newClassRoomsArray);
+    }
 
     const deleteStudentFromClassRoom = (classRoomId: string, studentId: string) => {
         const newClassRooms = classRooms.map((classRoom) => {
@@ -51,6 +52,7 @@ const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
         });
         setClassRooms(newClassRooms);
     }
+
     const addStudentFromClassRoom = (classRoomId: string, student: Student) => {
         const newClassRooms = classRooms.map((classRoom) => {
             if (classRoom.id === classRoomId) {
@@ -60,12 +62,11 @@ const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
         });
         setClassRooms(newClassRooms);
     }
+
     const updateStudentInClassRoom = (classRoomId: string, updatedStudent: Student) => {
-    
         const newClassRooms = classRooms.map((classRoom) => {
             if (classRoom.id === classRoomId) {
-                console.log("sinif bulundu:studeno id: "+updatedStudent.id);
-                const newStudents = classRoom.students.map((student) => 
+                const newStudents = classRoom.students.map((student) =>
                     student.id === updatedStudent.id ? updatedStudent : student
                 );
                 return { ...classRoom, students: newStudents };
@@ -74,9 +75,24 @@ const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
         });
         setClassRooms(newClassRooms);
     }
+
+    const updateClassRoom = (updatedClassRoom: ClassRoom) => {
+        const newClassRooms = classRooms.map((classRoom) =>
+            classRoom.id === updatedClassRoom.id ? updatedClassRoom : classRoom
+        );
+        setClassRooms(newClassRooms);
+    }
+
     const value = useMemo(() => {
         return {
-            classRooms,deleteClassRoom, setClassRooms,addClassRoom, deleteStudentFromClassRoom, addStudentFromClassRoom,updateStudentInClassRoom
+            classRooms,
+            setClassRooms,
+            deleteStudentFromClassRoom,
+            addStudentFromClassRoom,
+            updateStudentInClassRoom,
+            addClassRoom,
+            deleteClassRoom,
+            updateClassRoom,
         }
     }, [classRooms])
 

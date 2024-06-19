@@ -12,13 +12,14 @@ import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import CustomText from '../components/Text/Text';
 import { useClassRooms } from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
+import Input from '../components/Input/Input';
 
 export default function ClassRoomScreen(
   props: NativeStackScreenProps<RootStackParamList>,
 ) {
   const classRoomRepo = ClassRoomRepository.getInstance();
   const [loading, setLoading] = useState(true);
-  const { setClassRooms, classRooms , deleteClassRoom} = useClassRooms();
+  const { setClassRooms, classRooms , deleteClassRoom, updateClassRoom} = useClassRooms();
   useEffect(() => {
     props.navigation.addListener('focus', () => {
       loadClassRoom();
@@ -49,6 +50,9 @@ export default function ClassRoomScreen(
       },
     });
   }
+  
+
+  
   const RenderItem = ({ item, index }: { item: ClassRoom; index: number }) => {
     
     return (
@@ -67,14 +71,22 @@ export default function ClassRoomScreen(
           <CustomText  color="grey">Öğrenci Sayısı:</CustomText>
           <CustomText  color="grey">{item.students.length}</CustomText>
         </ListItemContainer>
-        <DeleteItemContainer>
+        <ListItemButtonContainer>
         <Button
           borderRadius={10}
           text="Sınıfı Sil"
           onPress={() => {
             deleteClass(item.id as string)
           }}></Button>
-        </DeleteItemContainer>
+          <Button
+             borderRadius={10}
+             text="Sınıf Adını Güncelle"
+             onPress={()=>{
+              props.navigation.navigate('UpdateClassScreen', {classRoom: item as ClassRoom})
+             }}
+          >
+          </Button>
+        </ListItemButtonContainer>
       </ListItem>
     );
   };
@@ -135,7 +147,9 @@ const ListItemContainer = styled(View)`
   margin-bottom: 8px;
 `;
 
-const DeleteItemContainer = styled(View)`
-  justify-content:flex-end;
-  flex:1;
+const ListItemButtonContainer = styled(View)`
+  flex-direction:column;
+  justify-content:space-between;
+  gap:10;
 `
+

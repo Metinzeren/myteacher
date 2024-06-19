@@ -1,3 +1,4 @@
+import ClassRoom from "../models/ClassRoom";
 import Student from "../models/Student";
 
 export type RootStackParamList = {
@@ -12,4 +13,5 @@ export type RootStackParamList = {
   UpdateStudentScreen:{studentId:string,classRoomId:string};
   ClassRoomScreen:undefined;
   AddClassScreen:undefined;
+  UpdateClassScreen:{classRoom: ClassRoom};
 };

@@ -58,7 +58,7 @@ export default function UpdateStudentScreen(
     if (!isEmpty) {
       AlertDialog.showModal({
         title: "Uyarı",
-        message:"Öğrencinin bilgileri düzenleme hay aq ",
+        message:"Öğrencinin bilgileri düzenleme",
         onConfirm() {
           classRoomRepo.updateStudentInClassRoom(classRoomId, updateDto);
           updateStudentInClassRoom(classRoomId, updateDto);

@@ -1,16 +1,23 @@
-import {View, Text, Platform} from 'react-native';
+import {View, Text, Platform, Alert} from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {CalendarProvider, WeekCalendar} from 'react-native-calendars';
 import Input from '../components/Input/Input';
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
+import {faFilter, faSearch} from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 import Container from '../components/Container/Container';
 import useThemeColors from '../constant/useColor';
 
 export default function CalendarScreen() {
   return (
-    <Container goBackShow header title="Ödev Takvimi">
+    <Container
+      goBackShow
+      header
+      title="Ödev Takvimi"
+      extraIcon={faFilter}
+      extraIconPress={() => {
+        Alert.alert('Filtreleme', 'Filtreleme ekranı gelecek');
+      }}>
       {Platform.OS === 'android' ? <AndroidContaier /> : <IosContainer />}
     </Container>
   );

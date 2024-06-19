@@ -10,7 +10,7 @@ import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 interface IconButtonProps extends TouchableOpacityProps {
   icon: IconProp;
   outline?: boolean;
-  iconSize?:number;
+  iconSize?: number;
   loading?: boolean;
   backgroundColor?: string;
   borderRadius?: number;
@@ -20,7 +20,7 @@ export default function IconButton({
   icon,
   outline = false,
   loading,
-  iconSize= 20,
+  iconSize = 15,
   backgroundColor,
   borderRadius = SIZES.radius_sm,
   ...props
@@ -29,6 +29,7 @@ export default function IconButton({
   var lockPressed = false;
   return (
     <CustomIconButton
+      hitSlop={15}
       onPress={event => {
         if (loading) {
           return true;
@@ -60,14 +61,14 @@ export default function IconButton({
     </CustomIconButton>
   );
 }
-const Icon = styled(FontAwesomeIcon)`
-`;
+const Icon = styled(FontAwesomeIcon)``;
 const CustomIconButton = styled(TouchableOpacity)`
   background-color: ${props => props.theme.backgroundColor};
   padding: 10px;
   border-radius: ${props => props.theme.borderRadius}px;
   border-width: 1px;
-  height: 45px;
+  height: 35px;
+  width: 35px;
   border-color: ${props => props.theme.borderColor};
   display: flex;
   flex-direction: row;

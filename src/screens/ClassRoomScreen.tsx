@@ -13,7 +13,7 @@ import CustomText from '../components/Text/Text';
 import {useClassRooms} from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Input from '../components/Input/Input';
-import { faDeleteLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {faDeleteLeft, faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
 import IconButton from '../components/IconButton/IconButton';
 
 export default function ClassRoomScreen(
@@ -27,9 +27,6 @@ export default function ClassRoomScreen(
     props.navigation.addListener('focus', () => {
       loadClassRoom();
     });
-    return () => {
-      setClassRooms([]);
-    };
   }, []);
   const loadClassRoom = () => {
     setLoading(true);
@@ -58,6 +55,16 @@ export default function ClassRoomScreen(
   const RenderItem = ({item, index}: {item: ClassRoom; index: number}) => {
     return (
       <ListItem
+        style={{
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 1,
+          },
+          shadowOpacity: 0.22,
+          shadowRadius: 1.24,
+          elevation: 3,
+        }}
         onPress={() => {
           props.navigation.navigate('StudentsScreen', {
             classRoomId: item.id as string,
@@ -74,13 +81,11 @@ export default function ClassRoomScreen(
         </ListItemContainer>
         <ListItemButtonContainer>
           <IconButton
-            borderRadius={10}
             icon={faTrash}
             onPress={() => {
               deleteClass(item.id as string);
             }}></IconButton>
           <IconButton
-            borderRadius={10}
             icon={faPen}
             onPress={() => {
               props.navigation.navigate('UpdateClassScreen', {
@@ -135,10 +140,6 @@ const ListItem = styled(TouchableOpacity)`
   border-radius: 8px;
   flex-direction: column;
   margin-bottom: 10px;
-  elevation: 2;
-  shadow-color: #000;
-  shadow-opacity: 0.1;
-  shadow-radius: 5px;
 `;
 
 const ListItemContainer = styled(View)`

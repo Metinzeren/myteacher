@@ -8,6 +8,8 @@ import {
   updateDoc,
   arrayUnion,
   arrayRemove,
+  query,
+  where,
 } from 'firebase/firestore';
 import {db} from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
@@ -90,6 +92,19 @@ class ClassRoomRepository {
         students: updatedStudents,
       });
     }
+  }
+  async getStudentByStudentNameForQuery(name: string) {
+    const querySnapshot = await getDocs(this.classRoomCollection);
+    const filteredClassRooms = querySnapshot.docs
+      .map(doc => doc.data() as ClassRoom)
+      .filter(classRoom =>
+        classRoom.students.some(
+          student =>
+            student.firstName.toLowerCase().includes(name.toLowerCase()) ||
+            student.lastName.toLowerCase().includes(name.toLowerCase()),
+        ),
+      );
+    return filteredClassRooms;
   }
 }
 

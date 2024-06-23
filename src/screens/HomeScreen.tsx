@@ -1,19 +1,10 @@
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
 import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {
-  faAngleRight,
-  faBook,
-  faCalendar,
-  faMoneyBillAlt,
-  faUsers,
-} from '@fortawesome/free-solid-svg-icons';
-import GroupSvgIcon from '../assets/icons/GroupSvgIcon';
-import BookSvgIcon from '../assets/icons/BookSvgIcon';
-import ScheduleSvgIcon from '../assets/icons/ScheduleSvgIcon';
+import {faAngleRight, faSearch} from '@fortawesome/free-solid-svg-icons';
 import useThemeColors from '../constant/useColor';
 import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
 import {RootStackParamList} from '../types/Navigation';
@@ -21,20 +12,39 @@ import {homeMenu} from '../data/data';
 import Button from '../components/Button/Button';
 import {signOut} from 'firebase/auth';
 import {auth} from '../firebase/config';
-import HomeWidgets from '../components/HomeWidgets/HomeWidgets';
 import {ScrollView} from 'react-native-gesture-handler';
+import Input from '../components/Input/Input';
+import ClassRoomRepository from '../repositories/ClassRoomRepository';
 
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
 ) => {
   const [loading, setLoading] = useState(false);
+  const [searchStudent, setSearchStudent] = useState('');
+  const classRoomRepo = ClassRoomRepository.getInstance();
+
   return (
     <Container title="Anasayfa" header showNotification>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
         <HomeTopContainer>
-          <HomeWidgets />
+          <Input
+            autoCapitalize="none"
+            id="searchStudent"
+            placeholder="Öğrenci Ara"
+            icon={faSearch}
+            value={searchStudent}
+            onChangeText={setSearchStudent}
+            onSubmitEditing={async () => {
+              const result =
+                await classRoomRepo.getStudentByStudentNameForQuery(
+                  searchStudent,
+                );
+              console.log(result);
+            }}
+          />
+          {/* <HomeWidgets /> */}
         </HomeTopContainer>
         <HomeBottomContainer>
           {homeMenu.map((item, index) => (
@@ -80,7 +90,10 @@ const HomeScreen = (
   );
 };
 const HomeBottomContainer = styled(View)``;
-const HomeTopContainer = styled(View)``;
+const HomeTopContainer = styled(View)`
+  margin-horizontal: 10px;
+  margin-top: 10px;
+`;
 const MenuItem = styled(View)`
   flex-direction: row;
   padding-vertical: 10px;

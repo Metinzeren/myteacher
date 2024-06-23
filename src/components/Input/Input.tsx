@@ -14,17 +14,16 @@ import useThemeColors from '../../constant/useColor';
 import {IconProp} from '@fortawesome/fontawesome-svg-core';
 import {useState} from 'react';
 import CustomText from '../Text/Text';
-import { FormInputProps } from 'react-native-form-container';
+import {FormInputProps} from 'react-native-form-container';
 
- 
 export default function Input({
   iconPosition = 'left',
   icon = undefined,
-   
+
   inputSize = 'md',
   enableFocusBorder = true,
   errorMessage,
- 
+
   required = false,
   ...props
 }: FormInputProps) {
@@ -67,8 +66,14 @@ export default function Input({
         placeholderTextColor={colors.descriptionColor}
         {...props}
         secureTextEntry={props.secureTextEntry && !passwordShow}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        onFocus={e => {
+          handleFocus();
+          props.onFocus && props.onFocus(e);
+        }}
+        onBlur={e => {
+          handleBlur();
+          props.onBlur && props.onBlur(e);
+        }}
         placeholder={
           required ? `${props.placeholder} *` : `${props.placeholder}`
         }
@@ -103,7 +108,7 @@ export default function Input({
           />
         </PasswordIconButton>
       )}
-      
+
       {iconPosition === 'right' && icon !== undefined && (
         <IconRight
           theme={{

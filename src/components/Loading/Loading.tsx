@@ -9,9 +9,10 @@ export default function Loading({
   children: React.ReactNode;
   loading?: boolean;
 }) {
+  const {primary} = useThemeColors();
   return loading ? (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <ActivityIndicator size="small" color={useThemeColors().primary} />
+      <ActivityIndicator size="small" color={primary} />
     </View>
   ) : (
     <>{children}</>

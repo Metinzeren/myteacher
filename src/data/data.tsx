@@ -19,9 +19,9 @@ export const homeMenu = [
     link: 'CalendarScreen',
   },
   {
-    name: 'Veliler',
+    name: 'Öğrenci Değerlendirme Soruları',
     icon: <GroupSvgIcon height={35} width={50} />,
-    link: 'StudentsScreen',
+    link: 'StudentEvulationScreen',
   },
 ];
 

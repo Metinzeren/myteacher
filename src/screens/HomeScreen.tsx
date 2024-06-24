@@ -1,27 +1,28 @@
-import {View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faAngleRight,
   faClose,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import useThemeColors from '../constant/useColor';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
-import {homeMenu} from '../data/data';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
+import { homeMenu } from '../data/data';
 import Button from '../components/Button/Button';
-import {signOut} from 'firebase/auth';
-import {auth} from '../firebase/config';
-import {ScrollView} from 'react-native-gesture-handler';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import { ScrollView } from 'react-native-gesture-handler';
 import Input from '../components/Input/Input';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import ClassRoom from '../models/ClassRoom';
 import IconButton from '../components/IconButton/IconButton';
 import Loading from '../components/Loading/Loading';
+import AlertDialog from '../components/AlertDialog/AlertDialog';
 
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
@@ -44,7 +45,7 @@ const HomeScreen = (
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
         <HomeTopContainer>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <Input
               autoCapitalize="none"
               id="searchStudent"
@@ -94,20 +95,30 @@ const HomeScreen = (
         {focusToSearch ? (
           <Loading loading={searchLoading}>
             {searchStudents.map((item, index) => (
-              <TouchableOpacity key={index} onPress={() => {}}>
-                <MenuItem>
-                  <CustomText fontSizes="h5" color="primaryText">
-                    {item.name}
-                  </CustomText>
-                  <MenuItemButton>
-                    <FontAwesomeIcon
-                      icon={faAngleRight}
-                      color={colors.iconColor}
-                      size={20}
-                    />
-                  </MenuItemButton>
-                </MenuItem>
-              </TouchableOpacity>
+              <View
+                key={index}
+              >
+                {item.students.map((student, studentIndex) => (
+                  <TouchableOpacity
+                    onPress={() => {
+                      props.navigation.navigate('UpdateStudentScreen', { studentId: student.id as string, classRoomId: item.id as string })
+                    }}>
+                    <MenuItem key={studentIndex}>
+                      <CustomText fontSizes="h5" color="primaryText">
+                        {student.firstName}
+                      </CustomText>
+                      <MenuItemButton
+                      >
+                        <FontAwesomeIcon
+                          icon={faAngleRight}
+                          color={colors.iconColor}
+                          size={20}
+                        />
+                      </MenuItemButton>
+                    </MenuItem>
+                  </TouchableOpacity>
+                ))}
+              </View>
             ))}
           </Loading>
         ) : (
@@ -117,7 +128,7 @@ const HomeScreen = (
                 onPress={() => props.navigation.navigate(item?.link as any)}
                 key={index}>
                 <MenuItem>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {item?.icon}
                     <CustomText fontSizes="h5" color="primaryText" center>
                       {item.name}
@@ -133,25 +144,34 @@ const HomeScreen = (
                 </MenuItem>
               </TouchableOpacity>
             ))}
-            <LogoutButton>
-              <Button
-                loading={loading}
-                text="Çıkış Yap"
-                onPress={() => {
-                  setLoading(true);
-                  signOut(auth)
-                    .then(() => {
-                      props.navigation.navigate('LoginScreen');
-                    })
-                    .finally(() => {
-                      setLoading(false);
-                    });
-                }}
-              />
-            </LogoutButton>
+
           </HomeBottomContainer>
         )}
       </ScrollView>
+      <LogoutButton>
+        <Button
+          loading={loading}
+          text="Çıkış Yap"
+          onPress={() => {
+            AlertDialog.showModal({
+              title: "Çıkış yapmak istediğinize emin misiniz?",
+              onConfirm() {
+                setLoading(true);
+                signOut(auth)
+                  .then(() => {
+                    props.navigation.navigate('LoginScreen');
+                  })
+                  .finally(() => {
+                    setLoading(false);
+                  });
+              },
+              onCancel() {
+
+              },
+            })
+          }}
+        />
+      </LogoutButton>
     </Container>
   );
 };
@@ -180,7 +200,7 @@ const MenuItem = styled(View)`
 `;
 const MenuItemButton = styled(TouchableOpacity)``;
 const LogoutButton = styled(View)`
-  margin-vertical: 10px;
+  margin-vertical: 20px;
   margin-horizontal: 10px;
 `;
 export default HomeScreen;

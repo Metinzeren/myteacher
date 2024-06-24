@@ -6,7 +6,7 @@ import { RootStackParamList } from '../types/Navigation'
 import Loading from '../components/Loading/Loading'
 import FormContainer from '../components/FormContainer'
 import Input from '../components/Input/Input'
-import { faEnvelope, faPhone, faSortNumericDesc, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faDeleteLeft, faEnvelope, faPhone, faSortNumericDesc, faTrash, faUser } from '@fortawesome/free-solid-svg-icons'
 import { FormContainerRef } from '../components/FormContainer'
 import Student from '../models/Student'
 
@@ -25,7 +25,7 @@ export default function UpdateStudentScreen(
 
   const {classRooms} = useClassRooms();
   const studentId = props.route.params.studentId;
-
+  const [loading, setLoading] = useState(false);
   const classRoomId = props.route.params.classRoomId;
   const student = classRooms?.find?.((c)=>c.id == classRoomId)?.students.find(d=> d.id === studentId) as Student;
   const [updateDto, setUpdateDto] = useState<Student>({
@@ -38,11 +38,12 @@ export default function UpdateStudentScreen(
     parentFirstName: student?.parentFirstName,
     parentLastName: student?.parentLastName,
     parentPhone: student?.parentPhone,
+    absenteeism:student?.absenteeism
   });
 
 
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const { updateStudentInClassRoom } = useClassRooms();
+  const { updateStudentInClassRoom ,deleteStudentFromClassRoom} = useClassRooms();
   const formRef = useRef<FormContainerRef>(null);
 
   const handleChange = (key: keyof Student, value: string) => {
@@ -55,23 +56,45 @@ export default function UpdateStudentScreen(
   const updateStudent = async () => {
     const isEmpty = formRef.current?.validate();
 
-    if (!isEmpty) {
+    if (isEmpty) {
+      setLoading(true);
       AlertDialog.showModal({
         title: "Uyarı",
         message:"Öğrencinin bilgileri düzenleme",
         onConfirm() {
           classRoomRepo.updateStudentInClassRoom(classRoomId, updateDto);
+          setLoading(false);
           updateStudentInClassRoom(classRoomId, updateDto);
           AlertDialog.dismiss();
           props.navigation.goBack();
         },
+        onCancel() {
+          setLoading(false);
+        },
       });
-
     }
   };
 
+  const pressToDelete = () => {
+    AlertDialog.showModal({
+      title: "Uyarı",
+      message: `${student.firstName} ${student.lastName} öğrenciyi silmeye emin misiniz?`,
+      onConfirm() {
+        classRoomRepo.removeStudentFromClassRoom(classRoomId, student.id as string)
+        deleteStudentFromClassRoom(classRoomId, student.id as string);
+        AlertDialog.dismiss();
+        props.navigation.goBack();
+
+      },
+      onCancel() {
+        
+      },
+    });
+  };
+
+
   return (
-    <Container p={10} goBackShow header title='Öğrenci Güncelle'>
+    <Container p={10} goBackShow header title='Öğrenci Bilgisi' extraIcon={faTrash} extraIconPress={()=>pressToDelete()}>
       <Loading>
       <FormKeyboardView>
       <FormContainer
@@ -147,9 +170,10 @@ export default function UpdateStudentScreen(
             onChangeText={e => handleChange('parentEmail', e)}
           />
           <Button
+            loading={loading}
             borderRadius={10}
             onPress={updateStudent}
-            text={t('GÜNCELLE')}
+            text={t('KAYDET')}
           />
         </FormContainer>
       </FormKeyboardView>

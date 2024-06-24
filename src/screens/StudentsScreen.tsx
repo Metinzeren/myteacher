@@ -30,7 +30,7 @@ export default function StudentsScreen(
 
   const RenderItem = ({ item, index }: { item: Student; index: number }) => {
     return (
-      <ListItem onPress={() => props.navigation.navigate('StudentDetailScreen', { studentId:item.id as string,classRoomId:classRoomId })}
+      <ListItem onPress={() => props.navigation.navigate('UpdateStudentScreen', { studentId:item.id as string,classRoomId:classRoomId })}
         key={index}>
         <ListItemContainer>
           <CustomText color="grey" >Öğrenci Adı:</CustomText>

@@ -13,10 +13,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import { useTranslation } from 'react-i18next';
-
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { useClassRooms } from '../context/ClassRoomContext';
 import uuid from 'react-native-uuid';
 export default function AddStudentScreen(
@@ -51,8 +50,7 @@ export default function AddStudentScreen(
   const handleAddStudent = async () => {
     let isEmpty = formRef.current?.validate();
 
-    console.log(isEmpty);
-    return;
+
     if (isEmpty) {
       Keyboard.dismiss();
       setLoading(true);

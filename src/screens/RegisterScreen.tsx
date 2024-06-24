@@ -29,6 +29,7 @@ export default function RegisterScreen(props: any) {
     password: '',
     confirmPassword: '',
   });
+  const [loading, setLoading] = useState(false)
   const handleChange = (key: keyof typeof registerDto, value: string) => {
     setRegisterDto({
       ...registerDto,
@@ -40,6 +41,7 @@ export default function RegisterScreen(props: any) {
   const register = () => {
     let isEmpty = formRef.current?.validate();
     if (isEmpty) {
+      setLoading(true)
       createUserWithEmailAndPassword(
         auth,
         registerDto.email,
@@ -62,6 +64,8 @@ export default function RegisterScreen(props: any) {
             title: errorCode,
             message: errorMessage,
           });
+        }).finally(()=>{
+          setLoading(false)
         });
     }
   };
@@ -126,6 +130,7 @@ export default function RegisterScreen(props: any) {
         />
 
         <Button
+          loading={loading}
           onPress={() => register()}
           borderRadius={10}
           text={t('KAYITOL')}

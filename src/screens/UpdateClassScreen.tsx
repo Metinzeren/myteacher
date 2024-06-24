@@ -20,7 +20,7 @@ export default function UpdateClassScreen(
   const classInfo = props.route.params.classRoom;
   const classRoomRepo = ClassRoomRepository.getInstance();
   const [className, setClassName] = useState(classInfo);
-
+  const [loading, setLoading] = useState(false)
   const { updateClassRoom } = useClassRooms();
 
   const handleChange = (key: keyof ClassRoom, value: string) => {
@@ -32,11 +32,13 @@ export default function UpdateClassScreen(
   const updateClass = () => {
     const result = formRef.current?.validate({ className: "Bu alanı boş bırakamazsınız." })
     if (result) {
+      setLoading(true)
       classRoomRepo
         .updateClassRoom(className)
         .then(res => {
           if (res) {
             updateClassRoom(res);
+            setLoading(false)
             AlertDialog.showModal({
               title: 'Başarılı',
               message: 'Sınıf başarıyla güncellendi',
@@ -71,7 +73,7 @@ export default function UpdateClassScreen(
           value={className.name}
           onChangeText={e => handleChange('name', e)}
         />
-        <Button borderRadius={10} onPress={updateClass} text={t('KAYDET')} />
+        <Button loading={loading} borderRadius={10} onPress={updateClass} text={t('KAYDET')} />
       </FormContainer>
     </Container>
   );

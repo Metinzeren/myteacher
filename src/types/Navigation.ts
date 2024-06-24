@@ -15,4 +15,5 @@ export type RootStackParamList = {
   AddClassScreen: undefined;
   UpdateClassScreen: {classRoom: ClassRoom};
   NotificationScreen: undefined;
+  StudentEvulationScreen:undefined;
 };

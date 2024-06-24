@@ -100,22 +100,26 @@ const HomeScreen = (
               >
                 {item.students.map((student, studentIndex) => (
                   <TouchableOpacity
+                    key={studentIndex}
                     onPress={() => {
                       props.navigation.navigate('UpdateStudentScreen', { studentId: student.id as string, classRoomId: item.id as string })
                     }}>
-                    <MenuItem key={studentIndex}>
-                      <CustomText fontSizes="h5" color="primaryText">
-                        {student.firstName}
-                      </CustomText>
-                      <MenuItemButton
-                      >
-                        <FontAwesomeIcon
-                          icon={faAngleRight}
-                          color={colors.iconColor}
-                          size={20}
-                        />
-                      </MenuItemButton>
-                    </MenuItem>
+                    <ListContainer>
+                    <ListItem >
+                      <ListItemContainer>
+                        <CustomText color="grey" >Öğrenci Adı:</CustomText>
+                        <CustomText color="grey" >{student?.firstName} {student.lastName}</CustomText>
+                      </ListItemContainer>
+                      <ListItemContainer>
+                        <CustomText color="grey" >Öğrenci Numarası:</CustomText>
+                        <CustomText color="grey" >{student.studentNo}</CustomText>
+                      </ListItemContainer>
+                      <ListItemContainer>
+                        <CustomText color="grey" >Veli Adı:</CustomText>
+                        <CustomText color="grey" >{student.parentFirstName} {student.parentLastName}</CustomText>
+                      </ListItemContainer>
+                    </ListItem>
+                    </ListContainer>
                   </TouchableOpacity>
                 ))}
               </View>
@@ -203,4 +207,25 @@ const LogoutButton = styled(View)`
   margin-vertical: 20px;
   margin-horizontal: 10px;
 `;
+const ListItem = styled(View)`
+  background-color: #fff;
+  padding: 15px;
+  margin-horizontal: 2px;
+  border-radius: 8px;
+  flex-direction: column;
+  elevation: 2;
+  shadow-color: #000;
+  shadow-opacity: 0.1;
+  shadow-radius: 5px;
+`;
+const ListContainer = styled(View)`
+  flex: 1;
+  padding: 10px;
+`;
+const ListItemContainer = styled(View)`
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 8px;
+`;
+
 export default HomeScreen;

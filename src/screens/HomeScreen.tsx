@@ -88,7 +88,9 @@ const HomeScreen = (
                 setSearchStudents([]);
                 setFocusToSearch(false);
               }}
-              icon={faClose}></IconButton>
+              icon={faClose}>
+
+            </IconButton>
           )}
           {/* <HomeWidgets /> */}
         </HomeTopContainer>
@@ -102,23 +104,23 @@ const HomeScreen = (
                   <TouchableOpacity
                     key={studentIndex}
                     onPress={() => {
-                      props.navigation.navigate('UpdateStudentScreen', { studentId: student.id as string, classRoomId: item.id as string })
+                      props.navigation.navigate('UpdateStudentScreen', { student: student, classRoomId: item.id as string })
                     }}>
                     <ListContainer>
-                    <ListItem >
-                      <ListItemContainer>
-                        <CustomText color="grey" >Öğrenci Adı:</CustomText>
-                        <CustomText color="grey" >{student?.firstName} {student.lastName}</CustomText>
-                      </ListItemContainer>
-                      <ListItemContainer>
-                        <CustomText color="grey" >Öğrenci Numarası:</CustomText>
-                        <CustomText color="grey" >{student.studentNo}</CustomText>
-                      </ListItemContainer>
-                      <ListItemContainer>
-                        <CustomText color="grey" >Veli Adı:</CustomText>
-                        <CustomText color="grey" >{student.parentFirstName} {student.parentLastName}</CustomText>
-                      </ListItemContainer>
-                    </ListItem>
+                      <ListItem>
+                        <ListItemContainer>
+                          <CustomText color="grey" >Öğrenci Adı: </CustomText>
+                          <CustomText color="grey" >{student?.firstName} {student.lastName}</CustomText>
+                        </ListItemContainer>
+                        <ListItemContainer>
+                          <CustomText color="grey" >Öğrenci Numarası:</CustomText>
+                          <CustomText color="grey" >{student.studentNo}</CustomText>
+                        </ListItemContainer>
+                        <ListItemContainer>
+                          <CustomText color="grey" >Veli Adı:</CustomText>
+                          <CustomText color="grey" >{student.parentFirstName} {student.parentLastName}</CustomText>
+                        </ListItemContainer>
+                      </ListItem>
                     </ListContainer>
                   </TouchableOpacity>
                 ))}

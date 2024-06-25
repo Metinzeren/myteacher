@@ -10,7 +10,7 @@ export type RootStackParamList = {
   AddStudentScreen: {classRoomId: string};
   CalendarScreen: undefined;
   StudentDetailScreen: {studentId: string; classRoomId: string};
-  UpdateStudentScreen: {studentId: string; classRoomId: string};
+  UpdateStudentScreen: {studentId?: string; classRoomId: string;student?:Student};
   ClassRoomScreen: undefined;
   AddClassScreen: undefined;
   UpdateClassScreen: {classRoom: ClassRoom};

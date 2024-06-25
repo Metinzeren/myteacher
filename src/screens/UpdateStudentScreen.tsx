@@ -16,18 +16,25 @@ import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { useClassRooms } from '../context/ClassRoomContext'
 import AlertDialog from '../components/AlertDialog/AlertDialog'
 import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView'
+import styled from 'styled-components'
+import Accordion from '../components/Accordion/Accordion'
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
 ) {
 
- 
 
-  const {classRooms} = useClassRooms();
+
+  const { classRooms } = useClassRooms();
+  const studentFromParam = props.route.params.student;
+
   const studentId = props.route.params.studentId;
+
   const [loading, setLoading] = useState(false);
   const classRoomId = props.route.params.classRoomId;
-  const student = classRooms?.find?.((c)=>c.id == classRoomId)?.students.find(d=> d.id === studentId) as Student;
+
+  const student = studentFromParam ?? classRooms?.find?.((c) => c.id == classRoomId)?.students.find(d => d.id === studentId) as Student;
+
   const [updateDto, setUpdateDto] = useState<Student>({
     id: student?.id,
     firstName: student?.firstName,
@@ -38,12 +45,12 @@ export default function UpdateStudentScreen(
     parentFirstName: student?.parentFirstName,
     parentLastName: student?.parentLastName,
     parentPhone: student?.parentPhone,
-    absenteeism:student?.absenteeism
+    absenteeism: student?.absenteeism
   });
 
 
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const { updateStudentInClassRoom ,deleteStudentFromClassRoom} = useClassRooms();
+  const { updateStudentInClassRoom, deleteStudentFromClassRoom } = useClassRooms();
   const formRef = useRef<FormContainerRef>(null);
 
   const handleChange = (key: keyof Student, value: string) => {
@@ -60,7 +67,7 @@ export default function UpdateStudentScreen(
       setLoading(true);
       AlertDialog.showModal({
         title: "Uyarı",
-        message:"Öğrencinin bilgileri düzenleme",
+        message: "Öğrencinin bilgileri düzenleme",
         onConfirm() {
           classRoomRepo.updateStudentInClassRoom(classRoomId, updateDto);
           setLoading(false);
@@ -87,97 +94,105 @@ export default function UpdateStudentScreen(
 
       },
       onCancel() {
-        
+
       },
     });
   };
 
 
   return (
-    <Container p={10} goBackShow header title='Öğrenci Bilgisi' extraIcon={faTrash} extraIconPress={()=>pressToDelete()}>
+    <Container p={10} goBackShow header title='Öğrenci Bilgisi' extraIcon={faTrash} extraIconPress={() => pressToDelete()}>
       <Loading>
-      <FormKeyboardView>
-      <FormContainer
-          style={{gap:10}}
-           
-          formId="addStudentForm"
-          formContainerRef={formRef}>
-          <Input
-            required
-            id="firstName"
-            errorMessage=""
-            placeholder="Ad"
-            icon={faUser}
-            value={updateDto.firstName}
-            onChangeText={e => handleChange('firstName', e)}
-          />
-          <Input
-            required
-            id="lastName"
-            errorMessage=""
-            placeholder="Soyad"
-            icon={faUser}
-            value={updateDto.lastName}
-            onChangeText={e => handleChange('lastName', e)}
-          />
-          <Input
-            required
-            errorMessage=""
-            id="studentNo"
-            placeholder="Öğrenci okul numarası"
-            icon={faSortNumericDesc}
-            keyboardType="numeric"
-            value={updateDto.studentNo?.toString()}
-            onChangeText={e => handleChange('studentNo', e)}
-          />
-          <Input
-            required
-            errorMessage=""
-            id="parentFirstName"
-            placeholder="Veli adı"
-            icon={faUser}
-            value={updateDto.parentFirstName}
-            onChangeText={e => handleChange('parentFirstName', e)}
-          />
-          <Input
-            required
-            errorMessage=""
-            id="parentLastName"
-            placeholder="Veli Soyadı"
-            icon={faUser}
-            value={updateDto.parentLastName}
-            onChangeText={e => handleChange('parentLastName', e)}
-          />
-          <Input
-            required
-            id="parentPhone"
-            placeholder="Veli telefon numarası"
-            icon={faPhone}
-            keyboardType="numeric"
-            maxLength={11}
-            value={updateDto.parentPhone}
-            onChangeText={e => handleChange('parentPhone', e)}
-          />
-          <Input
-            required
-            id="parentEmail"
-            errorMessage=""
-            autoCapitalize="none"
-            autoCorrect={false}
-            placeholder="Veli e-mail"
-            icon={faEnvelope}
-            value={updateDto.parentEmail}
-            onChangeText={e => handleChange('parentEmail', e)}
-          />
+        <FormKeyboardView>
+          <FormContainer
+            style={{ gap: 10 }}
+
+            formId="addStudentForm"
+            formContainerRef={formRef}>
+            <Input
+              required
+              id="firstName"
+              errorMessage=""
+              placeholder="Ad"
+              icon={faUser}
+              value={updateDto.firstName}
+              onChangeText={e => handleChange('firstName', e)}
+            />
+            <Input
+              required
+              id="lastName"
+              errorMessage=""
+              placeholder="Soyad"
+              icon={faUser}
+              value={updateDto.lastName}
+              onChangeText={e => handleChange('lastName', e)}
+            />
+            <Input
+              required
+              errorMessage=""
+              id="studentNo"
+              placeholder="Öğrenci okul numarası"
+              icon={faSortNumericDesc}
+              keyboardType="numeric"
+              value={updateDto.studentNo?.toString()}
+              onChangeText={e => handleChange('studentNo', e)}
+            />
+            <Input
+              required
+              errorMessage=""
+              id="parentFirstName"
+              placeholder="Veli adı"
+              icon={faUser}
+              value={updateDto.parentFirstName}
+              onChangeText={e => handleChange('parentFirstName', e)}
+            />
+            <Input
+              required
+              errorMessage=""
+              id="parentLastName"
+              placeholder="Veli Soyadı"
+              icon={faUser}
+              value={updateDto.parentLastName}
+              onChangeText={e => handleChange('parentLastName', e)}
+            />
+            <Input
+              required
+              id="parentPhone"
+              placeholder="Veli telefon numarası"
+              icon={faPhone}
+              keyboardType="numeric"
+              maxLength={11}
+              value={updateDto.parentPhone}
+              onChangeText={e => handleChange('parentPhone', e)}
+            />
+            <Input
+              required
+              id="parentEmail"
+              errorMessage=""
+              autoCapitalize="none"
+              autoCorrect={false}
+              placeholder="Veli e-mail"
+              icon={faEnvelope}
+              value={updateDto.parentEmail}
+              onChangeText={e => handleChange('parentEmail', e)}
+            />
+
+          </FormContainer>
+          <AccordionContainer>
+            <Accordion title="Section 1">
+              <Text>This is the content of section 1</Text>
+            </Accordion>
+          </AccordionContainer>
           <Button
             loading={loading}
             borderRadius={10}
             onPress={updateStudent}
             text={t('KAYDET')}
           />
-        </FormContainer>
-      </FormKeyboardView>
+        </FormKeyboardView>
       </Loading>
     </Container>
   )
 }
+const AccordionContainer = styled(View)`
+`

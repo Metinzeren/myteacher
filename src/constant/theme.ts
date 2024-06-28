@@ -51,6 +51,12 @@ export const FONTSIZES = {
   description2: 10,
   description3: 8,
 };
+export const FONTWEIGHT = {
+  bold: 'bold',
+  normal: 'normal',
+  light: 'light',
+  thin: '100',
+};
 export const COLORS = {
   primaryText: '#34495e',
   textBlack: '#000',

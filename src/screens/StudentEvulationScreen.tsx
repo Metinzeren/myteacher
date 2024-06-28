@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
 import {RootStackParamList} from '../types/Navigation';
 import Container from '../components/Container/Container';
@@ -11,10 +11,27 @@ import IconButton from '../components/IconButton/IconButton';
 import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import Questions from '../models/Questions';
+import QuestionRepository from '../repositories/QuestionRepository';
 
 export default function StudentEvulationScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentEvulationScreen'>,
 ) {
+  const questionRepo = QuestionRepository.getInstance();
+  const [questions, setQuestions] = useState<Questions[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    loadQuestions();
+  }, []);
+
+  const loadQuestions = async () => {
+    setLoading(true);
+    const questions = await questionRepo.getQuestions();
+    console.log(questions);
+    setQuestions(questions);
+    setLoading(false);
+  };
+
   const RenderItem = ({item, index}: {item: Questions; index: number}) => {
     return (
       <ListItem
@@ -28,15 +45,17 @@ export default function StudentEvulationScreen(
           shadowRadius: 1.24,
           elevation: 3,
         }}
-        onPress={() => {
-          props.navigation.navigate('StudentsScreen', {
-            classRoomId: item.id as string,
-          });
-        }}
+        onPress={() => {}}
         key={index}>
         <ListItemContainer>
-          <CustomText color="grey">Sınıf Adı:</CustomText>
-          <CustomText color="grey">{item.name}</CustomText>
+          <CustomText fontWeight="bold" color="grey">
+            Soru
+          </CustomText>
+        </ListItemContainer>
+        <ListItemContainer>
+          <CustomText fontSizes="caption" color="grey">
+            {item.name}
+          </CustomText>
         </ListItemContainer>
         <ListItemButtonContainer>
           <IconButton icon={faTrash}></IconButton>
@@ -55,7 +74,7 @@ export default function StudentEvulationScreen(
               return entity.name.toLowerCase().includes(value.toLowerCase());
             }}
             isSearchable
-            data={[]}
+            data={questions}
             renderItem={RenderItem}
           />
         </ListContainer>

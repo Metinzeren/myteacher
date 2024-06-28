@@ -1,13 +1,13 @@
-import { View, Text } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
+import {View, Text} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
 import Container from '../components/Container/Container';
-import FormContainer, { FormContainerRef } from '../components/FormContainer';
+import FormContainer, {FormContainerRef} from '../components/FormContainer';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
-import { t } from 'i18next';
-import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
+import {t} from 'i18next';
+import {faPlus, faQuestion, faUser} from '@fortawesome/free-solid-svg-icons';
 import Questions from '../models/Questions';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
@@ -15,6 +15,7 @@ import QuestionRepository from '../repositories/QuestionRepository';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import IconButton from '../components/IconButton/IconButton';
 import RadioButton from '../components/RadioButton/RadioButton';
+import useThemeColors from '../constant/useColor';
 
 export default function AddStudentEvulationScreen(
   props: NativeStackScreenProps<
@@ -22,6 +23,7 @@ export default function AddStudentEvulationScreen(
     'AddStudentEvulationScreen'
   >,
 ) {
+  const colors = useThemeColors();
   const formRef = useRef<FormContainerRef>(null);
   const [loading, setLoading] = useState(false);
   const [registerDto, setRegisterDto] = useState<Questions>({
@@ -29,6 +31,7 @@ export default function AddStudentEvulationScreen(
     name: '',
     answer: [],
     questionType: undefined,
+    answerType: undefined,
     teacherId: '',
   });
   const questionRepo = QuestionRepository.getInstance();
@@ -58,7 +61,7 @@ export default function AddStudentEvulationScreen(
   return (
     <Container p={10} goBackShow header title="Soru Ekle">
       <EvulationContainer>
-        <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
+        <FormContainer style={{gap: 20}} formContainerRef={formRef}>
           <CustomText color="primaryText" fontSizes="body4">
             Soru yazınız
           </CustomText>
@@ -66,7 +69,7 @@ export default function AddStudentEvulationScreen(
             required
             id="name"
             placeholder="Soru ekle"
-            icon={faUser}
+            icon={faQuestion}
             value={registerDto?.name}
             onChangeText={e => handleChange('name', e)}
           />
@@ -75,7 +78,7 @@ export default function AddStudentEvulationScreen(
           </CustomText>
           <ButtonContainer>
             <Button
-              style={{ flex: 1 }}
+              style={{flex: 1}}
               outline={registerDto.questionType === 'rating' ? false : true}
               text="Rating"
               onPress={() => handleChange('questionType', 'rating')}
@@ -83,27 +86,56 @@ export default function AddStudentEvulationScreen(
             <Button
               outline={registerDto.questionType === 'option' ? false : true}
               text="Option"
-              style={{ flex: 1 }}
+              style={{flex: 1}}
               onPress={() => handleChange('questionType', 'option')}
             />
             <Button
-              style={{ flex: 1 }}
+              style={{flex: 1}}
               outline={registerDto.questionType === 'text' ? false : true}
               text="Text"
               onPress={() => handleChange('questionType', 'text')}
             />
           </ButtonContainer>
 
-          {registerDto.questionType === "option" && <AnswerContainer>
-            <AnswerHeader>
-              <CustomText color="primaryText" fontSizes="body4">
-                Cevap ekleyin
+          {registerDto.questionType === 'option' && (
+            <AnswerContainer>
+              <CustomText fontSizes="body4" color="primaryText">
+                Soru tipini seçiniz
               </CustomText>
-              <IconButton icon={faPlus} />
-            </AnswerHeader>
-            <CustomText fontSizes='body4' color='primaryText'>Soru tipini seçiniz</CustomText>
-            <RadioButton />
-          </AnswerContainer>}
+              <View
+                style={{
+                  marginVertical: 10,
+                  justifyContent: 'space-between',
+                  backgroundColor: 'white',
+                  borderWidth: 1,
+                  flexDirection: 'row',
+                  padding: 10,
+                  borderRadius: 10,
+                  borderColor: colors.primary,
+                }}>
+                <RadioButton
+                  checked={registerDto.answerType === 'single'}
+                  label="Tekli Seçim"
+                  onPress={() => {
+                    handleChange('answerType', 'single');
+                  }}
+                />
+                <RadioButton
+                  checked={registerDto.answerType === 'multiple'}
+                  label="Çoklu Seçim"
+                  onPress={() => {
+                    handleChange('answerType', 'multiple');
+                  }}
+                />
+              </View>
+              <AnswerHeader>
+                <CustomText color="primaryText" fontSizes="body4">
+                  Cevap ekleyin
+                </CustomText>
+                <IconButton icon={faPlus} />
+              </AnswerHeader>
+            </AnswerContainer>
+          )}
         </FormContainer>
         <Button
           loading={loading}
@@ -114,7 +146,6 @@ export default function AddStudentEvulationScreen(
           text={t('KAYDET')}
         />
       </EvulationContainer>
-
     </Container>
   );
 }
@@ -129,11 +160,9 @@ const ButtonContainer = styled(View)`
   flex-direction: row;
   gap: 10px;
 `;
-const AnswerContainer = styled(View)`
-
-`
+const AnswerContainer = styled(View)``;
 const AnswerHeader = styled(View)`
-  flex-direction:row;
-  justify-content:space-between;
-  align-items:center;
-`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;

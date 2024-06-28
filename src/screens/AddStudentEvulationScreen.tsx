@@ -1,18 +1,20 @@
-import {View, Text} from 'react-native';
-import React, {useRef, useState} from 'react';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { View, Text } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Container from '../components/Container/Container';
-import FormContainer, {FormContainerRef} from '../components/FormContainer';
+import FormContainer, { FormContainerRef } from '../components/FormContainer';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
-import {t} from 'i18next';
-import {faUser} from '@fortawesome/free-solid-svg-icons';
+import { t } from 'i18next';
+import { faPlus, faUser } from '@fortawesome/free-solid-svg-icons';
 import Questions from '../models/Questions';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
 import QuestionRepository from '../repositories/QuestionRepository';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
+import IconButton from '../components/IconButton/IconButton';
+import RadioButton from '../components/RadioButton/RadioButton';
 
 export default function AddStudentEvulationScreen(
   props: NativeStackScreenProps<
@@ -56,9 +58,9 @@ export default function AddStudentEvulationScreen(
   return (
     <Container p={10} goBackShow header title="Soru Ekle">
       <EvulationContainer>
-        <FormContainer style={{gap: 20}} formContainerRef={formRef}>
+        <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
           <CustomText color="primaryText" fontSizes="body4">
-            Soru Yazınız
+            Soru yazınız
           </CustomText>
           <Input
             required
@@ -69,11 +71,11 @@ export default function AddStudentEvulationScreen(
             onChangeText={e => handleChange('name', e)}
           />
           <CustomText color="primaryText" fontSizes="body4">
-            Soru Tipini Seçiniz
+            Soru tipini seçiniz
           </CustomText>
-          <ButtonGroup>
+          <ButtonContainer>
             <Button
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               outline={registerDto.questionType === 'rating' ? false : true}
               text="Rating"
               onPress={() => handleChange('questionType', 'rating')}
@@ -81,16 +83,27 @@ export default function AddStudentEvulationScreen(
             <Button
               outline={registerDto.questionType === 'option' ? false : true}
               text="Option"
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               onPress={() => handleChange('questionType', 'option')}
             />
             <Button
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               outline={registerDto.questionType === 'text' ? false : true}
               text="Text"
               onPress={() => handleChange('questionType', 'text')}
             />
-          </ButtonGroup>
+          </ButtonContainer>
+
+          {registerDto.questionType === "option" && <AnswerContainer>
+            <AnswerHeader>
+              <CustomText color="primaryText" fontSizes="body4">
+                Cevap ekleyin
+              </CustomText>
+              <IconButton icon={faPlus} />
+            </AnswerHeader>
+            <CustomText fontSizes='body4' color='primaryText'>Soru tipini seçiniz</CustomText>
+            <RadioButton />
+          </AnswerContainer>}
         </FormContainer>
         <Button
           loading={loading}
@@ -101,6 +114,7 @@ export default function AddStudentEvulationScreen(
           text={t('KAYDET')}
         />
       </EvulationContainer>
+
     </Container>
   );
 }
@@ -111,9 +125,15 @@ const EvulationContainer = styled(View)`
   margin-bottom: 10px;
 `;
 
-const ButtonGroup = styled(View)`
-  flex: 1;
+const ButtonContainer = styled(View)`
   flex-direction: row;
   gap: 10px;
-  margin-top: 10px;
 `;
+const AnswerContainer = styled(View)`
+
+`
+const AnswerHeader = styled(View)`
+  flex-direction:row;
+  justify-content:space-between;
+  align-items:center;
+`

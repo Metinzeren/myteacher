@@ -1,5 +1,6 @@
 const FirebaseCollections = {
     STUDENTS: 'students',
-    CLASSROOMS:'classrooms'
+    CLASSROOMS: 'classrooms',
+    QUESTIONS: 'questions'
 };
 export default FirebaseCollections;

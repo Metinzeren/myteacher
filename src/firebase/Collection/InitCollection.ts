@@ -1,8 +1,8 @@
-import { collection, getDocs, addDoc,doc,setDoc } from '@firebase/firestore';
+import { collection, getDocs, addDoc, doc, setDoc } from '@firebase/firestore';
 import { db } from "../config";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
- 
+
 class InitCollection {
   private model: any;
   private collectionName: string;
@@ -17,7 +17,7 @@ class InitCollection {
 
   public async init(): Promise<void> {
     try {
-      
+
       const collectionExists = await this.getCollectionExistenceFromStorage();
       if (!collectionExists) {
         const exists = await this.checkCollectionExists();
@@ -50,7 +50,7 @@ class InitCollection {
     try {
       const getDoc = doc(this.collectionRef);
       this.model.id = getDoc.id;
-      await setDoc(getDoc,this.model);
+      await setDoc(getDoc, this.model);
       console.log(`Document added to collection "${this.collectionName}".`);
     } catch (error) {
       console.error('Error creating collection:', error);

@@ -1,9 +1,22 @@
 {
-    "translation": {
-      "LOGIN": "Login",
-      "KAYITOL": "Register",
-      "GONDER": "Send",
-      "GÜNCELLE":"Update"
-    }
+  "translation": {
+    "LOGIN": "Login",
+    "REGISTER": "Register",
+    "SEND": "Send",
+    "UPDATE": "Update"
+  },
+  "addStudentForm": {
+    "firstName": "Please enter your first name",
+    "lastName": "Please enter your last name",
+    "studentNo": "Please enter your student number",
+    "email": "Please enter your email",
+    "password": "Please enter a valid password",
+    "parentFirstName": "Please enter your parent's first name",
+    "parentLastName": "Please enter your parent's last name",
+    "parentPhone": "Please enter your parent's phone number",
+    "parentEmail": "Please enter your parent's email address"
+  },
+  "addClassRoomForm": {
+    "name": "Please enter the class name!"
   }
-  
+}

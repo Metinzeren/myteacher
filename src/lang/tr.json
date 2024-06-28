@@ -3,17 +3,21 @@
     "LOGIN": "Giriş yap",
     "REGISTER": "Kayıt Ol",
     "SEND": "Gönder",
-    "UPDATE":"Güncelle"
+    "UPDATE": "Güncelle"
   },
+
   "addStudentForm": {
     "firstName": "Lütfen adınızı giriniz",
     "lastName": "Lütfen soyadınızı giriniz",
     "studentNo": "Lütfen öğrenci numaranızı giriniz",
-    "email":"Lütfen e-mail giriniz",
-    "password":"Lütfen geçerli bir şifre giriniz",
+    "email": "Lütfen e-mail giriniz",
+    "password": "Lütfen geçerli bir şifre giriniz",
     "parentFirstName": "Lütfen ebeveyninizin adını giriniz",
     "parentLastName": "Lütfen ebeveyninizin soyadını giriniz",
     "parentPhone": "Lütfen ebeveyninizin telefon numarasını giriniz",
     "parentEmail": "Lütfen ebeveyninizin e-posta adresini giriniz"
+  },
+  "addClassRoomForm": {
+    "name": "Lütfen sınıf adını giriniz!"
   }
 }

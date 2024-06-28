@@ -19,6 +19,7 @@ import {createUserWithEmailAndPassword} from 'firebase/auth';
 import {auth} from '../firebase/config';
 import {useRef, useState} from 'react';
 import FormContainer, {FormContainerRef} from '../components/FormContainer';
+import {getResourceByKey} from '../lang/i18n';
 
 export default function RegisterScreen(props: any) {
   const {t} = useTranslation();
@@ -29,7 +30,7 @@ export default function RegisterScreen(props: any) {
     password: '',
     confirmPassword: '',
   });
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const handleChange = (key: keyof typeof registerDto, value: string) => {
     setRegisterDto({
       ...registerDto,
@@ -39,9 +40,9 @@ export default function RegisterScreen(props: any) {
   const formRef = useRef<FormContainerRef>(null);
 
   const register = () => {
-    let isEmpty = formRef.current?.validate();
+    let isEmpty = formRef.current?.validate(getResourceByKey('addStudentForm'));
     if (isEmpty) {
-      setLoading(true)
+      setLoading(true);
       createUserWithEmailAndPassword(
         auth,
         registerDto.email,
@@ -64,8 +65,9 @@ export default function RegisterScreen(props: any) {
             title: errorCode,
             message: errorMessage,
           });
-        }).finally(()=>{
-          setLoading(false)
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   };
@@ -80,10 +82,7 @@ export default function RegisterScreen(props: any) {
         </CustomText>
       </RegisterTopContainer>
 
-      <FormContainer
-        style={{gap: 10, padding: 10}}
-        formId="addStudentForm"
-        formContainerRef={formRef}>
+      <FormContainer style={{gap: 10, padding: 10}} formContainerRef={formRef}>
         <Input
           placeholder="Ad"
           required

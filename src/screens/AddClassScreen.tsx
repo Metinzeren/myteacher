@@ -1,32 +1,34 @@
-import { View, Text } from 'react-native'
-import React, { useRef, useState } from 'react'
-import Container from '../components/Container/Container'
+import {View, Text} from 'react-native';
+import React, {useRef, useState} from 'react';
+import Container from '../components/Container/Container';
 import ClassRoom from '../models/ClassRoom';
 import uuid from 'react-native-uuid';
-import { FormContainerRef } from '../components/FormContainer';
+import {FormContainerRef} from '../components/FormContainer';
 import FormContainer from 'react-native-form-container';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
-import { faSortNumericDesc, faUser } from '@fortawesome/free-solid-svg-icons';
-import { t } from 'i18next';
+import {faSortNumericDesc, faUser} from '@fortawesome/free-solid-svg-icons';
+import {t} from 'i18next';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import { useClassRooms } from '../context/ClassRoomContext';
+import {useClassRooms} from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
+import {useTranslation} from 'react-i18next';
+import {getResourceByKey} from '../lang/i18n';
 
 export default function AddClassScreen(
-  props: NativeStackScreenProps<RootStackParamList, "AddClassScreen">,
-
+  props: NativeStackScreenProps<RootStackParamList, 'AddClassScreen'>,
 ) {
   const [registerDto, setRegisterDto] = useState<ClassRoom>({
     id: uuid.v4().toString(),
-    name: "",
+    name: '',
     students: [],
-    teachers: []
+    teachers: [],
   });
+
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const { addClassRoom } = useClassRooms();
+  const {addClassRoom} = useClassRooms();
 
   const [loading, setLoading] = useState(false);
   const formRef = useRef<FormContainerRef>(null);
@@ -37,14 +39,15 @@ export default function AddClassScreen(
     });
   };
 
-
   const handleAddStudent = async () => {
-    let isEmpty = formRef.current?.validate();
+    let isEmpty = formRef.current?.validate(
+      getResourceByKey('addClassRoomForm'),
+    );
     if (isEmpty) {
-      setLoading(true)
+      setLoading(true);
       const entity = await classRoomRepo.addClassRoom(registerDto);
-      setLoading(false)
-      addClassRoom(entity)
+      setLoading(false);
+      addClassRoom(entity);
       AlertDialog.showModal({
         title: 'Başarılı',
         message: 'Öğrenci başarıyla eklendi',
@@ -53,14 +56,10 @@ export default function AddClassScreen(
         },
       });
     }
-
   };
   return (
     <Container p={10} header goBackShow title="Sınıf ekle">
-      <FormContainer
-        style={{ gap: 10 }}
-        formId='addStudentForm'
-        formContainerRef={formRef}>
+      <FormContainer style={{gap: 10}} formContainerRef={formRef}>
         <Input
           required
           id="name"
@@ -78,7 +77,6 @@ export default function AddClassScreen(
           text={t('KAYDET')}
         />
       </FormContainer>
-
     </Container>
-  )
+  );
 }

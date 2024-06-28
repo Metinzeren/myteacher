@@ -15,6 +15,7 @@ import {db} from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import ClassRoom from '../models/ClassRoom';
 import Student from '../models/Student';
+import {getUserId} from '../utils/AsyncStorageUtils';
 
 class ClassRoomRepository {
   private static instance: ClassRoomRepository;
@@ -55,7 +56,9 @@ class ClassRoomRepository {
 
   async getAllClassRooms() {
     const classRoomSnapshot = await getDocs(this.classRoomCollection);
-    return classRoomSnapshot.docs.map(doc => doc.data() as ClassRoom);
+    const userId = await getUserId();
+    let snapShots = classRoomSnapshot.docs.map(doc => doc.data() as ClassRoom);
+    return snapShots.filter(classRoom => classRoom.teachers.includes(userId));
   }
 
   async addStudentToClassRoom(classRoomId: string, student: Student) {

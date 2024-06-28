@@ -7,17 +7,24 @@ const resources = {
   tr: {
     translation: tr,
     addStudentForm: tr.addStudentForm,
+    addClassRoomForm: tr.addClassRoomForm,
   },
   en: en,
 };
 
 i18n.use(initReactI18next).init({
-  compatibilityJSON: 'v3', // Eğer JSON formatı ile ilgili bir sorun yoksa bu satırı kaldırabilirsiniz
+  compatibilityJSON: 'v3',
   resources,
-  lng: 'tr', // Varsayılan dil
+  lng: 'tr',
   interpolation: {
-    escapeValue: false, // React zaten XSS'den koruyor
+    escapeValue: false,
   },
 });
-
+export const getLanguage = () => i18n.language;
+export type Resource = keyof (typeof resources)['tr' | 'en'];
+export const getResourceByKey = (key: Resource) => {
+  let language = getLanguage();
+  let res = resources as any;
+  return res[language][key as any];
+};
 export default i18n;

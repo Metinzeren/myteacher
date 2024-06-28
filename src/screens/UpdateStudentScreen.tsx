@@ -1,31 +1,36 @@
-import { View, Text } from 'react-native'
-import React, { useRef, useState, useEffect } from 'react'
-import Container from '../components/Container/Container'
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types'
-import { RootStackParamList } from '../types/Navigation'
-import Loading from '../components/Loading/Loading'
-import FormContainer from '../components/FormContainer'
-import Input from '../components/Input/Input'
-import { faDeleteLeft, faEnvelope, faPhone, faSortNumericDesc, faTrash, faUser } from '@fortawesome/free-solid-svg-icons'
-import { FormContainerRef } from '../components/FormContainer'
-import Student from '../models/Student'
+import {View, Text} from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import Container from '../components/Container/Container';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
+import Loading from '../components/Loading/Loading';
+import FormContainer from '../components/FormContainer';
+import Input from '../components/Input/Input';
+import {
+  faDeleteLeft,
+  faEnvelope,
+  faPhone,
+  faSortNumericDesc,
+  faTrash,
+  faUser,
+} from '@fortawesome/free-solid-svg-icons';
+import {FormContainerRef} from '../components/FormContainer';
+import Student from '../models/Student';
 
-import Button from '../components/Button/Button'
-import { t } from 'i18next'
+import Button from '../components/Button/Button';
+import {t} from 'i18next';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import { useClassRooms } from '../context/ClassRoomContext'
-import AlertDialog from '../components/AlertDialog/AlertDialog'
-import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView'
-import styled from 'styled-components'
-import Accordion from '../components/Accordion/Accordion'
+import {useClassRooms} from '../context/ClassRoomContext';
+import AlertDialog from '../components/AlertDialog/AlertDialog';
+import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView';
+import styled from 'styled-components';
+import Accordion from '../components/Accordion/Accordion';
+import {getResourceByKey} from '../lang/i18n';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
 ) {
-
-
-
-  const { classRooms } = useClassRooms();
+  const {classRooms} = useClassRooms();
   const studentFromParam = props.route.params.student;
 
   const studentId = props.route.params.studentId;
@@ -33,7 +38,11 @@ export default function UpdateStudentScreen(
   const [loading, setLoading] = useState(false);
   const classRoomId = props.route.params.classRoomId;
 
-  const student = studentFromParam ?? classRooms?.find?.((c) => c.id == classRoomId)?.students.find(d => d.id === studentId) as Student;
+  const student =
+    studentFromParam ??
+    (classRooms
+      ?.find?.(c => c.id == classRoomId)
+      ?.students.find(d => d.id === studentId) as Student);
 
   const [updateDto, setUpdateDto] = useState<Student>({
     id: student?.id,
@@ -45,12 +54,12 @@ export default function UpdateStudentScreen(
     parentFirstName: student?.parentFirstName,
     parentLastName: student?.parentLastName,
     parentPhone: student?.parentPhone,
-    absenteeism: student?.absenteeism
+    absenteeism: student?.absenteeism,
   });
 
-
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const { updateStudentInClassRoom, deleteStudentFromClassRoom } = useClassRooms();
+  const {updateStudentInClassRoom, deleteStudentFromClassRoom} =
+    useClassRooms();
   const formRef = useRef<FormContainerRef>(null);
 
   const handleChange = (key: keyof Student, value: string) => {
@@ -61,13 +70,15 @@ export default function UpdateStudentScreen(
   };
 
   const updateStudent = async () => {
-    const isEmpty = formRef.current?.validate();
+    const isEmpty = formRef.current?.validate(
+      getResourceByKey('addStudentForm'),
+    );
 
     if (isEmpty) {
       setLoading(true);
       AlertDialog.showModal({
-        title: "Uyarı",
-        message: "Öğrencinin bilgileri düzenleme",
+        title: 'Uyarı',
+        message: 'Öğrencinin bilgileri düzenleme',
         onConfirm() {
           classRoomRepo.updateStudentInClassRoom(classRoomId, updateDto);
           setLoading(false);
@@ -84,31 +95,32 @@ export default function UpdateStudentScreen(
 
   const pressToDelete = () => {
     AlertDialog.showModal({
-      title: "Uyarı",
+      title: 'Uyarı',
       message: `${student.firstName} ${student.lastName} öğrenciyi silmeye emin misiniz?`,
       onConfirm() {
-        classRoomRepo.removeStudentFromClassRoom(classRoomId, student.id as string)
+        classRoomRepo.removeStudentFromClassRoom(
+          classRoomId,
+          student.id as string,
+        );
         deleteStudentFromClassRoom(classRoomId, student.id as string);
         AlertDialog.dismiss();
         props.navigation.goBack();
-
       },
-      onCancel() {
-
-      },
+      onCancel() {},
     });
   };
 
-
   return (
-    <Container p={10} goBackShow header title='Öğrenci Bilgisi' extraIcon={faTrash} extraIconPress={() => pressToDelete()}>
+    <Container
+      p={10}
+      goBackShow
+      header
+      title="Öğrenci Bilgisi"
+      extraIcon={faTrash}
+      extraIconPress={() => pressToDelete()}>
       <Loading>
         <FormKeyboardView>
-          <FormContainer
-            style={{ gap: 10 }}
-
-            formId="addStudentForm"
-            formContainerRef={formRef}>
+          <FormContainer style={{gap: 10}} formContainerRef={formRef}>
             <Input
               required
               id="firstName"
@@ -176,7 +188,6 @@ export default function UpdateStudentScreen(
               value={updateDto.parentEmail}
               onChangeText={e => handleChange('parentEmail', e)}
             />
-
           </FormContainer>
           <AccordionContainer>
             <Accordion title="Section 1">
@@ -192,7 +203,6 @@ export default function UpdateStudentScreen(
         </FormKeyboardView>
       </Loading>
     </Container>
-  )
+  );
 }
-const AccordionContainer = styled(View)`
-`
+const AccordionContainer = styled(View)``;

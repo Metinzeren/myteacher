@@ -1,13 +1,13 @@
-import {View, Text} from 'react-native';
-import React, {useRef, useState} from 'react';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { View, Text } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Container from '../components/Container/Container';
-import FormContainer, {FormContainerRef} from '../components/FormContainer';
+import FormContainer, { FormContainerRef } from '../components/FormContainer';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
-import {t} from 'i18next';
-import {faPlus, faQuestion, faUser} from '@fortawesome/free-solid-svg-icons';
+import { t } from 'i18next';
+import { faPlus, faQuestion, faUser } from '@fortawesome/free-solid-svg-icons';
 import Questions from '../models/Questions';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
@@ -16,6 +16,8 @@ import AlertDialog from '../components/AlertDialog/AlertDialog';
 import IconButton from '../components/IconButton/IconButton';
 import RadioButton from '../components/RadioButton/RadioButton';
 import useThemeColors from '../constant/useColor';
+import AnswerForm from '../components/AnswerForm/AnswerForm';
+import AnswerList from '../components/AnswerList/AnswerList';
 
 export default function AddStudentEvulationScreen(
   props: NativeStackScreenProps<
@@ -41,7 +43,6 @@ export default function AddStudentEvulationScreen(
       [key]: value,
     });
   };
-
   const handleAddQuestion = () => {
     let isEmpty = formRef.current?.validate();
     if (isEmpty) {
@@ -58,10 +59,25 @@ export default function AddStudentEvulationScreen(
     }
   };
 
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [showForm, setShowForm] = useState(false);
+
+  const handleAddAnswer = (newAnswer: string) => {
+    setAnswers([...answers, newAnswer]);
+    handleChange('answer', [...answers, newAnswer]);
+  };
+
+  const handleDeleteAnswer = (index: number) => {
+    const newAnswers = answers.filter((_, i) => i !== index);
+    setAnswers(newAnswers);
+    handleChange('answer', newAnswers);
+  };
+
+
   return (
     <Container p={10} goBackShow header title="Soru Ekle">
       <EvulationContainer>
-        <FormContainer style={{gap: 20}} formContainerRef={formRef}>
+        <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
           <CustomText color="primaryText" fontSizes="body4">
             Soru yazınız
           </CustomText>
@@ -78,7 +94,7 @@ export default function AddStudentEvulationScreen(
           </CustomText>
           <ButtonContainer>
             <Button
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               outline={registerDto.questionType === 'rating' ? false : true}
               text="Rating"
               onPress={() => handleChange('questionType', 'rating')}
@@ -86,11 +102,11 @@ export default function AddStudentEvulationScreen(
             <Button
               outline={registerDto.questionType === 'option' ? false : true}
               text="Option"
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               onPress={() => handleChange('questionType', 'option')}
             />
             <Button
-              style={{flex: 1}}
+              style={{ flex: 1 }}
               outline={registerDto.questionType === 'text' ? false : true}
               text="Text"
               onPress={() => handleChange('questionType', 'text')}
@@ -132,8 +148,12 @@ export default function AddStudentEvulationScreen(
                 <CustomText color="primaryText" fontSizes="body4">
                   Cevap ekleyin
                 </CustomText>
-                <IconButton icon={faPlus} />
+                <IconButton icon={faPlus} onPress={() => setShowForm(true)} />
               </AnswerHeader>
+              {showForm && (
+                <AnswerForm onAddAnswer={handleAddAnswer} onClose={() => setShowForm(false)} />
+              )}
+              <AnswerList answers={answers} onDeleteAnswer={handleDeleteAnswer} />
             </AnswerContainer>
           )}
         </FormContainer>
@@ -165,4 +185,5 @@ const AnswerHeader = styled(View)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  margin-bottom:10px;
 `;

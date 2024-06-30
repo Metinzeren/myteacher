@@ -6,9 +6,10 @@ import {
   getDocs,
   setDoc,
 } from 'firebase/firestore';
-import {db} from '../firebase/config';
+import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import Questions from '../models/Questions';
+import { getUserId } from '../utils/AsyncStorageUtils';
 
 class QuestionRepository {
   private static instance: QuestionRepository;
@@ -19,7 +20,7 @@ class QuestionRepository {
     }
     return QuestionRepository.instance;
   }
-  private constructor() {}
+  private constructor() { }
   async addQuestion(questions: Questions) {
     const questionsDoc = doc(this.questionCollection);
     questions.id = questionsDoc.id;
@@ -28,7 +29,9 @@ class QuestionRepository {
   }
   async getQuestions() {
     const querySnapshot = await getDocs(this.questionCollection);
-    return querySnapshot.docs.map(doc => doc.data() as Questions);
+    const userId = await getUserId();
+    let snapShots = querySnapshot.docs.map(doc => doc.data() as Questions)
+    return snapShots.filter(question => question.teacherId.includes(userId))
   }
 }
 

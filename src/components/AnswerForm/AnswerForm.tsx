@@ -24,7 +24,7 @@ const AnswerForm = ({ onAddAnswer, onClose }: AnswerFormProps) => {
         <AnswerFormContainer>
             <Input
                 id='question'
-                placeholder="Soru"
+                placeholder="Cevap"
                 value={answer}
                 onChangeText={setAnswer}
             />

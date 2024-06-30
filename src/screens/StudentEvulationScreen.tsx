@@ -1,14 +1,14 @@
-import React, {useEffect, useRef, useState} from 'react';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import React, { useEffect, useRef, useState } from 'react';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Container from '../components/Container/Container';
 import Loading from '../components/Loading/Loading';
 import styled from 'styled-components';
-import {TouchableOpacity, View} from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import CustomText from '../components/Text/Text';
 import IconButton from '../components/IconButton/IconButton';
-import {faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import Questions from '../models/Questions';
 import QuestionRepository from '../repositories/QuestionRepository';
@@ -32,7 +32,7 @@ export default function StudentEvulationScreen(
     setLoading(false);
   };
 
-  const RenderItem = ({item, index}: {item: Questions; index: number}) => {
+  const RenderItem = ({ item, index }: { item: Questions; index: number }) => {
     return (
       <ListItem
         style={{
@@ -45,7 +45,7 @@ export default function StudentEvulationScreen(
           shadowRadius: 1.24,
           elevation: 3,
         }}
-        onPress={() => {}}
+        onPress={() => { }}
         key={index}>
         <ListItemContainer>
           <CustomText fontWeight="bold" color="grey">
@@ -59,14 +59,14 @@ export default function StudentEvulationScreen(
         </ListItemContainer>
         <ListItemButtonContainer>
           <IconButton icon={faTrash}></IconButton>
-          <IconButton icon={faPen} onPress={() => {}}></IconButton>
+          <IconButton icon={faPen} onPress={() => { }}></IconButton>
         </ListItemButtonContainer>
       </ListItem>
     );
   };
   return (
     <Container p={10} goBackShow header title="Değerlendirme Soruları">
-      <Loading>
+      <Loading loading={loading}>
         <ListContainer>
           <CustomFlatList
             notFoundText="Soru Bulunamadı."

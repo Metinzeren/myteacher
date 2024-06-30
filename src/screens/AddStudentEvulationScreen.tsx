@@ -18,6 +18,8 @@ import RadioButton from '../components/RadioButton/RadioButton';
 import useThemeColors from '../constant/useColor';
 import AnswerForm from '../components/AnswerForm/AnswerForm';
 import AnswerList from '../components/AnswerList/AnswerList';
+import Loading from '../components/Loading/Loading';
+import { getUserId } from '../utils/AsyncStorageUtils';
 
 export default function AddStudentEvulationScreen(
   props: NativeStackScreenProps<
@@ -43,11 +45,14 @@ export default function AddStudentEvulationScreen(
       [key]: value,
     });
   };
-  const handleAddQuestion = () => {
+  const handleAddQuestion = async () => {
     let isEmpty = formRef.current?.validate();
+    let userId = await getUserId()
+    let addedUserIdFromTeacher = { ...registerDto, teacherId: [userId] };
+
     if (isEmpty) {
       setLoading(true);
-      questionRepo.addQuestion(registerDto);
+      questionRepo.addQuestion(addedUserIdFromTeacher as any);
       setLoading(false);
       AlertDialog.showModal({
         title: 'Başarılı',
@@ -76,96 +81,98 @@ export default function AddStudentEvulationScreen(
 
   return (
     <Container p={10} goBackShow header title="Soru Ekle">
-      <EvulationContainer>
-        <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
-          <CustomText color="primaryText" fontSizes="body4">
-            Soru yazınız
-          </CustomText>
-          <Input
-            required
-            id="name"
-            placeholder="Soru ekle"
-            icon={faQuestion}
-            value={registerDto?.name}
-            onChangeText={e => handleChange('name', e)}
-          />
-          <CustomText color="primaryText" fontSizes="body4">
-            Soru tipini seçiniz
-          </CustomText>
-          <ButtonContainer>
-            <Button
-              style={{ flex: 1 }}
-              outline={registerDto.questionType === 'rating' ? false : true}
-              text="Rating"
-              onPress={() => handleChange('questionType', 'rating')}
+      <Loading loading={loading}>
+        <EvulationContainer>
+          <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
+            <CustomText color="primaryText" fontSizes="body4">
+              Soru yazınız
+            </CustomText>
+            <Input
+              required
+              id="name"
+              placeholder="Soru ekle"
+              icon={faQuestion}
+              value={registerDto?.name}
+              onChangeText={e => handleChange('name', e)}
             />
-            <Button
-              outline={registerDto.questionType === 'option' ? false : true}
-              text="Option"
-              style={{ flex: 1 }}
-              onPress={() => handleChange('questionType', 'option')}
-            />
-            <Button
-              style={{ flex: 1 }}
-              outline={registerDto.questionType === 'text' ? false : true}
-              text="Text"
-              onPress={() => handleChange('questionType', 'text')}
-            />
-          </ButtonContainer>
+            <CustomText color="primaryText" fontSizes="body4">
+              Soru tipini seçiniz
+            </CustomText>
+            <ButtonContainer>
+              <Button
+                style={{ flex: 1 }}
+                outline={registerDto.questionType === 'rating' ? false : true}
+                text="Rating"
+                onPress={() => handleChange('questionType', 'rating')}
+              />
+              <Button
+                outline={registerDto.questionType === 'option' ? false : true}
+                text="Option"
+                style={{ flex: 1 }}
+                onPress={() => handleChange('questionType', 'option')}
+              />
+              <Button
+                style={{ flex: 1 }}
+                outline={registerDto.questionType === 'text' ? false : true}
+                text="Text"
+                onPress={() => handleChange('questionType', 'text')}
+              />
+            </ButtonContainer>
 
-          {registerDto.questionType === 'option' && (
-            <AnswerContainer>
-              <CustomText fontSizes="body4" color="primaryText">
-                Soru tipini seçiniz
-              </CustomText>
-              <View
-                style={{
-                  marginVertical: 10,
-                  justifyContent: 'space-between',
-                  backgroundColor: 'white',
-                  borderWidth: 1,
-                  flexDirection: 'row',
-                  padding: 10,
-                  borderRadius: 10,
-                  borderColor: colors.primary,
-                }}>
-                <RadioButton
-                  checked={registerDto.answerType === 'single'}
-                  label="Tekli Seçim"
-                  onPress={() => {
-                    handleChange('answerType', 'single');
-                  }}
-                />
-                <RadioButton
-                  checked={registerDto.answerType === 'multiple'}
-                  label="Çoklu Seçim"
-                  onPress={() => {
-                    handleChange('answerType', 'multiple');
-                  }}
-                />
-              </View>
-              <AnswerHeader>
-                <CustomText color="primaryText" fontSizes="body4">
-                  Cevap ekleyin
+            {registerDto.questionType === 'option' && (
+              <AnswerContainer>
+                <CustomText fontSizes="body4" color="primaryText">
+                  Soru tipini seçiniz
                 </CustomText>
-                <IconButton icon={faPlus} onPress={() => setShowForm(true)} />
-              </AnswerHeader>
-              {showForm && (
-                <AnswerForm onAddAnswer={handleAddAnswer} onClose={() => setShowForm(false)} />
-              )}
-              <AnswerList answers={answers} onDeleteAnswer={handleDeleteAnswer} />
-            </AnswerContainer>
-          )}
-        </FormContainer>
-        <Button
-          loading={loading}
-          borderRadius={10}
-          onPress={() => {
-            handleAddQuestion();
-          }}
-          text={t('KAYDET')}
-        />
-      </EvulationContainer>
+                <View
+                  style={{
+                    marginVertical: 10,
+                    justifyContent: 'space-between',
+                    backgroundColor: 'white',
+                    borderWidth: 1,
+                    flexDirection: 'row',
+                    padding: 10,
+                    borderRadius: 10,
+                    borderColor: colors.primary,
+                  }}>
+                  <RadioButton
+                    checked={registerDto.answerType === 'single'}
+                    label="Tekli Seçim"
+                    onPress={() => {
+                      handleChange('answerType', 'single');
+                    }}
+                  />
+                  <RadioButton
+                    checked={registerDto.answerType === 'multiple'}
+                    label="Çoklu Seçim"
+                    onPress={() => {
+                      handleChange('answerType', 'multiple');
+                    }}
+                  />
+                </View>
+                <AnswerHeader>
+                  <CustomText color="primaryText" fontSizes="body4">
+                    Cevap ekleyin
+                  </CustomText>
+                  <IconButton icon={faPlus} onPress={() => setShowForm(true)} />
+                </AnswerHeader>
+                {showForm && (
+                  <AnswerForm onAddAnswer={handleAddAnswer} onClose={() => setShowForm(false)} />
+                )}
+                <AnswerList answers={answers} onDeleteAnswer={handleDeleteAnswer} />
+              </AnswerContainer>
+            )}
+          </FormContainer>
+          <Button
+            loading={loading}
+            borderRadius={10}
+            onPress={() => {
+              handleAddQuestion();
+            }}
+            text={t('KAYDET')}
+          />
+        </EvulationContainer>
+      </Loading>
     </Container>
   );
 }

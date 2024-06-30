@@ -78,8 +78,16 @@ export default function StudentEvulationScreen(
           </CustomText>
         </ListItemContainer>
         <ListItemButtonContainer>
-          <IconButton icon={faTrash} onPress={() => handleDeleteQuestion(item.id as string)}></IconButton>
-          <IconButton icon={faPen} onPress={() => { }}></IconButton>
+          <LeftSide>
+            <CustomText color='textLink'>
+              {item.questionType === "option" ? "Seçenekli" : item.questionType === "rating" ? "Puanlama" : "Yazı"}
+            </CustomText>
+          </LeftSide>
+          <RightSide>
+            <IconButton icon={faTrash} onPress={() => handleDeleteQuestion(item.id as string)}></IconButton>
+            <IconButton icon={faPen} onPress={() => props.navigation.navigate('UpdateStudentEvulationScreen', { questionId: item.id as string })}></IconButton>
+          </RightSide>
+
         </ListItemButtonContainer>
       </ListItem>
     );
@@ -139,6 +147,17 @@ const ListItemContainer = styled(View)`
 
 const ListItemButtonContainer = styled(View)`
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items:center;
   gap: 10px;
 `;
+
+
+const LeftSide = styled(View)`
+
+`
+
+const RightSide = styled(View)`
+  flex-direction:row;
+  gap:5px;
+`

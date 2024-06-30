@@ -5,6 +5,7 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  updateDoc,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
@@ -36,6 +37,18 @@ class QuestionRepository {
   async deleteQuestion(questionId: string) {
     const classRoomDoc = doc(this.questionCollection, questionId);
     await deleteDoc(classRoomDoc);
+  }
+
+  async getQuestion(questionId: string) {
+    const questionDoc = doc(this.questionCollection, questionId);
+    const questionSnapshot = await getDoc(questionDoc);
+    return questionSnapshot.data() as Questions;
+  }
+  async updateQuestion(updatedQuestion: Questions) {
+    const { id, ...questionWithoutId } = updatedQuestion;
+    const questionDoc = doc(this.questionCollection, id);
+    await updateDoc(questionDoc, questionWithoutId);
+    return updatedQuestion;
   }
 }
 

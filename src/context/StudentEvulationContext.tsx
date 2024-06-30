@@ -5,13 +5,15 @@ interface QuestionContextProps {
     questions: Array<Questions>,
     setQuestions: React.Dispatch<React.SetStateAction<Array<Questions>>>,
     deleteQuestion: (id: string) => void,
-    addQuestion: (question: Questions) => void
+    addQuestion: (question: Questions) => void,
+    updateQuestion: (updatedQuestion: Questions) => void
 }
 const initialState: QuestionContextProps = {
     questions: [],
     setQuestions: () => { },
     deleteQuestion: (id) => { },
     addQuestion: (questions) => { },
+    updateQuestion: (updatedQuestion) => { }
 }
 const QuestionsContext = createContext<QuestionContextProps>(
     initialState
@@ -30,9 +32,18 @@ const QuestionProvider = (props: QuestionProviderProps) => {
 
         setQuestions([...questions, question]);
     }
+    const updateQuestion = (updatedQuestion: Questions) => {
+        const updatedQuestions = questions.map((question) => {
+            if (question.id === updatedQuestion.id) {
+                return updatedQuestion;
+            }
+            return question;
+        });
+        setQuestions(updatedQuestions);
+    }
     const value = useMemo(() => {
         return {
-            questions, setQuestions, deleteQuestion, addQuestion
+            questions, setQuestions, deleteQuestion, addQuestion, updateQuestion
         }
     }, [questions])
     return (

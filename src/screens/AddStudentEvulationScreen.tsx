@@ -108,19 +108,19 @@ export default function AddStudentEvulationScreen(
               <Button
                 style={{ flex: 1 }}
                 outline={registerDto.questionType === 'rating' ? false : true}
-                text="Rating"
+                text="Puanlama"
                 onPress={() => handleChange('questionType', 'rating')}
               />
               <Button
                 outline={registerDto.questionType === 'option' ? false : true}
-                text="Option"
+                text="Seçenekli"
                 style={{ flex: 1 }}
                 onPress={() => handleChange('questionType', 'option')}
               />
               <Button
                 style={{ flex: 1 }}
                 outline={registerDto.questionType === 'text' ? false : true}
-                text="Text"
+                text="Yazı"
                 onPress={() => handleChange('questionType', 'text')}
               />
             </ButtonContainer>

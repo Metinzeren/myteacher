@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Keyboard } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
@@ -20,6 +20,7 @@ import AnswerForm from '../components/AnswerForm/AnswerForm';
 import AnswerList from '../components/AnswerList/AnswerList';
 import Loading from '../components/Loading/Loading';
 import { getUserId } from '../utils/AsyncStorageUtils';
+import { useQuestions } from '../context/StudentEvulationContext';
 
 export default function AddStudentEvulationScreen(
   props: NativeStackScreenProps<
@@ -35,7 +36,7 @@ export default function AddStudentEvulationScreen(
     name: '',
     answer: [],
     questionType: undefined,
-    answerType: undefined,
+    answerType: 'single',
     teacherId: '',
   });
   const questionRepo = QuestionRepository.getInstance();
@@ -45,15 +46,20 @@ export default function AddStudentEvulationScreen(
       [key]: value,
     });
   };
+  const { addQuestion } = useQuestions()
   const handleAddQuestion = async () => {
     let isEmpty = formRef.current?.validate();
     let userId = await getUserId()
     let addedUserIdFromTeacher = { ...registerDto, teacherId: [userId] };
 
+
     if (isEmpty) {
+      Keyboard.dismiss();
       setLoading(true);
-      questionRepo.addQuestion(addedUserIdFromTeacher as any);
+      const entity = await questionRepo.addQuestion(addedUserIdFromTeacher as any);
       setLoading(false);
+      addQuestion(entity as any)
+
       AlertDialog.showModal({
         title: 'Başarılı',
         message: 'Soru başarıyla eklendi',

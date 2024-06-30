@@ -12,25 +12,45 @@ import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import Questions from '../models/Questions';
 import QuestionRepository from '../repositories/QuestionRepository';
+import { useQuestions } from '../context/StudentEvulationContext';
+import AlertDialog from '../components/AlertDialog/AlertDialog';
 
 export default function StudentEvulationScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentEvulationScreen'>,
 ) {
   const questionRepo = QuestionRepository.getInstance();
-  const [questions, setQuestions] = useState<Questions[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadQuestions();
+    props.navigation.addListener('focus', () => {
+      loadQuestions();
+    });
   }, []);
-
+  const { questions, setQuestions, deleteQuestion } = useQuestions()
   const loadQuestions = async () => {
     setLoading(true);
-    const questions = await questionRepo.getQuestions();
-    console.log(questions);
-    setQuestions(questions);
+    await questionRepo.getQuestions()
+      .then(res => {
+        setQuestions(res);
+      })
+      .finally(() => {
+        setLoading(false)
+      })
     setLoading(false);
   };
+
+  const handleDeleteQuestion = (id: string) => {
+    AlertDialog.showModal({
+      title: 'Uyarı',
+      message: 'Sınıfı kalıcı olarak silmeye emin misiniz?',
+      onConfirm() {
+        questionRepo.deleteQuestion(id as string);
+        deleteQuestion(id as string);
+        AlertDialog.dismiss();
+      },
+      onCancel() { },
+    });
+  }
 
   const RenderItem = ({ item, index }: { item: Questions; index: number }) => {
     return (
@@ -58,7 +78,7 @@ export default function StudentEvulationScreen(
           </CustomText>
         </ListItemContainer>
         <ListItemButtonContainer>
-          <IconButton icon={faTrash}></IconButton>
+          <IconButton icon={faTrash} onPress={() => handleDeleteQuestion(item.id as string)}></IconButton>
           <IconButton icon={faPen} onPress={() => { }}></IconButton>
         </ListItemButtonContainer>
       </ListItem>

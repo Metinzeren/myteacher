@@ -33,6 +33,10 @@ class QuestionRepository {
     let snapShots = querySnapshot.docs.map(doc => doc.data() as Questions)
     return snapShots.filter(question => question.teacherId.includes(userId))
   }
+  async deleteQuestion(questionId: string) {
+    const classRoomDoc = doc(this.questionCollection, questionId);
+    await deleteDoc(classRoomDoc);
+  }
 }
 
 export default QuestionRepository;

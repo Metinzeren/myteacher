@@ -1,4 +1,4 @@
-import {View, Text} from 'react-native';
+import {View, Text, TouchableOpacity, Alert} from 'react-native';
 import React, {useRef, useState, useEffect} from 'react';
 import Container from '../components/Container/Container';
 import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
@@ -7,6 +7,7 @@ import Loading from '../components/Loading/Loading';
 import FormContainer from '../components/FormContainer';
 import Input from '../components/Input/Input';
 import {
+  faAngleRight,
   faDeleteLeft,
   faEnvelope,
   faPhone,
@@ -26,15 +27,19 @@ import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView';
 import styled from 'styled-components';
 import Accordion from '../components/Accordion/Accordion';
 import {getResourceByKey} from '../lang/i18n';
+import EvulationRepository from '../repositories/EvulationRepository';
+import EvulationQuestionResponse from '../models/EvulationQuestionResponse';
+import EvulationResponse from '../models/EvulationResponse';
+import CustomText from '../components/Text/Text';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import useThemeColors from '../constant/useColor';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
 ) {
   const {classRooms} = useClassRooms();
   const studentFromParam = props.route.params.student;
-
   const studentId = props.route.params.studentId;
-
   const [loading, setLoading] = useState(false);
   const classRoomId = props.route.params.classRoomId;
 
@@ -56,12 +61,24 @@ export default function UpdateStudentScreen(
     parentPhone: student?.parentPhone,
     absenteeism: student?.absenteeism,
   });
-
+  const [evulation, setEvulation] = useState<Array<EvulationResponse>>([]);
+  const colors = useThemeColors();
   const classRoomRepo = ClassRoomRepository.getInstance();
+  const evulationRepo = EvulationRepository.getInstance();
   const {updateStudentInClassRoom, deleteStudentFromClassRoom} =
     useClassRooms();
   const formRef = useRef<FormContainerRef>(null);
 
+  useEffect(() => {
+    getEvulation();
+  }, []);
+
+  const getEvulation = async () => {
+    const evulation = await evulationRepo.getEvulationWithQuestions(
+      student.id as string,
+    );
+    setEvulation(evulation);
+  };
   const handleChange = (key: keyof Student, value: string) => {
     setUpdateDto(prevState => ({
       ...prevState,
@@ -92,7 +109,6 @@ export default function UpdateStudentScreen(
       });
     }
   };
-
   const pressToDelete = () => {
     AlertDialog.showModal({
       title: 'Uyarı',
@@ -190,8 +206,31 @@ export default function UpdateStudentScreen(
             />
           </FormContainer>
           <AccordionContainer>
-            <Accordion title="Section 1">
-              <Text>This is the content of section 1</Text>
+            <Accordion title="Değerlendirmeler">
+              {evulation.map((evulation, index) => (
+                <EvulationCard
+                  onPress={() => {
+                    AlertDialog.showModal({
+                      title: 'Değerlendirme',
+                      content: evulation.evulationQuestions.map(
+                        (question, index) => (
+                          <CustomText color="grey" key={index}>{`${
+                            index + 1
+                          }. ${question.question.name} : ${
+                            question.answer[0]
+                          }`}</CustomText>
+                        ),
+                      ),
+                    });
+                  }}
+                  key={index}>
+                  <CustomText color="primaryText">{evulation.date}</CustomText>
+                  <FontAwesomeIcon
+                    color={colors.iconColor}
+                    icon={faAngleRight}
+                  />
+                </EvulationCard>
+              ))}
             </Accordion>
           </AccordionContainer>
           <Button
@@ -206,3 +245,12 @@ export default function UpdateStudentScreen(
   );
 }
 const AccordionContainer = styled(View)``;
+const EvulationCard = styled(TouchableOpacity)`
+  padding: 10px;
+  margin-vertical: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: white;
+  flex-direction: row;
+  justify-content: space-between;
+`;

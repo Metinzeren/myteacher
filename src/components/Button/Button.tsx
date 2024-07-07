@@ -23,6 +23,7 @@ interface OutlineButtonProps extends TouchableOpacityProps {
   textColor?: string;
   backgroundColor?: string;
   borderRadius?: number;
+  size?: 'sm' | 'md';
 }
 
 export default function Button({
@@ -33,6 +34,7 @@ export default function Button({
   textColor,
   backgroundColor,
   borderRadius = SIZES.radius_sm,
+  size = 'md',
   ...props
 }: OutlineButtonProps) {
   const colors = useThemeColors();
@@ -55,6 +57,7 @@ export default function Button({
       }}
       activeOpacity={props.activeOpacity || 0.7}
       theme={{
+        size: size,
         borderRadius: borderRadius,
         borderColor: loading ? '#ddd' : backgroundColor || colors.primary,
         backgroundColor: outline
@@ -83,10 +86,10 @@ const IconLeft = styled(FontAwesomeIcon)`
 `;
 const CustomButton = styled(TouchableOpacity)`
   background-color: ${props => props.theme.backgroundColor};
-  padding: 10px;
+  padding: ${props => (props.theme.size === 'sm' ? '5px' : '10px')};
   border-radius: ${props => props.theme.borderRadius}px;
   border-width: 1px;
-  height: 45px;
+  height: ${props => (props.theme.size === 'sm' ? '30px' : '50px')};
   border-color: ${props => props.theme.borderColor};
   display: flex;
   flex-direction: row;
@@ -95,6 +98,6 @@ const CustomButton = styled(TouchableOpacity)`
 `;
 const ButtonText = styled(CustomText)`
   color: ${props => props.theme.color};
-  font-size: ${SIZES.font}px;
+  font-size: ${SIZES.fontSm}px;
   font-weight: bold;
 `;

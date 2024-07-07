@@ -1,22 +1,22 @@
-import { View, TouchableOpacity } from 'react-native';
-import React, { useState } from 'react';
+import {View, TouchableOpacity, StyleSheet} from 'react-native';
+import React, {useCallback, useRef, useState} from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import {
   faAngleRight,
   faClose,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import useThemeColors from '../constant/useColor';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
-import { homeMenu } from '../data/data';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
+import {homeMenu} from '../data/data';
 import Button from '../components/Button/Button';
-import { signOut } from 'firebase/auth';
-import { auth } from '../firebase/config';
-import { ScrollView } from 'react-native-gesture-handler';
+import {signOut} from 'firebase/auth';
+import {auth} from '../firebase/config';
+import {ScrollView} from 'react-native-gesture-handler';
 import Input from '../components/Input/Input';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import ClassRoom from '../models/ClassRoom';
@@ -45,7 +45,7 @@ const HomeScreen = (
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
         <HomeTopContainer>
-          <View style={{ flex: 1 }}>
+          <View style={{flex: 1}}>
             <Input
               autoCapitalize="none"
               id="searchStudent"
@@ -88,37 +88,44 @@ const HomeScreen = (
                 setSearchStudents([]);
                 setFocusToSearch(false);
               }}
-              icon={faClose}>
-
-            </IconButton>
+              icon={faClose}></IconButton>
           )}
           {/* <HomeWidgets /> */}
         </HomeTopContainer>
         {focusToSearch ? (
           <Loading loading={searchLoading}>
             {searchStudents.map((item, index) => (
-              <View
-                key={index}
-              >
+              <View key={index}>
                 {item.students.map((student, studentIndex) => (
                   <TouchableOpacity
                     key={studentIndex}
                     onPress={() => {
-                      props.navigation.navigate('UpdateStudentScreen', { student: student, classRoomId: item.id as string })
+                      props.navigation.navigate('UpdateStudentScreen', {
+                        student: student,
+                        classRoomId: item.id as string,
+                      });
                     }}>
                     <ListContainer>
                       <ListItem>
                         <ListItemContainer>
-                          <CustomText color="grey" >Öğrenci Adı: </CustomText>
-                          <CustomText color="grey" >{student?.firstName} {student.lastName}</CustomText>
+                          <CustomText color="grey">Öğrenci Adı: </CustomText>
+                          <CustomText color="grey">
+                            {student?.firstName} {student.lastName}
+                          </CustomText>
                         </ListItemContainer>
                         <ListItemContainer>
-                          <CustomText color="grey" >Öğrenci Numarası:</CustomText>
-                          <CustomText color="grey" >{student.studentNo}</CustomText>
+                          <CustomText color="grey">
+                            Öğrenci Numarası:
+                          </CustomText>
+                          <CustomText color="grey">
+                            {student.studentNo}
+                          </CustomText>
                         </ListItemContainer>
                         <ListItemContainer>
-                          <CustomText color="grey" >Veli Adı:</CustomText>
-                          <CustomText color="grey" >{student.parentFirstName} {student.parentLastName}</CustomText>
+                          <CustomText color="grey">Veli Adı:</CustomText>
+                          <CustomText color="grey">
+                            {student.parentFirstName} {student.parentLastName}
+                          </CustomText>
                         </ListItemContainer>
                       </ListItem>
                     </ListContainer>
@@ -134,7 +141,7 @@ const HomeScreen = (
                 onPress={() => props.navigation.navigate(item?.link as any)}
                 key={index}>
                 <MenuItem>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     {item?.icon}
                     <CustomText fontSizes="h5" color="primaryText" center>
                       {item.name}
@@ -150,7 +157,6 @@ const HomeScreen = (
                 </MenuItem>
               </TouchableOpacity>
             ))}
-
           </HomeBottomContainer>
         )}
       </ScrollView>
@@ -160,7 +166,7 @@ const HomeScreen = (
           text="Çıkış Yap"
           onPress={() => {
             AlertDialog.showModal({
-              title: "Çıkış yapmak istediğinize emin misiniz?",
+              title: 'Çıkış yapmak istediğinize emin misiniz?',
               onConfirm() {
                 setLoading(true);
                 signOut(auth)
@@ -171,10 +177,8 @@ const HomeScreen = (
                     setLoading(false);
                   });
               },
-              onCancel() {
-
-              },
-            })
+              onCancel() {},
+            });
           }}
         />
       </LogoutButton>
@@ -231,3 +235,14 @@ const ListItemContainer = styled(View)`
 `;
 
 export default HomeScreen;
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 24,
+    backgroundColor: 'grey',
+  },
+  contentContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+});

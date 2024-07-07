@@ -13,11 +13,15 @@ interface ContainerProps extends HeaderProps {
   ml?: number;
   mt?: number;
   mb?: number;
+  mx?: number;
+  my?: number;
   p?: number;
   pl?: number;
   pr?: number;
   pt?: number;
   pb?: number;
+  px?: number;
+  py?: number;
 }
 
 export default function Container({
@@ -45,6 +49,10 @@ export default function Container({
           paddingTop: props.pt,
           paddingBottom: props.pb,
           gap: props.gap,
+          marginHorizontal: props.mx,
+          marginVertical: props.my,
+          paddingHorizontal: props.px,
+          paddingVertical: props.py,
         }}>
         {children}
       </View>

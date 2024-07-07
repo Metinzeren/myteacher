@@ -23,8 +23,7 @@ export default function Input({
   inputSize = 'md',
   enableFocusBorder = true,
   errorMessage,
-
-  required = false,
+  required,
   ...props
 }: FormInputProps) {
   const colors = useThemeColors();

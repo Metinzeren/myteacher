@@ -16,6 +16,7 @@ import UpdateStudentScreen from './UpdateStudentScreen';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import {useClassRooms} from '../context/ClassRoomContext';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import EvulationRepository from '../repositories/EvulationRepository';
 export default function StudentDetailScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentDetailScreen'>,
 ) {

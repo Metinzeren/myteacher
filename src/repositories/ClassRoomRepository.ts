@@ -7,9 +7,6 @@ import {
   setDoc,
   updateDoc,
   arrayUnion,
-  arrayRemove,
-  query,
-  where,
 } from 'firebase/firestore';
 import {db} from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';

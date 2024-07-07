@@ -1,10 +1,13 @@
+import AnswerType from './AnswerType';
+import QuestionType from './QuestionType';
+
 interface Questions {
-    id?: string;
-    name: string;
-    questionType?: "rating" | "option" | "text";
-    answer: [];
-    answerType?: "single" | "multiple";
-    teacherId: string;
+  id?: string;
+  name: string;
+  questionType?: QuestionType;
+  answer: [];
+  answerType?: AnswerType;
+  teacherId: string;
 }
 
 export default Questions;

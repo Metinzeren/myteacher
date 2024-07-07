@@ -11,11 +11,6 @@ export const homeMenu = [
   {
     name: 'Ödevler',
     icon: <BookSvgIcon height={35} width={50} />,
-    link: 'StudentsScreen',
-  },
-  {
-    name: 'Ödev Takvimi',
-    icon: <ScheduleSvgIcon height={35} width={50} />,
     link: 'CalendarScreen',
   },
   {

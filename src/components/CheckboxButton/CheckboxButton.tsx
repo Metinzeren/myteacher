@@ -8,46 +8,42 @@ import React from 'react';
 import styled from 'styled-components';
 import useThemeColors from '../../constant/useColor';
 import CustomText from '../Text/Text';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faCheck} from '@fortawesome/free-solid-svg-icons';
 
-interface RadioButtonProps extends TouchableOpacityProps {
+interface CheckboxButtonProps extends TouchableOpacityProps {
   checked?: boolean;
   label?: string;
 }
-export default function RadioButton({
+export default function CheckboxButton({
   checked = false,
   label,
   ...res
-}: RadioButtonProps) {
+}: CheckboxButtonProps) {
   const color = useThemeColors();
   return (
-    <CircleContainer activeOpacity={res.activeOpacity || 0.7} {...res}>
-      <Circle theme={{borderColor: color.primary}}>
-        {checked && <FilledCircle style={{backgroundColor: color.primary}} />}
-      </Circle>
+    <BoxContainer activeOpacity={res.activeOpacity || 0.7} {...res}>
+      <Box theme={{borderColor: color.primary}}>
+        {checked && <FontAwesomeIcon icon={faCheck} color={color.primary} />}
+      </Box>
       {label && (
         <CustomText style={{marginLeft: 10, fontWeight: 'bold'}}>
           {label}
         </CustomText>
       )}
-    </CircleContainer>
+    </BoxContainer>
   );
 }
-const CircleContainer = styled(TouchableOpacity)`
+const BoxContainer = styled(TouchableOpacity)`
   flex-direction: row;
   align-items: center;
 `;
-const Circle = styled(View)`
+const Box = styled(View)`
   height: 25px;
   width: 25px;
-  border-radius: 100px;
+  border-radius: 5px;
   border: 2.5px solid ${props => props.theme.borderColor};
   justify-content: center;
   align-items: center;
   padding: 5px;
-`;
-const FilledCircle = styled(View)`
-  height: 13px;
-  width: 12px;
-  border-radius: 100px;
-  background-color: ${props => props.theme.bgColor};
 `;

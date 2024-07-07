@@ -1,20 +1,20 @@
-import {View, TouchableOpacity, Text} from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import styled from 'styled-components/native';
-import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
 
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Button from '../components/Button/Button';
 import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
 import CustomText from '../components/Text/Text';
-import {useState} from 'react';
-import {signInWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../firebase/config';
+import { useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/config';
 import '../lang/i18n';
 
 export default function LoginScreen(props: any) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -41,15 +41,16 @@ export default function LoginScreen(props: any) {
   return (
     <Container>
       <LoginTopContainer>
-        <CustomText color="textBlack" center fontSizes="h1">
-          Welcome To
-        </CustomText>
+        {/* <CustomText color="textBlack" center fontSizes="h1">
+          Hoş Geldiniz
+        </CustomText> */}
         <CustomText color="textLink" center fontSizes="h1">
-          Teacher Application
+          Öğretmenim
         </CustomText>
       </LoginTopContainer>
       <FormContainer>
         <Input
+          id='email'
           autoCapitalize="none"
           autoCorrect={false}
           placeholder="E-mail"
@@ -57,6 +58,7 @@ export default function LoginScreen(props: any) {
           icon={faEnvelope}
         />
         <Input
+          id='password'
           placeholder="Şifre"
           onChangeText={e => setPassword(e)}
           icon={faLock}
@@ -72,7 +74,7 @@ export default function LoginScreen(props: any) {
             handleLogin();
           }}
           borderRadius={10}
-          text={t('LOGIN')}
+          text={t('Giriş')}
         />
       </FormContainer>
       <RegisterContainer>

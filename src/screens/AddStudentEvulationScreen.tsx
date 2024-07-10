@@ -6,7 +6,6 @@ import Container from '../components/Container/Container';
 import FormContainer, { FormContainerRef } from '../components/FormContainer';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
-import { t } from 'i18next';
 import { faPlus, faQuestion, faUser } from '@fortawesome/free-solid-svg-icons';
 import Questions from '../models/Questions';
 import styled from 'styled-components';

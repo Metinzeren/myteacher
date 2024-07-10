@@ -1,24 +1,24 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import Container from '../components/Container/Container';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
 
 import Button from '../components/Button/Button';
-import {t} from 'i18next';
-import {useTranslation} from 'react-i18next';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 import StudentRepository from '../repositories/StudentRepository';
 import Student from '../models/Student';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
-import {useStudents} from '../context/StudentContext';
+import { useStudents } from '../context/StudentContext';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import {useClassRooms} from '../context/ClassRoomContext';
+import { useClassRooms } from '../context/ClassRoomContext';
 import RBSheet from 'react-native-raw-bottom-sheet';
-import {COLORS, SIZES} from '../constant/theme';
+import { COLORS, SIZES } from '../constant/theme';
 import QuestionsList from '../components/QuestionsList/QuestionsList';
 import useThemeColors from '../constant/useColor';
 import FormContainer from '../components/FormContainer';
@@ -26,7 +26,7 @@ export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
   const colors = useThemeColors();
-  const {classRooms} = useClassRooms();
+  const { classRooms } = useClassRooms();
   const classRoomId = props.route.params?.classRoomId;
   const students = classRooms?.find?.(x => x.id == classRoomId)?.students || [];
   const refRBSheet = React.useRef<any>(null);
@@ -35,7 +35,7 @@ export default function StudentsScreen(
     {} as Student,
   );
 
-  const RenderItem = ({item, index}: {item: Student; index: number}) => {
+  const RenderItem = ({ item, index }: { item: Student; index: number }) => {
     return (
       <ListItem
         onPress={() =>
@@ -63,7 +63,7 @@ export default function StudentsScreen(
         </ListItemContainer>
         <ListItemContainer>
           <View></View>
-          <View style={{marginTop: 10}}>
+          <View style={{ marginTop: 10 }}>
             <Button
               size="sm"
               text="Değerlendirme Ekle"
@@ -107,7 +107,7 @@ export default function StudentsScreen(
       <RBSheet
         ref={refRBSheet}
         draggable
-        onClose={() => {}}
+        onClose={() => { }}
         customStyles={{
           wrapper: {
             backgroundColor: 'rgba(0,0,0,0.5)',

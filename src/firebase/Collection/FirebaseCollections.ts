@@ -3,5 +3,6 @@ const FirebaseCollections = {
   CLASSROOMS: 'classrooms',
   QUESTIONS: 'questions',
   EVULATIONS: 'evaluations',
+  USERS: 'users'
 };
 export default FirebaseCollections;

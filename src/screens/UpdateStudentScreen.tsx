@@ -1,8 +1,8 @@
-import {View, Text, TouchableOpacity, Alert} from 'react-native';
-import React, {useRef, useState, useEffect} from 'react';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import React, { useRef, useState, useEffect } from 'react';
 import Container from '../components/Container/Container';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Loading from '../components/Loading/Loading';
 import FormContainer from '../components/FormContainer';
 import Input from '../components/Input/Input';
@@ -15,29 +15,29 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import {FormContainerRef} from '../components/FormContainer';
+import { FormContainerRef } from '../components/FormContainer';
 import Student from '../models/Student';
 
 import Button from '../components/Button/Button';
-import {t} from 'i18next';
+import { t } from 'i18next';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import {useClassRooms} from '../context/ClassRoomContext';
+import { useClassRooms } from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView';
 import styled from 'styled-components';
 import Accordion from '../components/Accordion/Accordion';
-import {getResourceByKey} from '../lang/i18n';
+import { getResourceByKey } from '../lang/i18n';
 import EvulationRepository from '../repositories/EvulationRepository';
 import EvulationQuestionResponse from '../models/EvulationQuestionResponse';
 import EvulationResponse from '../models/EvulationResponse';
 import CustomText from '../components/Text/Text';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import useThemeColors from '../constant/useColor';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
 ) {
-  const {classRooms} = useClassRooms();
+  const { classRooms } = useClassRooms();
   const studentFromParam = props.route.params.student;
   const studentId = props.route.params.studentId;
   const [loading, setLoading] = useState(false);
@@ -65,7 +65,7 @@ export default function UpdateStudentScreen(
   const colors = useThemeColors();
   const classRoomRepo = ClassRoomRepository.getInstance();
   const evulationRepo = EvulationRepository.getInstance();
-  const {updateStudentInClassRoom, deleteStudentFromClassRoom} =
+  const { updateStudentInClassRoom, deleteStudentFromClassRoom } =
     useClassRooms();
   const formRef = useRef<FormContainerRef>(null);
 
@@ -122,7 +122,7 @@ export default function UpdateStudentScreen(
         AlertDialog.dismiss();
         props.navigation.goBack();
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
@@ -136,7 +136,7 @@ export default function UpdateStudentScreen(
       extraIconPress={() => pressToDelete()}>
       <Loading>
         <FormKeyboardView>
-          <FormContainer style={{gap: 10}} formContainerRef={formRef}>
+          <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
             <Input
               required
               id="firstName"
@@ -212,13 +212,27 @@ export default function UpdateStudentScreen(
                   onPress={() => {
                     AlertDialog.showModal({
                       title: 'Değerlendirme',
+                      onCancel() {
+
+                      },
+                      onCancelText: "Kapat",
                       content: evulation.evulationQuestions.map(
                         (question, index) => (
-                          <CustomText color="grey" key={index}>{`${
-                            index + 1
-                          }. ${question.question.name} : ${
-                            question.answer[0]
-                          }`}</CustomText>
+                          <CardContentContainer
+                            key={index}>
+                            <CustomText fontSizes='body4' color="textLink">{`${index + 1
+                              }.`}</CustomText>
+                            <CardContentRight>
+                              <CustomText color='primaryText'>
+                                {question.question.name}
+                              </CustomText>
+                              <CustomText color='textLink'>
+                                {question.answer[0]}
+                              </CustomText>
+                            </CardContentRight>
+
+                          </CardContentContainer>
+
                         ),
                       ),
                     });
@@ -254,3 +268,21 @@ const EvulationCard = styled(TouchableOpacity)`
   flex-direction: row;
   justify-content: space-between;
 `;
+
+const CardContentContainer = styled(View)`
+  background-color: #fff;
+  padding: 15px;
+  gap:5px;
+  margin-horizontal: 2px;
+  border-radius: 8px;
+  flex-direction: row;
+  margin-bottom: 10px;
+  elevation: 2;
+  shadow-color: #000;
+  shadow-opacity: 0.1;
+  shadow-radius: 5px;
+`
+
+const CardContentRight = styled(View)`
+  
+`

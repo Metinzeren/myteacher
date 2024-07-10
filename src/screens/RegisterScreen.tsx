@@ -1,34 +1,39 @@
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import Container from '../components/Container/Container';
 import CustomText from '../components/Text/Text';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Input from '../components/Input/Input';
 import {
   faArrowLeft,
   faEnvelope,
   faLock,
+  faPhone,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import {t} from 'i18next';
-import {useTranslation} from 'react-i18next';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../firebase/config';
-import {useRef, useState} from 'react';
-import FormContainer, {FormContainerRef} from '../components/FormContainer';
-import {getResourceByKey} from '../lang/i18n';
+import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import { useRef, useState } from 'react';
+import FormContainer, { FormContainerRef } from '../components/FormContainer';
+import { getResourceByKey } from '../lang/i18n';
+import UserRepository from '../repositories/UserRepository';
+import User from '../models/User';
+import { Dropdown } from 'react-native-element-dropdown';
 
 export default function RegisterScreen(props: any) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [registerDto, setRegisterDto] = useState({
     firstName: '',
     lastName: '',
     email: '',
     password: '',
     confirmPassword: '',
+    phone: '',
+    role: ""
   });
   const [loading, setLoading] = useState(false);
   const handleChange = (key: keyof typeof registerDto, value: string) => {
@@ -48,8 +53,20 @@ export default function RegisterScreen(props: any) {
         registerDto.email,
         registerDto.password,
       )
-        .then(userCredential => {
+        .then(async userCredential => {
           const user = userCredential.user;
+          console.log(user);
+
+          const newUser: User = {
+            id: user.uid,
+            firstName: registerDto.firstName,
+            lastName: registerDto.lastName,
+            phone: registerDto.phone,
+            password: registerDto.password,
+            role: registerDto.role
+          };
+          await UserRepository.getInstance().addUser(newUser);
+
           AlertDialog.showModal({
             title: 'Başarılı',
             message: 'Kullanıcı başarıyla oluşturuldu',
@@ -71,6 +88,11 @@ export default function RegisterScreen(props: any) {
         });
     }
   };
+  const [roleTypes, setRoleTypes] = useState([
+    { label: 'Öğretmen', value: 'teacher' },
+    { label: 'Veli', value: 'parent' },
+  ]);
+
   return (
     <Container>
       <RegisterTopContainer>
@@ -82,7 +104,7 @@ export default function RegisterScreen(props: any) {
         </CustomText>
       </RegisterTopContainer>
 
-      <FormContainer style={{gap: 10, padding: 10}} formContainerRef={formRef}>
+      <FormContainer style={{ gap: 10, padding: 10 }} formContainerRef={formRef}>
         <Input
           placeholder="Ad"
           required
@@ -120,14 +142,30 @@ export default function RegisterScreen(props: any) {
         />
         <Input
           required
-          id="password"
+          id="confirmPassword"
           placeholder="Şifre (Tekrar)"
           icon={faLock}
           secureTextEntry={true}
           value={registerDto.confirmPassword}
           onChangeText={e => handleChange('confirmPassword', e)}
         />
-
+        <Input
+          required
+          id="phone"
+          placeholder="Telefon"
+          icon={faPhone}
+          value={registerDto.phone}
+          onChangeText={e => handleChange('phone', e)}
+        />
+        <Dropdown
+          style={{ backgroundColor: "white", padding: 13, borderRadius: 10, }}
+          data={roleTypes}
+          labelField="label"
+          valueField="value"
+          placeholder="Kayıt türünü seçin"
+          value={registerDto.role}
+          onChange={item => handleChange('role', item.value)}
+        />
         <Button
           loading={loading}
           onPress={() => register()}

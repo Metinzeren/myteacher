@@ -1,9 +1,9 @@
-import { View, Text, Keyboard } from 'react-native';
-import React, { useRef, useState } from 'react';
+import {View, Text, Keyboard} from 'react-native';
+import React, {useRef, useState} from 'react';
 import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
 import Student from '../models/Student';
-import FormContainer, { FormContainerRef } from '../components/FormContainer';
+import FormContainer, {FormContainerRef} from '../components/FormContainer';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import {
   faEnvelope,
@@ -11,23 +11,22 @@ import {
   faSortNumericDesc,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import Button from '../components/Button/Button';
-import { useTranslation } from 'react-i18next';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
+import {useTranslation} from 'react-i18next';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import { useClassRooms } from '../context/ClassRoomContext';
-import uuid from 'react-native-uuid';
-import { getResourceByKey } from '../lang/i18n';
-import { getLocalStorage } from '../utils/AsyncStorageUtils';
+import {useClassRooms} from '../context/ClassRoomContext';
+import {getResourceByKey} from '../lang/i18n';
+import {getLocalStorage} from '../utils/AsyncStorageUtils';
 export default function AddStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'AddStudentScreen'>,
 ) {
   const t = useTranslation().t;
   const classRoomId = props.route.params.classRoomId;
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const { addStudentFromClassRoom } = useClassRooms();
+  const {addStudentFromClassRoom} = useClassRooms();
   const [loading, setLoading] = useState(false);
   const [registerDto, setRegisterDto] = useState<Student>({
     firstName: '',
@@ -51,30 +50,28 @@ export default function AddStudentScreen(
   const handleAddStudent = async () => {
     let isEmpty = formRef.current?.validate(getResourceByKey('addStudentForm'));
 
-
     if (isEmpty) {
       Keyboard.dismiss();
       setLoading(true);
 
       try {
-
-        const user = await getLocalStorage("authUser");
+        const user = await getLocalStorage('authUser');
         const accessToken = user?.stsTokenManager?.accessToken;
-        let data =
-        {
+        let data = {
           firstName: registerDto.firstName,
           lastName: registerDto.lastName,
           email: registerDto.parentEmail,
           phone: registerDto.parentPhone,
-        }
+        };
 
         const response = await axios.post(
-          'https://us-central1-my-teacher-553bb.cloudfunctions.net/createUser',
-          data, {
-          headers: {
-            'Authorization': `Bearer ${accessToken}`,
-          }
-        }
+          'https://europe-west1-my-teacher-553bb.cloudfunctions.net/createUser',
+          data,
+          {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
         );
         if (response.status === 201) {
           const entity = response.data;
@@ -88,8 +85,8 @@ export default function AddStudentScreen(
             },
           });
         }
-      } catch (error) {
-        console.error('Error adding student:', error.request);
+      } catch (error: AxiosError | any) {
+        console.error('Error adding student:', error.response.error);
         AlertDialog.showModal({
           title: 'Hata',
           message: 'Öğrenci eklenirken bir hata oluştu.',
@@ -102,7 +99,7 @@ export default function AddStudentScreen(
 
   return (
     <Container p={10} goBackShow header title="Öğrenci Ekle">
-      <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+      <FormContainer style={{gap: 10}} formContainerRef={formRef}>
         <Input
           required
           id="firstName"

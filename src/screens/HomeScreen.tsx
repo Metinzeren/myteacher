@@ -48,7 +48,6 @@ const HomeScreen = (
           <View style={{flex: 1}}>
             <Input
               autoCapitalize="none"
-              id="searchStudent"
               placeholder="Öğrenci Ara"
               icon={faSearch}
               value={searchStudent}

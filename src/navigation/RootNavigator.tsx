@@ -1,13 +1,13 @@
-import { TransitionPresets, createStackNavigator } from '@react-navigation/stack';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ForgotPasswordScreen from '../screens/ForgotPassword';
-import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase/config';
+import {useEffect, useState} from 'react';
+import {onAuthStateChanged} from 'firebase/auth';
+import {auth} from '../firebase/config';
 import HomeScreen from '../screens/HomeScreen';
-import { RootStackParamList } from '../types/Navigation';
+import {RootStackParamList} from '../types/Navigation';
 import StudentsScreen from '../screens/StudentsScreen';
 import AddStudentScreen from '../screens/AddStudentScreen';
 import CalendarScreen from '../screens/CalendarScreen';
@@ -18,7 +18,7 @@ import AddClassScreen from '../screens/AddClassScreen';
 import UpdateClassScreen from '../screens/UpdateClassScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import StudentEvulationScreen from '../screens/StudentEvulationScreen';
-import { getLocalStorage, setLocalStorage } from '../utils/AsyncStorageUtils';
+import {getLocalStorage, setLocalStorage} from '../utils/AsyncStorageUtils';
 import AddStudentEvulationScreen from '../screens/AddStudentEvulationScreen';
 import UpdateStudentEvulationScreen from '../screens/UpdateStudentEvulationScreen';
 const RootNavigator = () => {
@@ -26,7 +26,7 @@ const RootNavigator = () => {
   const [authUser, setAuth] = useState(null);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
-      console.log(user);
+      console.log(await user?.getIdToken());
 
       if (user) {
         setAuth(user as any);

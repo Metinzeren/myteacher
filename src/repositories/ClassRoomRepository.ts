@@ -17,7 +17,6 @@ import {getUserId} from '../utils/AsyncStorageUtils';
 class ClassRoomRepository {
   private static instance: ClassRoomRepository;
   private classRoomCollection = collection(db, FirebaseCollections.CLASSROOMS);
-
   public static getInstance(): ClassRoomRepository {
     if (!ClassRoomRepository.instance) {
       ClassRoomRepository.instance = new ClassRoomRepository();

@@ -1,7 +1,7 @@
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
 import Container from '../components/Container/Container';
 import CustomText from '../components/Text/Text';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Input from '../components/Input/Input';
 import {
@@ -13,19 +13,19 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase/config';
-import { useRef, useState } from 'react';
-import FormContainer, { FormContainerRef } from '../components/FormContainer';
-import { getResourceByKey } from '../lang/i18n';
+import {useTranslation} from 'react-i18next';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {createUserWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../firebase/config';
+import {useRef, useState} from 'react';
+import FormContainer, {FormContainerRef} from '../components/FormContainer';
+import {getResourceByKey} from '../lang/i18n';
 import UserRepository from '../repositories/UserRepository';
 import User from '../models/User';
-import { Dropdown } from 'react-native-element-dropdown';
+import {Dropdown} from 'react-native-element-dropdown';
 
 export default function RegisterScreen(props: any) {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [registerDto, setRegisterDto] = useState({
     firstName: '',
     lastName: '',
@@ -33,7 +33,7 @@ export default function RegisterScreen(props: any) {
     password: '',
     confirmPassword: '',
     phone: '',
-    role: ""
+    role: '',
   });
   const [loading, setLoading] = useState(false);
   const handleChange = (key: keyof typeof registerDto, value: string) => {
@@ -63,7 +63,7 @@ export default function RegisterScreen(props: any) {
             lastName: registerDto.lastName,
             phone: registerDto.phone,
             password: registerDto.password,
-            role: registerDto.role
+            role: 'teacher',
           };
           await UserRepository.getInstance().addUser(newUser);
 
@@ -89,8 +89,8 @@ export default function RegisterScreen(props: any) {
     }
   };
   const [roleTypes, setRoleTypes] = useState([
-    { label: 'Öğretmen', value: 'teacher' },
-    { label: 'Veli', value: 'parent' },
+    {label: 'Öğretmen', value: 'teacher'},
+    {label: 'Veli', value: 'parent'},
   ]);
 
   return (
@@ -104,7 +104,7 @@ export default function RegisterScreen(props: any) {
         </CustomText>
       </RegisterTopContainer>
 
-      <FormContainer style={{ gap: 10, padding: 10 }} formContainerRef={formRef}>
+      <FormContainer style={{gap: 10, padding: 10}} formContainerRef={formRef}>
         <Input
           placeholder="Ad"
           required
@@ -158,7 +158,7 @@ export default function RegisterScreen(props: any) {
           onChangeText={e => handleChange('phone', e)}
         />
         <Dropdown
-          style={{ backgroundColor: "white", padding: 13, borderRadius: 10, }}
+          style={{backgroundColor: 'white', padding: 13, borderRadius: 10}}
           data={roleTypes}
           labelField="label"
           valueField="value"

@@ -7,12 +7,11 @@ interface Student {
   studentNo: number | string;
   parentFirstName: string;
   parentLastName: string;
-  parent: 'Mother' | 'Father';
   parentEmail: string;
   parentPhone: string;
   createdAt?: Date;
   photo?: string;
-  absenteeism:Array<Absenteeism>
+  absenteeism: Array<Absenteeism>
 }
 
 export default Student;

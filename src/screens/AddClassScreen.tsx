@@ -53,7 +53,7 @@ export default function AddClassScreen(
       addClassRoom(entity);
       AlertDialog.showModal({
         title: 'Başarılı',
-        message: 'Öğrenci başarıyla eklendi',
+        message: 'Sınıf başarıyla eklendi',
         onConfirm() {
           props.navigation.goBack();
         },

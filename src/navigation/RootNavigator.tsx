@@ -26,6 +26,8 @@ const RootNavigator = () => {
   const [authUser, setAuth] = useState(null);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
+      console.log(user);
+
       if (user) {
         setAuth(user as any);
         await setLocalStorage('authUser', user);

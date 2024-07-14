@@ -3,13 +3,13 @@ import Modal, {
   ModalPortal,
   SlideAnimation,
 } from 'react-native-modals';
-import {SIZES} from '../../constant/theme';
-import {Appearance, Text, View} from 'react-native';
+import { SIZES } from '../../constant/theme';
+import { Appearance, Text, View } from 'react-native';
 import Button from '../Button/Button';
 import styled from 'styled-components';
 import Divider from '../Divider/Divider';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faCheckCircle} from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faCheckCircle } from '@fortawesome/free-regular-svg-icons';
 import {
   faExclamationCircle,
   faWarning,
@@ -49,8 +49,8 @@ class AlertDialog {
               slideFrom: 'bottom',
             })
           }>
-          <ModalContent style={{backgroundColor: '#fff'}}>
-            <View style={{width: SIZES.width - 80}}>
+          <ModalContent style={{ backgroundColor: '#fff' }}>
+            <View style={{ width: SIZES.width - 80 }}>
               {props?.title?.length && (
                 <View>
                   <TitleContainer>
@@ -67,16 +67,16 @@ class AlertDialog {
                         props.type === 'success'
                           ? faCheckCircle
                           : props.type === 'error'
-                          ? faWarning
-                          : faExclamationCircle
+                            ? faWarning
+                            : faExclamationCircle
                       }
                       size={50}
                       color={
                         props.type === 'success'
                           ? 'green'
                           : props.type === 'error'
-                          ? 'red'
-                          : 'orange'
+                            ? 'red'
+                            : 'orange'
                       }
                     />
                   </IconContainer>
@@ -107,7 +107,7 @@ class AlertDialog {
                   {props.onConfirm && (
                     <ButtonView>
                       <Button
-                        text={props.onConfirmText || 'Onayla'}
+                        text={props.onConfirmText || 'Tamam'}
                         onPress={() => {
                           ModalPortal.dismiss(id);
                           this.ids.pop();

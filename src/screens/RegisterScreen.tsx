@@ -1,7 +1,7 @@
-import {View, Text, TextInput, TouchableOpacity, Image} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
 import Container from '../components/Container/Container';
 import CustomText from '../components/Text/Text';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Input from '../components/Input/Input';
 import {
@@ -13,19 +13,20 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import {useTranslation} from 'react-i18next';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {createUserWithEmailAndPassword} from 'firebase/auth';
-import {auth} from '../firebase/config';
-import {useRef, useState} from 'react';
-import FormContainer, {FormContainerRef} from '../components/FormContainer';
-import {getResourceByKey} from '../lang/i18n';
+import { useTranslation } from 'react-i18next';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import { useRef, useState } from 'react';
+import FormContainer, { FormContainerRef } from '../components/FormContainer';
+import { getResourceByKey } from '../lang/i18n';
 import UserRepository from '../repositories/UserRepository';
 import User from '../models/User';
-import {Dropdown} from 'react-native-element-dropdown';
+import { Dropdown } from 'react-native-element-dropdown';
+import axios from 'axios';
 
 export default function RegisterScreen(props: any) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [registerDto, setRegisterDto] = useState({
     firstName: '',
     lastName: '',
@@ -44,29 +45,26 @@ export default function RegisterScreen(props: any) {
   };
   const formRef = useRef<FormContainerRef>(null);
 
-  const register = () => {
+  const register = async () => {
     let isEmpty = formRef.current?.validate(getResourceByKey('addStudentForm'));
     if (isEmpty) {
       setLoading(true);
-      createUserWithEmailAndPassword(
-        auth,
-        registerDto.email,
-        registerDto.password,
-      )
-        .then(async userCredential => {
-          const user = userCredential.user;
-          console.log(user);
+      let data = {
+        firstName: registerDto.firstName,
+        lastName: registerDto.lastName,
+        email: registerDto.email,
+        password: registerDto.password,
+        phone: registerDto.phone,
+        role: "teacher",
+      };
 
-          const newUser: User = {
-            id: user.uid,
-            firstName: registerDto.firstName,
-            lastName: registerDto.lastName,
-            phone: registerDto.phone,
-            password: registerDto.password,
-            role: 'teacher',
-          };
-          await UserRepository.getInstance().addUser(newUser);
+      try {
+        const response = await axios.post(
+          "https://europe-west1-my-teacher-553bb.cloudfunctions.net/createNewTeacher",
+          data
+        );
 
+        if (response.status === 201) {
           AlertDialog.showModal({
             title: 'Başarılı',
             message: 'Kullanıcı başarıyla oluşturuldu',
@@ -74,24 +72,20 @@ export default function RegisterScreen(props: any) {
               props.navigation.goBack();
             },
           });
-        })
-        .catch(error => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          AlertDialog.showModal({
-            title: errorCode,
-            message: errorMessage,
-          });
-        })
-        .finally(() => {
-          setLoading(false);
+        }
+      } catch (error: any) {
+        console.log(error.response.data.error);
+        AlertDialog.showModal({
+          title: 'Hata',
+          message: error.response.data.error,
         });
+      } finally {
+        setLoading(false);
+      }
     }
   };
-  const [roleTypes, setRoleTypes] = useState([
-    {label: 'Öğretmen', value: 'teacher'},
-    {label: 'Veli', value: 'parent'},
-  ]);
+
+
 
   return (
     <Container>
@@ -104,7 +98,7 @@ export default function RegisterScreen(props: any) {
         </CustomText>
       </RegisterTopContainer>
 
-      <FormContainer style={{gap: 10, padding: 10}} formContainerRef={formRef}>
+      <FormContainer style={{ gap: 10, padding: 10 }} formContainerRef={formRef}>
         <Input
           placeholder="Ad"
           required
@@ -157,15 +151,7 @@ export default function RegisterScreen(props: any) {
           value={registerDto.phone}
           onChangeText={e => handleChange('phone', e)}
         />
-        <Dropdown
-          style={{backgroundColor: 'white', padding: 13, borderRadius: 10}}
-          data={roleTypes}
-          labelField="label"
-          valueField="value"
-          placeholder="Kayıt türünü seçin"
-          value={registerDto.role}
-          onChange={item => handleChange('role', item.value)}
-        />
+
         <Button
           loading={loading}
           onPress={() => register()}

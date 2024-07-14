@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native';
+import { View, Text, Keyboard } from 'react-native';
 import React, { useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import ClassRoom from '../models/ClassRoom';
@@ -47,6 +47,7 @@ export default function AddClassScreen(
       getResourceByKey('addClassRoomForm'),
     );
     if (isEmpty) {
+      Keyboard.dismiss();
       setLoading(true);
       const entity = await classRoomRepo.addClassRoom(addedUserIdFromTeacher);
       setLoading(false);

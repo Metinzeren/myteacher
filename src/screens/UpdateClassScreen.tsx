@@ -60,7 +60,7 @@ export default function UpdateClassScreen(
 
   };
   return (
-    <Container p={10} header title="Sınıf Bilgisi Güncelle" goBackShow>
+    <Container p={10} header title="Sınıf Bilgisi" goBackShow>
       <FormContainer
         style={{ gap: 10 }}
         formContainerRef={formRef}>

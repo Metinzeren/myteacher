@@ -14,13 +14,14 @@ import Questions from '../models/Questions';
 import QuestionRepository from '../repositories/QuestionRepository';
 import { useQuestions } from '../context/StudentEvulationContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
+import { useTranslation } from 'react-i18next';
 
 export default function StudentEvulationScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentEvulationScreen'>,
 ) {
   const questionRepo = QuestionRepository.getInstance();
   const [loading, setLoading] = useState(false);
-
+  const { t } = useTranslation();
   useEffect(() => {
     props.navigation.addListener('focus', () => {
       loadQuestions();
@@ -41,8 +42,8 @@ export default function StudentEvulationScreen(
 
   const handleDeleteQuestion = (id: string) => {
     AlertDialog.showModal({
-      title: 'Uyarı',
-      message: 'Sınıfı kalıcı olarak silmeye emin misiniz?',
+      title: t('WARNING'),
+      message: t('CLASS_DELETE_CHECK'),
       onConfirm() {
         questionRepo.deleteQuestion(id as string);
         deleteQuestion(id as string);
@@ -69,7 +70,7 @@ export default function StudentEvulationScreen(
         key={index}>
         <ListItemContainer>
           <CustomText fontWeight="bold" color="grey">
-            Soru
+            {t("QUESTION")}:
           </CustomText>
         </ListItemContainer>
         <ListItemContainer>
@@ -93,11 +94,11 @@ export default function StudentEvulationScreen(
     );
   };
   return (
-    <Container p={10} goBackShow header title="Değerlendirme Soruları">
+    <Container p={10} goBackShow header title={t("QUESTION")}>
       <Loading loading={loading}>
         <ListContainer>
           <CustomFlatList
-            notFoundText="Soru Bulunamadı."
+            notFoundText={t("QUESTION_NOT_FOUND")}
             filter={(entity, value, index) => {
               return entity.name.toLowerCase().includes(value.toLowerCase());
             }}
@@ -109,7 +110,7 @@ export default function StudentEvulationScreen(
         <ButtonContainer>
           <Button
             borderRadius={10}
-            text="Soru Ekle"
+            text={t('QUESTION_ADD')}
             onPress={() => {
               props.navigation.navigate('AddStudentEvulationScreen');
             }}></Button>

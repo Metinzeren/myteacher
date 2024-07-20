@@ -3,6 +3,7 @@ import { View } from 'react-native';
 import Button from '../Button/Button';
 import Input from '../Input/Input';
 import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
 
 interface AnswerFormProps {
     onAddAnswer: (answer: string) => void;
@@ -11,7 +12,7 @@ interface AnswerFormProps {
 
 const AnswerForm = ({ onAddAnswer, onClose }: AnswerFormProps) => {
     const [answer, setAnswer] = useState('');
-
+    const { t } = useTranslation();
     const handleAddAnswer = () => {
         if (answer.trim()) {
             onAddAnswer(answer.trim());
@@ -24,12 +25,12 @@ const AnswerForm = ({ onAddAnswer, onClose }: AnswerFormProps) => {
         <AnswerFormContainer>
             <Input
                 id='question'
-                placeholder="Cevap"
+                placeholder={t('ANSWER')}
                 value={answer}
                 onChangeText={setAnswer}
             />
-            <Button text="Ekle" onPress={handleAddAnswer} />
-            <Button text="İptal" onPress={onClose} />
+            <Button text={t("ADD")} onPress={handleAddAnswer} />
+            <Button text={t('CANCEL')} onPress={onClose} />
         </AnswerFormContainer>
     );
 };

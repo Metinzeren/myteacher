@@ -20,6 +20,8 @@ import AnswerList from '../components/AnswerList/AnswerList';
 import Loading from '../components/Loading/Loading';
 import { getUserId } from '../utils/AsyncStorageUtils';
 import { useQuestions } from '../context/StudentEvulationContext';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
 
 export default function AddStudentEvulationScreen(
   props: NativeStackScreenProps<
@@ -28,6 +30,7 @@ export default function AddStudentEvulationScreen(
   >,
 ) {
   const colors = useThemeColors();
+  const { t } = useTranslation()
   const formRef = useRef<FormContainerRef>(null);
   const [loading, setLoading] = useState(false);
   const [registerDto, setRegisterDto] = useState<Questions>({
@@ -60,8 +63,8 @@ export default function AddStudentEvulationScreen(
       addQuestion(entity as any)
 
       AlertDialog.showModal({
-        title: 'Başarılı',
-        message: 'Soru başarıyla eklendi',
+        title: t('SUCCESS'),
+        message: t('QUESTION_ADD_SUCCESS'),
         onConfirm() {
           props.navigation.goBack();
         },
@@ -85,41 +88,41 @@ export default function AddStudentEvulationScreen(
 
 
   return (
-    <Container p={10} goBackShow header title="Soru Ekle">
+    <Container p={10} goBackShow header title={t("QUESTION_ADD")}>
       <Loading loading={loading}>
         <EvulationContainer>
           <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
             <CustomText color="primaryText" fontSizes="body4">
-              Soru yazınız
+              {t("WRITE_QUESTION")}
             </CustomText>
             <Input
               required
               id="name"
-              placeholder="Soru ekle"
+              placeholder={t("WRITE_QUESTION")}
               icon={faQuestion}
               value={registerDto?.name}
               onChangeText={e => handleChange('name', e)}
             />
             <CustomText color="primaryText" fontSizes="body4">
-              Soru tipini seçiniz
+              {t("CHOOSE_QUESTION_TYPE")}
             </CustomText>
             <ButtonContainer>
               <Button
                 style={{ flex: 1 }}
                 outline={registerDto.questionType === 'rating' ? false : true}
-                text="Puanlama"
+                text={t("QUESTION_TYPE_STAR")}
                 onPress={() => handleChange('questionType', 'rating')}
               />
               <Button
                 outline={registerDto.questionType === 'option' ? false : true}
-                text="Seçenekli"
+                text={t("QUESTION_TYPE_OPTIONAL")}
                 style={{ flex: 1 }}
                 onPress={() => handleChange('questionType', 'option')}
               />
               <Button
                 style={{ flex: 1 }}
                 outline={registerDto.questionType === 'text' ? false : true}
-                text="Yazı"
+                text={t("QUESTION_TYPE_TEXT")}
                 onPress={() => handleChange('questionType', 'text')}
               />
             </ButtonContainer>
@@ -127,7 +130,7 @@ export default function AddStudentEvulationScreen(
             {registerDto.questionType === 'option' && (
               <AnswerContainer>
                 <CustomText fontSizes="body4" color="primaryText">
-                  Soru tipini seçiniz
+                  {t("ANSWER_TYPE")}
                 </CustomText>
                 <View
                   style={{
@@ -142,14 +145,14 @@ export default function AddStudentEvulationScreen(
                   }}>
                   <RadioButton
                     checked={registerDto.answerType === 'single'}
-                    label="Tekli Seçim"
+                    label={t("QUESTION_TYPE_SINGULAR")}
                     onPress={() => {
                       handleChange('answerType', 'single');
                     }}
                   />
                   <RadioButton
                     checked={registerDto.answerType === 'multiple'}
-                    label="Çoklu Seçim"
+                    label={t("QUESTION_TYPE_MULTIPLE")}
                     onPress={() => {
                       handleChange('answerType', 'multiple');
                     }}
@@ -157,7 +160,7 @@ export default function AddStudentEvulationScreen(
                 </View>
                 <AnswerHeader>
                   <CustomText color="primaryText" fontSizes="body4">
-                    Cevap ekleyin
+                    {t("ANSWER_ADD")}
                   </CustomText>
                   <IconButton icon={faPlus} onPress={() => setShowForm(true)} />
                 </AnswerHeader>

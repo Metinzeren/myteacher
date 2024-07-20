@@ -12,6 +12,7 @@ import { t } from 'i18next';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { useClassRooms } from '../context/ClassRoomContext';
+import { useTranslation } from 'react-i18next';
 
 export default function UpdateClassScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateClassScreen'>,
@@ -22,7 +23,7 @@ export default function UpdateClassScreen(
   const [className, setClassName] = useState(classInfo);
   const [loading, setLoading] = useState(false)
   const { updateClassRoom } = useClassRooms();
-
+  const { t } = useTranslation()
   const handleChange = (key: keyof ClassRoom, value: string) => {
     setClassName(prevState => ({
       ...prevState,
@@ -40,9 +41,9 @@ export default function UpdateClassScreen(
             updateClassRoom(res);
             setLoading(false)
             AlertDialog.showModal({
-              title: 'Başarılı',
-              message: 'Sınıf başarıyla güncellendi',
-              onConfirmText: 'Tamam',
+              title: t('SUCCESS'),
+              message: t('CLASS_EDIT_SUCCESS'),
+              onConfirmText: t('OKAY'),
               onConfirm: () => {
                 props.navigation.goBack();
               },
@@ -52,15 +53,15 @@ export default function UpdateClassScreen(
         .catch(er => {
           console.log(er);
           AlertDialog.showModal({
-            title: 'Hata',
-            message: 'Sınıf güncellenirken bir hata oluştu',
+            title: t('ERROR'),
+            message: t('CLASS_EDIT_ERROR'),
           });
         });
     }
 
   };
   return (
-    <Container p={10} header title="Sınıf Bilgisi" goBackShow>
+    <Container p={10} header title={t("CLASS_INFO")} goBackShow>
       <FormContainer
         style={{ gap: 10 }}
         formContainerRef={formRef}>
@@ -68,7 +69,7 @@ export default function UpdateClassScreen(
           required
           id="className"
           errorMessage=""
-          placeholder="Ad"
+          placeholder={t('NAME')}
           icon={faUser}
           value={className.name}
           onChangeText={e => handleChange('name', e)}

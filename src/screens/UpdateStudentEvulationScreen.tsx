@@ -16,12 +16,14 @@ import useThemeColors from '../constant/useColor'
 import { getResourceByKey } from '../lang/i18n'
 import AlertDialog from '../components/AlertDialog/AlertDialog'
 import { useQuestions } from '../context/StudentEvulationContext'
+import { useTranslation } from 'react-i18next'
 export default function UpdateStudentEvulationScreen(
     props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentEvulationScreen'>
 ) {
 
     const [loading, setLoading] = useState(false);
     const questionRepo = QuestionRepository.getInstance();
+    const { t } = useTranslation();
     const { updateQuestion } = useQuestions()
     const questionId = props.route.params.questionId;
     const formRef = useRef<FormContainerRef>(null);
@@ -105,7 +107,7 @@ export default function UpdateStudentEvulationScreen(
             p={10}
             goBackShow
             header
-            title="Soru Bilgisi"
+            title={t("QUESTION_INFO")}
             extraIcon={faTrash}
         >
             <Loading>

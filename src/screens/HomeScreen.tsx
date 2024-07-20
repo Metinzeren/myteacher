@@ -1,42 +1,43 @@
-import {View, TouchableOpacity, StyleSheet} from 'react-native';
-import React, {useCallback, useRef, useState} from 'react';
+import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useCallback, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faAngleRight,
   faClose,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import useThemeColors from '../constant/useColor';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
-import {homeMenu} from '../data/data';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
+import { homeMenu } from '../data/data';
 import Button from '../components/Button/Button';
-import {signOut} from 'firebase/auth';
-import {auth} from '../firebase/config';
-import {ScrollView} from 'react-native-gesture-handler';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/config';
+import { ScrollView } from 'react-native-gesture-handler';
 import Input from '../components/Input/Input';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import ClassRoom from '../models/ClassRoom';
 import IconButton from '../components/IconButton/IconButton';
 import Loading from '../components/Loading/Loading';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
+import { useTranslation } from 'react-i18next';
 
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
 ) => {
   const classRoomRepo = ClassRoomRepository.getInstance();
   const colors = useThemeColors();
-
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [searchStudent, setSearchStudent] = useState('');
   const [focusToSearch, setFocusToSearch] = useState(false);
   const [searchStudents, setSearchStudents] = useState<Array<ClassRoom>>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   return (
-    <Container title="Anasayfa" header showNotification>
+    <Container title={t('HOME')} header showNotification>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -45,10 +46,10 @@ const HomeScreen = (
         showsHorizontalScrollIndicator={false}
         showsVerticalScrollIndicator={false}>
         <HomeTopContainer>
-          <View style={{flex: 1}}>
+          <View style={{ flex: 1 }}>
             <Input
               autoCapitalize="none"
-              placeholder="Öğrenci Ara"
+              placeholder={t('SEARCH_STUDENT')}
               icon={faSearch}
               value={searchStudent}
               onChangeText={search => {
@@ -140,7 +141,7 @@ const HomeScreen = (
                 onPress={() => props.navigation.navigate(item?.link as any)}
                 key={index}>
                 <MenuItem>
-                  <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {item?.icon}
                     <CustomText fontSizes="h5" color="primaryText" center>
                       {item.name}
@@ -162,7 +163,7 @@ const HomeScreen = (
       <LogoutButton>
         <Button
           loading={loading}
-          text="Çıkış Yap"
+          text={t('LOGOUT')}
           onPress={() => {
             AlertDialog.showModal({
               title: 'Çıkış yapmak istediğinize emin misiniz?',
@@ -176,7 +177,7 @@ const HomeScreen = (
                     setLoading(false);
                   });
               },
-              onCancel() {},
+              onCancel() { },
             });
           }}
         />

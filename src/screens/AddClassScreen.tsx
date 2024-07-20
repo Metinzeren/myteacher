@@ -30,7 +30,7 @@ export default function AddClassScreen(
 
   const classRoomRepo = ClassRoomRepository.getInstance();
   const { addClassRoom } = useClassRooms();
-
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const formRef = useRef<FormContainerRef>(null);
   const handleChange = (key: keyof typeof registerDto, value: string) => {
@@ -53,8 +53,8 @@ export default function AddClassScreen(
       setLoading(false);
       addClassRoom(entity);
       AlertDialog.showModal({
-        title: 'Başarılı',
-        message: 'Sınıf başarıyla eklendi',
+        title: t("SUCCESS"),
+        message: t("CLASS_ADD_SUCCESS"),
         onConfirm() {
           props.navigation.goBack();
         },
@@ -62,12 +62,12 @@ export default function AddClassScreen(
     }
   };
   return (
-    <Container p={10} header goBackShow title="Sınıf ekle">
+    <Container p={10} header goBackShow title={t("CLASS_ADD")}>
       <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
         <Input
           required
           id="name"
-          placeholder="Sınıf adı"
+          placeholder={t('CLASS_NAME')}
           icon={faUser}
           value={registerDto?.name}
           onChangeText={e => handleChange('name', e)}

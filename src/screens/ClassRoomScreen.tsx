@@ -1,8 +1,8 @@
-import {View, Text, TouchableOpacity} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import ClassRoom from '../models/ClassRoom';
 import Container from '../components/Container/Container';
 import Loading from '../components/Loading/Loading';
@@ -10,18 +10,21 @@ import styled from 'styled-components';
 import Button from '../components/Button/Button';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import CustomText from '../components/Text/Text';
-import {useClassRooms} from '../context/ClassRoomContext';
+import { useClassRooms } from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Input from '../components/Input/Input';
-import {faDeleteLeft, faPen, faTrash} from '@fortawesome/free-solid-svg-icons';
+import { faDeleteLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import IconButton from '../components/IconButton/IconButton';
+import { useTranslation } from 'react-i18next';
 
 export default function ClassRoomScreen(
   props: NativeStackScreenProps<RootStackParamList>,
 ) {
   const classRoomRepo = ClassRoomRepository.getInstance();
   const [loading, setLoading] = useState(true);
-  const {setClassRooms, classRooms, deleteClassRoom, updateClassRoom} =
+  const { t } = useTranslation();
+
+  const { setClassRooms, classRooms, deleteClassRoom, updateClassRoom } =
     useClassRooms();
   useEffect(() => {
     props.navigation.addListener('focus', () => {
@@ -41,18 +44,18 @@ export default function ClassRoomScreen(
   };
   const deleteClass = (id: string) => {
     AlertDialog.showModal({
-      title: 'Uyarı',
+      title: t('WARNING'),
       message: 'Sınıfı kalıcı olarak silmeye emin misiniz?',
       onConfirm() {
         classRoomRepo.deleteClassRoom(id as string);
         deleteClassRoom(id as string);
         AlertDialog.dismiss();
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
 
-  const RenderItem = ({item, index}: {item: ClassRoom; index: number}) => {
+  const RenderItem = ({ item, index }: { item: ClassRoom; index: number }) => {
     return (
       <ListItem
         style={{
@@ -72,11 +75,11 @@ export default function ClassRoomScreen(
         }}
         key={index}>
         <ListItemContainer>
-          <CustomText color="grey">Sınıf Adı:</CustomText>
+          <CustomText color="grey">{t('CLASS_NAME')}:</CustomText>
           <CustomText color="grey">{item.name}</CustomText>
         </ListItemContainer>
         <ListItemContainer>
-          <CustomText color="grey">Öğrenci Sayısı:</CustomText>
+          <CustomText color="grey">{t('STUDENT_COUNT')}:</CustomText>
           <CustomText color="grey">{item.students.length}</CustomText>
         </ListItemContainer>
         <ListItemButtonContainer>
@@ -97,11 +100,11 @@ export default function ClassRoomScreen(
     );
   };
   return (
-    <Container goBackShow header title="Sınıflar">
+    <Container goBackShow header title={t('CLASSROOMS')}>
       <Loading loading={loading}>
         <ListContainer>
           <CustomFlatList
-            notFoundText="Sınıf Bulunamadı."
+            notFoundText={t('CLASS_NOT_FOUND')}
             filter={(entity, value, index) => {
               return entity.name.toLowerCase().includes(value.toLowerCase());
             }}
@@ -113,7 +116,7 @@ export default function ClassRoomScreen(
         <ButtonContainer>
           <Button
             borderRadius={10}
-            text="Sınıf Ekle"
+            text={t('CLASS_ADD')}
             onPress={() => {
               props.navigation.navigate('AddClassScreen');
             }}></Button>

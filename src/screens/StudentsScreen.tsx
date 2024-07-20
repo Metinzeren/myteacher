@@ -26,6 +26,7 @@ export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
   const colors = useThemeColors();
+  const { t } = useTranslation();
   const { classRooms } = useClassRooms();
   const classRoomId = props.route.params?.classRoomId;
   const students = classRooms?.find?.(x => x.id == classRoomId)?.students || [];
@@ -46,17 +47,17 @@ export default function StudentsScreen(
         }
         key={index}>
         <ListItemContainer>
-          <CustomText color="grey">Öğrenci Adı:</CustomText>
+          <CustomText color="grey">{t('STUDENT_NAME')}:</CustomText>
           <CustomText color="grey">
             {item?.firstName} {item.lastName}
           </CustomText>
         </ListItemContainer>
         <ListItemContainer>
-          <CustomText color="grey">Öğrenci Numarası:</CustomText>
+          <CustomText color="grey">{t("STUDENT_NO")}:</CustomText>
           <CustomText color="grey">{item.studentNo}</CustomText>
         </ListItemContainer>
         <ListItemContainer>
-          <CustomText color="grey">Veli Adı:</CustomText>
+          <CustomText color="grey">{t('PARENT_NAME')}:</CustomText>
           <CustomText color="grey">
             {item.parentFirstName} {item.parentLastName}
           </CustomText>
@@ -66,7 +67,7 @@ export default function StudentsScreen(
           <View style={{ marginTop: 10 }}>
             <Button
               size="sm"
-              text="Değerlendirme Ekle"
+              text={t('EVULATION_ADD')}
               onPress={() => {
                 setSelectedStudent(item);
                 refRBSheet.current.open();
@@ -77,17 +78,17 @@ export default function StudentsScreen(
     );
   };
   return (
-    <Container goBackShow header title="Öğrenciler">
+    <Container goBackShow header title={t("STUDENTS")}>
       <Loading>
         <ListContainer>
           <CustomFlatList
-            notFoundText="Öğrenci Bulunamadı."
-            filter={(entity, value, index) => {
-              return (
-                entity.firstName.toLowerCase().includes(value.toLowerCase()) ||
-                entity.lastName.toLowerCase().includes(value.toLowerCase())
-              );
-            }}
+            notFoundText={t("STUDENT_NOT_FOUND")}
+            // filter={(entity, value, index) => {
+            //   return (
+            //     entity.firstName.toLowerCase().includes(value.toLowerCase()) ||
+            //     entity.lastName.toLowerCase().includes(value.toLowerCase())
+            //   );
+            // }}
             isSearchable
             data={students}
             renderItem={RenderItem}
@@ -96,7 +97,7 @@ export default function StudentsScreen(
         <ButtonContainer>
           <Button
             borderRadius={10}
-            text="Öğrenci Ekle"
+            text={t("STUDENT_ADD")}
             onPress={() =>
               props.navigation.navigate('AddStudentScreen', {
                 classRoomId: classRoomId,

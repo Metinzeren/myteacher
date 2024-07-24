@@ -45,7 +45,7 @@ const ClassRoomProvider = ({ children }: ClassRoomProviderProps) => {
     const deleteStudentFromClassRoom = (classRoomId: string, studentId: string) => {
         const newClassRooms = classRooms.map((classRoom) => {
             if (classRoom.id === classRoomId) {
-                const newStudents = classRoom.students.filter((student) => student.id !== studentId);
+                const newStudents = classRoom.students.filter((student) => student.newStudentId !== studentId);
                 return { ...classRoom, students: newStudents };
             }
             return classRoom;

@@ -42,7 +42,7 @@ export default function StudentsScreen(
       <ListItem
         onPress={() =>
           props.navigation.navigate('UpdateStudentScreen', {
-            studentId: item.id as string,
+            studentId: item.newStudentId as string,
             classRoomId: classRoomId,
           })
         }

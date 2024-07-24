@@ -40,6 +40,7 @@ export default function UpdateStudentScreen(
   const { classRooms } = useClassRooms();
   const studentFromParam = props.route.params.student;
   const studentId = props.route.params.studentId;
+
   const [loading, setLoading] = useState(false);
   const classRoomId = props.route.params.classRoomId;
 
@@ -47,7 +48,7 @@ export default function UpdateStudentScreen(
     studentFromParam ??
     (classRooms
       ?.find?.(c => c.id == classRoomId)
-      ?.students.find(d => d.id === studentId) as Student);
+      ?.students.find(d => d.newStudentId === studentId) as Student);
 
   const [updateDto, setUpdateDto] = useState<Student>({
     id: student?.id,
@@ -74,7 +75,7 @@ export default function UpdateStudentScreen(
 
   const getEvulation = async () => {
     const evulation = await evulationRepo.getEvulationWithQuestions(
-      student.id as string,
+      student.newStudentId as string,
     );
     setEvulation(evulation);
   };
@@ -108,16 +109,18 @@ export default function UpdateStudentScreen(
       });
     }
   };
+
   const pressToDelete = () => {
+
     AlertDialog.showModal({
       title: 'Uyarı',
       message: `${student.firstName} ${student.lastName} öğrenciyi silmeye emin misiniz?`,
       onConfirm() {
         classRoomRepo.removeStudentFromClassRoom(
           classRoomId,
-          student.id as string,
+          student.newStudentId as string,
         );
-        deleteStudentFromClassRoom(classRoomId, student.id as string);
+        deleteStudentFromClassRoom(classRoomId, student.newStudentId as string);
         AlertDialog.dismiss();
         props.navigation.goBack();
       },

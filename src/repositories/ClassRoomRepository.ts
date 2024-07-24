@@ -8,11 +8,11 @@ import {
   updateDoc,
   arrayUnion,
 } from 'firebase/firestore';
-import {db} from '../firebase/config';
+import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import ClassRoom from '../models/ClassRoom';
 import Student from '../models/Student';
-import {getUserId} from '../utils/AsyncStorageUtils';
+import { getUserId } from '../utils/AsyncStorageUtils';
 
 class ClassRoomRepository {
   private static instance: ClassRoomRepository;
@@ -24,7 +24,7 @@ class ClassRoomRepository {
     return ClassRoomRepository.instance;
   }
 
-  private constructor() {}
+  private constructor() { }
 
   async addClassRoom(classRoom: ClassRoom) {
     const classRoomDoc = doc(this.classRoomCollection);
@@ -71,7 +71,7 @@ class ClassRoomRepository {
     if (classRoomSnapshot.exists()) {
       const classRoom = classRoomSnapshot.data() as ClassRoom;
       const updatedStudents = classRoom.students.filter(
-        student => student.id !== studentId,
+        student => student.newStudentId !== studentId,
       );
       await updateDoc(classRoomDoc, {
         students: updatedStudents,
@@ -85,7 +85,7 @@ class ClassRoomRepository {
     if (classRoomSnapshot.exists()) {
       const classRoom = classRoomSnapshot.data() as ClassRoom;
       const updatedStudents = classRoom.students.map(student =>
-        student.id === updatedStudent.id ? updatedStudent : student,
+        student.newStudentId === updatedStudent.id ? updatedStudent : student,
       );
       await updateDoc(classRoomDoc, {
         students: updatedStudents,

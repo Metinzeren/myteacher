@@ -6,7 +6,7 @@ import {
   getDocs,
   setDoc,
 } from 'firebase/firestore';
-import {db} from '../firebase/config';
+import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import Student from '../models/Student';
 
@@ -19,16 +19,16 @@ class StudentRepository {
     }
     return StudentRepository.instance;
   }
-  private constructor() {}
+  private constructor() { }
 
   async addStudent(student: Student) {
     const studentDoc = doc(this.studentCollection);
-    student.id = studentDoc.id;
+    student.newStudentId = studentDoc.id;
     await setDoc(studentDoc, student);
     return student
   }
   async updateStudent(student: Student) {
-    const studentDoc = doc(this.studentCollection, student.id);
+    const studentDoc = doc(this.studentCollection, student.newStudentId);
     await setDoc(studentDoc, student);
   }
   async deleteStudent(studentId: string) {

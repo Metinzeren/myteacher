@@ -54,7 +54,6 @@ export default function UpdateStudentScreen(
     firstName: student?.firstName,
     lastName: student?.lastName,
     studentNo: student?.studentNo,
-    parent: student?.parent,
     parentEmail: student?.parentEmail,
     parentFirstName: student?.parentFirstName,
     parentLastName: student?.parentLastName,

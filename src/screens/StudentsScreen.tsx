@@ -37,6 +37,7 @@ export default function StudentsScreen(
   );
 
   const RenderItem = ({ item, index }: { item: Student; index: number }) => {
+
     return (
       <ListItem
         onPress={() =>

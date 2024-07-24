@@ -7,6 +7,7 @@ interface Student {
   studentNo: number | string;
   parentFirstName: string;
   parentLastName: string;
+  newStudentId?: string;
   parentEmail: string;
   parentPhone: string;
   createdAt?: Date;

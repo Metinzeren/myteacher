@@ -20,6 +20,8 @@ import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { useClassRooms } from '../context/ClassRoomContext';
 import { getResourceByKey } from '../lang/i18n';
 import { getLocalStorage } from '../utils/AsyncStorageUtils';
+import uuid from 'react-native-uuid';
+
 export default function AddStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'AddStudentScreen'>,
 ) {
@@ -33,6 +35,7 @@ export default function AddStudentScreen(
     lastName: '',
     studentNo: '',
     parentEmail: '',
+    newStudentId: uuid.v4().toString(),
     parentFirstName: '',
     parentLastName: '',
     parentPhone: '',
@@ -65,6 +68,7 @@ export default function AddStudentScreen(
           studentNo: registerDto.studentNo,
           parentFirstName: registerDto.parentFirstName,
           parentLastName: registerDto.parentLastName,
+          newStudentId: registerDto.newStudentId,
         };
         const response = await axios.post(
           'https://europe-west1-my-teacher-553bb.cloudfunctions.net/createUser',
@@ -75,9 +79,12 @@ export default function AddStudentScreen(
             },
           },
         );
+
         if (response.status === 201) {
           const entity = response.data;
-          addStudentFromClassRoom(classRoomId, entity);
+          console.log(response.data);
+
+          addStudentFromClassRoom(classRoomId, registerDto);
 
           AlertDialog.showModal({
             title: 'Başarılı',
@@ -88,7 +95,6 @@ export default function AddStudentScreen(
           });
         }
       } catch (error: AxiosError | any) {
-        console.log(error);
 
         AlertDialog.showModal({
           title: 'Hata',

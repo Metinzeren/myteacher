@@ -37,7 +37,7 @@ const HomeScreen = (
   const [searchStudents, setSearchStudents] = useState<Array<ClassRoom>>([]);
   const [searchLoading, setSearchLoading] = useState(false);
   return (
-    <Container title={t('HOME')} header showNotification>
+    <Container title={focusToSearch ? t('SEARCH_RESULTS') : t('HOME')} header showNotification={!focusToSearch}>
       <ScrollView
         contentContainerStyle={{
           flexGrow: 1,
@@ -135,57 +135,68 @@ const HomeScreen = (
             ))}
           </Loading>
         ) : (
-          <HomeBottomContainer>
-            {homeMenu.map((item, index) => (
-              <TouchableOpacity
-                onPress={() => props.navigation.navigate(item?.link as any)}
-                key={index}>
-                <MenuItem>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    {item?.icon}
-                    <CustomText fontSizes="h5" color="primaryText" center>
-                      {item.name}
-                    </CustomText>
-                  </View>
-                  <MenuItemButton>
-                    <FontAwesomeIcon
-                      icon={faAngleRight}
-                      color={colors.iconColor}
-                      size={20}
-                    />
-                  </MenuItemButton>
-                </MenuItem>
-              </TouchableOpacity>
-            ))}
-          </HomeBottomContainer>
+          <NoSearchContainer>
+            <HomeBottomContainer>
+              {homeMenu.map((item, index) => (
+                <TouchableOpacity
+                  onPress={() => props.navigation.navigate(item?.link as any)}
+                  key={index}>
+                  <MenuItem>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                      {item?.icon}
+                      <CustomText fontSizes="h5" color="primaryText" center>
+                        {item.name}
+                      </CustomText>
+                    </View>
+                    <MenuItemButton>
+                      <FontAwesomeIcon
+                        icon={faAngleRight}
+                        color={colors.iconColor}
+                        size={20}
+                      />
+                    </MenuItemButton>
+                  </MenuItem>
+                </TouchableOpacity>
+              ))}
+            </HomeBottomContainer>
+
+            <LogoutButton>
+              <Button
+                loading={loading}
+                text={t('LOGOUT')}
+                onPress={() => {
+                  AlertDialog.showModal({
+                    title: 'Çıkış yapmak istediğinize emin misiniz?',
+                    onConfirm() {
+                      setLoading(true);
+                      signOut(auth)
+                        .then(() => {
+                          props.navigation.navigate('LoginScreen');
+                        })
+                        .finally(() => {
+                          setLoading(false);
+                        });
+                    },
+                    onCancel() { },
+                  });
+                }}
+              />
+            </LogoutButton>
+          </NoSearchContainer>
+
         )}
       </ScrollView>
-      <LogoutButton>
-        <Button
-          loading={loading}
-          text={t('LOGOUT')}
-          onPress={() => {
-            AlertDialog.showModal({
-              title: 'Çıkış yapmak istediğinize emin misiniz?',
-              onConfirm() {
-                setLoading(true);
-                signOut(auth)
-                  .then(() => {
-                    props.navigation.navigate('LoginScreen');
-                  })
-                  .finally(() => {
-                    setLoading(false);
-                  });
-              },
-              onCancel() { },
-            });
-          }}
-        />
-      </LogoutButton>
+
     </Container>
   );
 };
-const HomeBottomContainer = styled(View)``;
+const HomeBottomContainer = styled(View)`
+`;
+const NoSearchContainer = styled(View)`
+  flex: 1;
+  justify-content: space-between;
+  flex-direction: column;
+`;
 const HomeTopContainer = styled(View)`
   margin-horizontal: 10px;
   margin-top: 10px;

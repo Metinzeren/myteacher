@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { View, TouchableOpacity, } from 'react-native';
 import React, { useRef, useState, useEffect } from 'react';
 import Container from '../components/Container/Container';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
@@ -33,6 +33,7 @@ import EvulationResponse from '../models/EvulationResponse';
 import CustomText from '../components/Text/Text';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import useThemeColors from '../constant/useColor';
+import { ScrollView } from 'react-native-gesture-handler';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
@@ -137,125 +138,136 @@ export default function UpdateStudentScreen(
       extraIcon={faTrash}
       extraIconPress={() => pressToDelete()}>
       <Loading>
-        <FormKeyboardView>
-          <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
-            <Input
-              required
-              id="firstName"
-              errorMessage=""
-              placeholder="Ad"
-              icon={faUser}
-              value={updateDto.firstName}
-              onChangeText={e => handleChange('firstName', e)}
-            />
-            <Input
-              required
-              id="lastName"
-              errorMessage=""
-              placeholder="Soyad"
-              icon={faUser}
-              value={updateDto.lastName}
-              onChangeText={e => handleChange('lastName', e)}
-            />
-            <Input
-              required
-              errorMessage=""
-              id="studentNo"
-              placeholder="Öğrenci okul numarası"
-              icon={faSortNumericDesc}
-              keyboardType="numeric"
-              value={updateDto.studentNo?.toString()}
-              onChangeText={e => handleChange('studentNo', e)}
-            />
-            <Input
-              required
-              errorMessage=""
-              id="parentFirstName"
-              placeholder="Veli adı"
-              icon={faUser}
-              value={updateDto.parentFirstName}
-              onChangeText={e => handleChange('parentFirstName', e)}
-            />
-            <Input
-              required
-              errorMessage=""
-              id="parentLastName"
-              placeholder="Veli Soyadı"
-              icon={faUser}
-              value={updateDto.parentLastName}
-              onChangeText={e => handleChange('parentLastName', e)}
-            />
-            <Input
-              required
-              id="parentPhone"
-              placeholder="Veli telefon numarası"
-              icon={faPhone}
-              keyboardType="numeric"
-              maxLength={11}
-              value={updateDto.parentPhone}
-              onChangeText={e => handleChange('parentPhone', e)}
-            />
-            <Input
-              required
-              id="parentEmail"
-              errorMessage=""
-              autoCapitalize="none"
-              autoCorrect={false}
-              placeholder="Veli e-mail"
-              icon={faEnvelope}
-              value={updateDto.parentEmail}
-              onChangeText={e => handleChange('parentEmail', e)}
-            />
-          </FormContainer>
-          <AccordionContainer>
-            <Accordion title="Değerlendirmeler">
-              {evulation.map((evulation, index) => (
-                <EvulationCard
-                  onPress={() => {
-                    AlertDialog.showModal({
-                      title: 'Değerlendirme',
-                      onCancel() {
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            backgroundColor: colors.background,
+          }}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}
+        >
 
-                      },
-                      onCancelText: "Kapat",
-                      content: evulation.evulationQuestions.map(
-                        (question, index) => (
-                          <CardContentContainer
-                            key={index}>
-                            <CustomText fontSizes='body4' color="textLink">{`${index + 1
-                              }.`}</CustomText>
-                            <CardContentRight>
-                              <CustomText color='primaryText'>
-                                {question.question.name}
-                              </CustomText>
-                              <CustomText color='textLink'>
-                                {question.answer[0]}
-                              </CustomText>
-                            </CardContentRight>
+          <FormKeyboardView>
+            <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+              <Input
+                required
+                id="firstName"
+                errorMessage=""
+                placeholder="Ad"
+                icon={faUser}
+                value={updateDto.firstName}
+                onChangeText={e => handleChange('firstName', e)}
+              />
+              <Input
+                required
+                id="lastName"
+                errorMessage=""
+                placeholder="Soyad"
+                icon={faUser}
+                value={updateDto.lastName}
+                onChangeText={e => handleChange('lastName', e)}
+              />
+              <Input
+                required
+                errorMessage=""
+                id="studentNo"
+                placeholder="Öğrenci okul numarası"
+                icon={faSortNumericDesc}
+                keyboardType="numeric"
+                value={updateDto.studentNo?.toString()}
+                onChangeText={e => handleChange('studentNo', e)}
+              />
+              <Input
+                required
+                errorMessage=""
+                id="parentFirstName"
+                placeholder="Veli adı"
+                icon={faUser}
+                value={updateDto.parentFirstName}
+                onChangeText={e => handleChange('parentFirstName', e)}
+              />
+              <Input
+                required
+                errorMessage=""
+                id="parentLastName"
+                placeholder="Veli Soyadı"
+                icon={faUser}
+                value={updateDto.parentLastName}
+                onChangeText={e => handleChange('parentLastName', e)}
+              />
+              <Input
+                required
+                id="parentPhone"
+                placeholder="Veli telefon numarası"
+                icon={faPhone}
+                keyboardType="numeric"
+                maxLength={11}
+                value={updateDto.parentPhone}
+                onChangeText={e => handleChange('parentPhone', e)}
+              />
+              <Input
+                required
+                id="parentEmail"
+                errorMessage=""
+                autoCapitalize="none"
+                autoCorrect={false}
+                placeholder="Veli e-mail"
+                icon={faEnvelope}
+                value={updateDto.parentEmail}
+                onChangeText={e => handleChange('parentEmail', e)}
+              />
+            </FormContainer>
+            <AccordionContainer>
+              <Accordion title="Değerlendirmeler">
+                {evulation.map((evulation, index) => (
+                  <EvulationCard
+                    onPress={() => {
+                      AlertDialog.showModal({
+                        title: 'Değerlendirme',
+                        onCancel() {
 
-                          </CardContentContainer>
+                        },
+                        onCancelText: "Kapat",
+                        content: evulation.evulationQuestions.map(
+                          (question, index) => (
+                            <CardContentContainer
+                              key={index}>
+                              <CustomText fontSizes='body4' color="textLink">{`${index + 1
+                                }.`}</CustomText>
+                              <CardContentRight>
+                                <CustomText color='primaryText'>
+                                  {question.question.name}
+                                </CustomText>
+                                <CustomText color='textLink'>
+                                  {question.answer[0]}
+                                </CustomText>
+                              </CardContentRight>
 
+                            </CardContentContainer>
+
+                          ),
                         ),
-                      ),
-                    });
-                  }}
-                  key={index}>
-                  <CustomText color="primaryText">{evulation.date}</CustomText>
-                  <FontAwesomeIcon
-                    color={colors.iconColor}
-                    icon={faAngleRight}
-                  />
-                </EvulationCard>
-              ))}
-            </Accordion>
-          </AccordionContainer>
-          <Button
-            loading={loading}
-            borderRadius={10}
-            onPress={updateStudent}
-            text={t('KAYDET')}
-          />
-        </FormKeyboardView>
+                      });
+                    }}
+                    key={index}>
+                    <CustomText color="primaryText">{evulation.date}</CustomText>
+                    <FontAwesomeIcon
+                      color={colors.iconColor}
+                      icon={faAngleRight}
+                    />
+                  </EvulationCard>
+                ))}
+              </Accordion>
+            </AccordionContainer>
+            <Button
+              loading={loading}
+              borderRadius={10}
+              onPress={updateStudent}
+              text={t('KAYDET')}
+            />
+          </FormKeyboardView>
+        </ScrollView>
+
       </Loading>
     </Container>
   );

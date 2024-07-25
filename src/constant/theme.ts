@@ -1,6 +1,6 @@
-import {Dimensions} from 'react-native';
+import { Dimensions } from 'react-native';
 
-const {width, height} = Dimensions.get('screen');
+const { width, height } = Dimensions.get('screen');
 
 export const SIZES = {
   fontLg: 16,
@@ -63,4 +63,16 @@ export const COLORS = {
   textLink: '#e78577',
   grey: 'grey',
   error: '#ff0000',
+  white: '#fff',
+  black: '#000',
+  primary: '#e78577',
+  secondary: '#f1c40f',
+  tertiary: '#2c3e50',
+  dark: '#000',
+  light: '#fff',
+  grey2: '#f9f9f9',
+  grey3: '#f0f0f0',
+  grey4: '#ebebeb',
+  grey5: '#d8d8d8',
+
 };

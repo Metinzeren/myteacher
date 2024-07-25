@@ -1,5 +1,5 @@
-import {View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, Text } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import QuestionRepository from '../../repositories/QuestionRepository';
 import Questions from '../../models/Questions';
 import Container from '../Container/Container';
@@ -17,6 +17,7 @@ import Button from '../Button/Button';
 import AlertDialog from '../AlertDialog/AlertDialog';
 import EvulationRepository from '../../repositories/EvulationRepository';
 import EvulationResponse from '../../models/EvulationResponse';
+import { useTranslation } from 'react-i18next';
 
 export default function QuestionsList({
   student,
@@ -27,10 +28,11 @@ export default function QuestionsList({
 }) {
   const questionRepo = QuestionRepository.getInstance();
   const evulationRepo = EvulationRepository.getInstance();
+  const { t } = useTranslation()
   const [questions, setQuestions] = useState<Array<Questions>>([]);
   const [loading, setLoading] = useState(true);
   const [evulation, setEvulation] = useState<Evulation>({
-    studentId: student.id as string,
+    studentId: student.newStudentId as string,
     date: '2021-08-01',
     evulationQuestions: [],
   });
@@ -134,7 +136,7 @@ export default function QuestionsList({
       evulationQuestions: evulationQuestions,
     });
   };
-  const RenderItem = ({item, index}: {item: Questions; index: number}) => {
+  const RenderItem = ({ item, index }: { item: Questions; index: number }) => {
     const question = item;
     return (
       <QuestionCard
@@ -150,7 +152,7 @@ export default function QuestionsList({
         }}
         key={index}>
         <CustomText color="textLink">{`${index + 1}. Soru`}</CustomText>
-        <View style={{marginBottom: 10}}>
+        <View style={{ marginBottom: 10 }}>
           <CustomText fontSizes="body4" color="primaryText">
             {question.name}
           </CustomText>
@@ -166,20 +168,20 @@ export default function QuestionsList({
     );
     if (evulationQuestions.length === 0) {
       AlertDialog.showModal({
-        title: 'Uyarı',
+        title: t('ERROR'),
         message: 'Lütfen tüm soruları cevaplayınız',
       });
     }
     const entity = await evulationRepo.addEvulation(evulation);
     if (entity) {
       AlertDialog.showModal({
-        title: 'Başarılı',
+        title: t('SUCCESS'),
         message: 'Değerlendirme başarılı bir şekilde kaydedildi.',
         type: 'success',
       });
     } else {
       AlertDialog.showModal({
-        title: 'Hata',
+        title: t('ERROR'),
         message: 'Değerlendirme kaydedilirken bir hata oluştu.',
         type: 'error',
       });
@@ -189,12 +191,12 @@ export default function QuestionsList({
   return (
     <>
       <Loading loading={loading}>
-        <View style={{flex: 0.9}}>
+        <View style={{ flex: 0.9 }}>
           <CustomFlatList data={questions} renderItem={RenderItem} />
         </View>
-        <View style={{flex: 0.1}}>
+        <View style={{ flex: 0.1 }}>
           <Container px={20}>
-            <Button text="Kaydet" onPress={() => handleSave()} />
+            <Button text={t("SAVE")} onPress={() => handleSave()} />
           </Container>
         </View>
       </Loading>

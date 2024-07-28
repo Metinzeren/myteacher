@@ -1,9 +1,9 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, TouchableOpacity, Modal, ScrollView, Image } from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import {View, TouchableOpacity, Modal, ScrollView, Image} from 'react-native';
 import styled from 'styled-components';
 import Container from '../components/Container/Container';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
 import Loading from '../components/Loading/Loading';
 import FormContainer from '../components/FormContainer';
 import Input from '../components/Input/Input';
@@ -15,29 +15,30 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { FormContainerRef } from '../components/FormContainer';
+import {FormContainerRef} from '../components/FormContainer';
 import Student from '../models/Student';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Button from '../components/Button/Button';
-import { t } from 'i18next';
+import {t} from 'i18next';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import { useClassRooms } from '../context/ClassRoomContext';
+import {useClassRooms} from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView';
 import Accordion from '../components/Accordion/Accordion';
-import { getResourceByKey } from '../lang/i18n';
+import {getResourceByKey} from '../lang/i18n';
 import EvulationRepository from '../repositories/EvulationRepository';
 import EvulationResponse from '../models/EvulationResponse';
 import CustomText from '../components/Text/Text';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import useThemeColors from '../constant/useColor';
 import axios from 'axios';
-import { getLocalStorage } from '../utils/AsyncStorageUtils';
+import {getLocalStorage} from '../utils/AsyncStorageUtils';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
 ) {
-  const { classRooms, deleteStudentFromClassRoom, updateStudentInClassRoom } = useClassRooms();
+  const {classRooms, deleteStudentFromClassRoom, updateStudentInClassRoom} =
+    useClassRooms();
   const studentFromParam = props.route.params.student;
   const studentId = props.route.params.studentId;
   const classRoomId = props.route.params.classRoomId;
@@ -132,7 +133,9 @@ export default function UpdateStudentScreen(
   const pressToDelete = () => {
     AlertDialog.showModal({
       title: t('WARNING'),
-      message: `${student.firstName} ${student.lastName} ${t('STUDENT_DELETE_CHECK')}`,
+      message: `${student.firstName} ${student.lastName} ${t(
+        'STUDENT_DELETE_CHECK',
+      )}`,
       onConfirm: async () => {
         setLoading(true);
 
@@ -153,10 +156,13 @@ export default function UpdateStudentScreen(
                 Authorization: `Bearer ${accessToken}`,
               },
               data: data,
-            }
+            },
           );
 
-          deleteStudentFromClassRoom(classRoomId, student.newStudentId as string);
+          deleteStudentFromClassRoom(
+            classRoomId,
+            student.newStudentId as string,
+          );
           AlertDialog.dismiss();
           props.navigation.goBack();
         } catch (error) {
@@ -172,9 +178,6 @@ export default function UpdateStudentScreen(
     });
   };
 
-
-
-
   return (
     <Container
       p={10}
@@ -182,8 +185,7 @@ export default function UpdateStudentScreen(
       header
       title={t('STUDENT_INFO')}
       extraIcon={faTrash}
-      extraIconPress={() => pressToDelete()}
-    >
+      extraIconPress={() => pressToDelete()}>
       <Loading>
         <ScrollView
           contentContainerStyle={{
@@ -191,10 +193,9 @@ export default function UpdateStudentScreen(
             backgroundColor: colors.background,
           }}
           showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}
-        >
+          showsVerticalScrollIndicator={false}>
           <FormKeyboardView>
-            <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+            <FormContainer style={{gap: 10}} formContainerRef={formRef}>
               <Input
                 required
                 id="firstName"
@@ -271,12 +272,14 @@ export default function UpdateStudentScreen(
                     onPress={() => {
                       AlertDialog.showModal({
                         title: t('EVULATION'),
-                        onCancel() { },
+                        onCancel() {},
                         onCancelText: t('CANCEL'),
                         content: evulation.evulationQuestions.map(
                           (question, index) => (
                             <CardContentContainer key={index}>
-                              <CustomText fontSizes="body4" color="textLink">{`${index + 1}.`}</CustomText>
+                              <CustomText
+                                fontSizes="body4"
+                                color="textLink">{`${index + 1}.`}</CustomText>
                               <CardContentRight>
                                 <CustomText color="primaryText">
                                   {question.question.name}
@@ -290,9 +293,10 @@ export default function UpdateStudentScreen(
                         ),
                       });
                     }}
-                    key={index}
-                  >
-                    <CustomText color="primaryText">{evulation.date}</CustomText>
+                    key={index}>
+                    <CustomText color="primaryText">
+                      {evulation.date}
+                    </CustomText>
                     <FontAwesomeIcon
                       color={colors.iconColor}
                       icon={faAngleRight}
@@ -310,46 +314,57 @@ export default function UpdateStudentScreen(
                     onPress={() => {
                       AlertDialog.showModal({
                         title: t('STUDENT_ABSENCE'),
-                        onCancel() { },
+                        onCancel() {},
                         onCancelText: t('CANCEL'),
                         content: (
-                          <ScrollView
-                            style={{ maxHeight: '80%' }}
-                          >
+                          <ScrollView style={{maxHeight: '80%'}}>
                             {mockAbsence.map((absence, index) => (
-                              <CardContentContainer key={index} >
-                                <CustomText fontSizes="body4" color="textLink">{`${index + 1}.`}</CustomText>
+                              <CardContentContainer key={index}>
+                                <CustomText
+                                  fontSizes="body4"
+                                  color="textLink">{`${
+                                  index + 1
+                                }.`}</CustomText>
                                 <CardContentRight>
                                   <TouchableOpacity
                                     onPress={() => {
-                                      setSelectedImage([{ url: absence.url }] as any);
+                                      setSelectedImage([
+                                        {url: absence.url},
+                                      ] as any);
                                       setModalVisible(true);
-                                    }}
-                                  >
+                                    }}>
                                     <Image
-                                      source={{ uri: absence.url }}
-                                      style={{ width: 150, height: 150, borderRadius: 8 }}
+                                      source={{uri: absence.url}}
+                                      style={{
+                                        width: 150,
+                                        height: 150,
+                                        borderRadius: 8,
+                                      }}
                                     />
                                   </TouchableOpacity>
 
-                                  <CustomText color="primaryText">{absence.date}</CustomText>
-                                  <CustomText color="textLink">{absence.reason}</CustomText>
+                                  <CustomText color="primaryText">
+                                    {absence.date}
+                                  </CustomText>
+                                  <CustomText color="textLink">
+                                    {absence.reason}
+                                  </CustomText>
                                 </CardContentRight>
                               </CardContentContainer>
                             ))}
                           </ScrollView>
                         ),
                       });
-                    }}
-                  >
+                    }}>
                     <CustomText color="primaryText">{absence.date}</CustomText>
-                    <FontAwesomeIcon color={colors.iconColor} icon={faAngleRight} />
+                    <FontAwesomeIcon
+                      color={colors.iconColor}
+                      icon={faAngleRight}
+                    />
                   </AbsenceCard>
-
                 ))}
               </Accordion>
             </AccordionContainer>
-
           </FormKeyboardView>
           <ButtonContainer>
             <Button
@@ -362,9 +377,14 @@ export default function UpdateStudentScreen(
         </ScrollView>
       </Loading>
       {modalVisible && (
-        <Modal visible={modalVisible} transparent={true} onRequestClose={() => setModalVisible(false)}>
+        <Modal
+          visible={modalVisible}
+          transparent={true}
+          onRequestClose={() => setModalVisible(false)}>
           <ImageViewer imageUrls={selectedImage} />
-          <TouchableOpacity onPress={() => setModalVisible(false)} style={{ position: 'absolute', top: 40, right: 20 }}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(false)}
+            style={{position: 'absolute', top: 40, right: 20}}>
             <CustomText color="white">Close</CustomText>
           </TouchableOpacity>
         </Modal>
@@ -410,11 +430,9 @@ const CardContentContainer = styled(View)`
 `;
 
 const ButtonContainer = styled(View)`
-  flex: 0.2;
   max-height: 50px;
   margin-bottom: 20px;
   justify-content: center;
-  padding-horizontal: 10px;
 `;
 
 const CardContentRight = styled(View)`

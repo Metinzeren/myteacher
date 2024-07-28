@@ -13,6 +13,7 @@ import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import ClassRoom from '../models/ClassRoom';
 import Student from '../models/Student';
 import { getUserId } from '../utils/AsyncStorageUtils';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
 class ClassRoomRepository {
   private static instance: ClassRoomRepository;
@@ -65,7 +66,7 @@ class ClassRoomRepository {
     return student;
   }
 
-  async removeStudentFromClassRoom(classRoomId: string, studentId: string) {
+  async removeStudentFromClassRoom(classRoomId: string, studentId: string, parentId: string) {
     const classRoomDoc = doc(this.classRoomCollection, classRoomId);
     const classRoomSnapshot = await getDoc(classRoomDoc);
     if (classRoomSnapshot.exists()) {
@@ -77,6 +78,11 @@ class ClassRoomRepository {
         students: updatedStudents,
       });
     }
+
+    const userDoc = doc(db, 'users', parentId);
+    await deleteDoc(userDoc);
+
+
   }
 
   async updateStudentInClassRoom(classRoomId: string, updatedStudent: Student) {

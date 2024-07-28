@@ -1,9 +1,9 @@
-import {AppRegistry, LogBox, Platform} from 'react-native';
-import {name as appName} from './app.json';
+import { AppRegistry, LogBox, Platform } from 'react-native';
+import { name as appName } from './app.json';
 import RootNavigator from './src/navigation/RootNavigator';
 import 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import {ModalPortal} from 'react-native-modals';
+import { NavigationContainer } from '@react-navigation/native';
+import { ModalPortal } from 'react-native-modals';
 import KeyboardManager from 'react-native-keyboard-manager';
 import './src/lang/i18n';
 import StudentProvider from './src/context/StudentContext';
@@ -33,7 +33,7 @@ const MyTeacher = () => {
     KeyboardManager.setShouldResignOnTouchOutside(true);
     KeyboardManager.setShouldPlayInputClicks(true);
     KeyboardManager.resignFirstResponder();
-    KeyboardManager.isKeyboardShowing().then(isShowing => {});
+    KeyboardManager.isKeyboardShowing().then(isShowing => { });
   }
 
   const initDb = () => {

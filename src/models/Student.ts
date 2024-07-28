@@ -12,6 +12,7 @@ interface Student {
   parentPhone: string;
   createdAt?: Date;
   photo?: string;
+  parentId?: string;
   absenteeism: Array<Absenteeism>
 }
 

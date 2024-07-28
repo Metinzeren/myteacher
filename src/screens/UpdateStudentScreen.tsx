@@ -31,11 +31,13 @@ import EvulationResponse from '../models/EvulationResponse';
 import CustomText from '../components/Text/Text';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import useThemeColors from '../constant/useColor';
+import axios from 'axios';
+import { getLocalStorage } from '../utils/AsyncStorageUtils';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
 ) {
-  const { classRooms } = useClassRooms();
+  const { classRooms, deleteStudentFromClassRoom, updateStudentInClassRoom } = useClassRooms();
   const studentFromParam = props.route.params.student;
   const studentId = props.route.params.studentId;
   const classRoomId = props.route.params.classRoomId;
@@ -131,18 +133,47 @@ export default function UpdateStudentScreen(
     AlertDialog.showModal({
       title: t('WARNING'),
       message: `${student.firstName} ${student.lastName} ${t('STUDENT_DELETE_CHECK')}`,
-      onConfirm() {
-        classRoomRepo.removeStudentFromClassRoom(
-          classRoomId,
-          student.newStudentId as string,
-        );
-        deleteStudentFromClassRoom(classRoomId, student.newStudentId as string);
-        AlertDialog.dismiss();
-        props.navigation.goBack();
+      onConfirm: async () => {
+        setLoading(true);
+
+        try {
+          const user = await getLocalStorage('authUser');
+          const accessToken = user?.stsTokenManager?.accessToken;
+          let data = {
+            classRoomId: classRoomId,
+            studentId: student.newStudentId,
+            parentId: student.parentId,
+          };
+
+          const response = await axios.delete(
+            'https://europe-west1-my-teacher-553bb.cloudfunctions.net/deleteStudent',
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${accessToken}`,
+              },
+              data: data,
+            }
+          );
+
+          deleteStudentFromClassRoom(classRoomId, student.newStudentId as string);
+          AlertDialog.dismiss();
+          props.navigation.goBack();
+        } catch (error) {
+          console.error('Error deleting student:', error);
+          AlertDialog.dismiss();
+        } finally {
+          setLoading(false);
+        }
       },
-      onCancel() { },
+      onCancel: () => {
+        setLoading(false);
+      },
     });
   };
+
+
+
 
   return (
     <Container

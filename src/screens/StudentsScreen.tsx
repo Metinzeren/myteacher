@@ -84,12 +84,12 @@ export default function StudentsScreen(
         <ListContainer>
           <CustomFlatList
             notFoundText={t("STUDENT_NOT_FOUND")}
-            // filter={(entity, value, index) => {
-            //   return (
-            //     entity.firstName.toLowerCase().includes(value.toLowerCase()) ||
-            //     entity.lastName.toLowerCase().includes(value.toLowerCase())
-            //   );
-            // }}
+            filter={(entity, value, index) => {
+              return (
+                entity.firstName.toLowerCase().includes(value.toLowerCase()) ||
+                entity.lastName.toLowerCase().includes(value.toLowerCase())
+              );
+            }}
             isSearchable
             data={students}
             renderItem={RenderItem}

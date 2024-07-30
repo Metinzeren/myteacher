@@ -30,6 +30,7 @@ export default function AddStudentScreen(
   const classRoomRepo = ClassRoomRepository.getInstance();
   const { addStudentFromClassRoom } = useClassRooms();
   const [loading, setLoading] = useState(false);
+
   const [registerDto, setRegisterDto] = useState<Student>({
     firstName: '',
     lastName: '',
@@ -81,8 +82,6 @@ export default function AddStudentScreen(
         );
 
         if (response.status === 201) {
-          const entity = response.data;
-          console.log(response.data);
 
           addStudentFromClassRoom(classRoomId, registerDto);
 
@@ -98,7 +97,7 @@ export default function AddStudentScreen(
 
         AlertDialog.showModal({
           title: 'Hata',
-          message: error.response.error,
+          message: error.response.data.error,
         });
       } finally {
         setLoading(false);

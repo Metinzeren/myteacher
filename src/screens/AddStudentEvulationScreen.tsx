@@ -33,6 +33,7 @@ export default function AddStudentEvulationScreen(
   const { t } = useTranslation()
   const formRef = useRef<FormContainerRef>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingButton, setLoadingButton] = useState(false)
   const [registerDto, setRegisterDto] = useState<Questions>({
     id: '',
     name: '',
@@ -57,9 +58,9 @@ export default function AddStudentEvulationScreen(
 
     if (isEmpty) {
       Keyboard.dismiss();
-      setLoading(true);
+      setLoadingButton(true);
       const entity = await questionRepo.addQuestion(addedUserIdFromTeacher as any);
-      setLoading(false);
+      setLoadingButton(false);
       addQuestion(entity as any)
 
       AlertDialog.showModal({
@@ -172,7 +173,7 @@ export default function AddStudentEvulationScreen(
             )}
           </FormContainer>
           <Button
-            loading={loading}
+            loading={loadingButton}
             borderRadius={10}
             onPress={() => {
               handleAddQuestion();

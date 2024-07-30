@@ -122,7 +122,7 @@ export default function UpdateStudentEvulationScreen(
                             value={updateDto.name}
                             onChangeText={e => handleChange('name', e)}
                         />
-                        {updateDto.answer?.map((answer, index) => (
+                        {updateDto.questionType === "option" && updateDto.answer?.map((answer, index) => (
                             <Input
                                 key={index}
                                 required

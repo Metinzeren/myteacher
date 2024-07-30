@@ -1,7 +1,7 @@
-import {View, Text, SafeAreaView} from 'react-native';
+import { View, Text, SafeAreaView } from 'react-native';
 import useThemeColors from '../../constant/useColor';
 import styled from 'styled-components';
-import Header, {HeaderProps} from '../Header/Header';
+import Header, { HeaderProps } from '../Header/Header';
 
 interface ContainerProps extends HeaderProps {
   children?: React.ReactNode;
@@ -63,6 +63,7 @@ export default function Container({
         backgroundColor: colors.background,
       }}>
       {header && <Header {...props} goBackShow={goBackShow} />}
+
       <View
         style={{
           flex: 1,

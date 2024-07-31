@@ -1,4 +1,4 @@
-import {View} from 'react-native';
+import { View } from 'react-native';
 import React from 'react';
 import Input from '../Input/Input';
 
@@ -12,12 +12,13 @@ export default function QuestionText({
   return (
     <View>
       <Input
+        isBottomSheet={true}
         value={value}
         onChangeText={value => {
           setValue(value);
         }}
         required
-        id="questionText"
+
         placeholder="Soru Cevabı"
         multiline
       />

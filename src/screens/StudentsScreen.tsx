@@ -1,27 +1,20 @@
 import { View, Text, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-
 import Button from '../components/Button/Button';
-import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
-import StudentRepository from '../repositories/StudentRepository';
 import Student from '../models/Student';
-import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
-import { useStudents } from '../context/StudentContext';
-import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { useClassRooms } from '../context/ClassRoomContext';
-import RBSheet from 'react-native-raw-bottom-sheet';
-import { COLORS, SIZES } from '../constant/theme';
 import QuestionsList from '../components/QuestionsList/QuestionsList';
 import useThemeColors from '../constant/useColor';
-import FormContainer from '../components/FormContainer';
+import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomSheet/CustomBottomSheet';
+import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
@@ -31,7 +24,7 @@ export default function StudentsScreen(
   const classRoomId = props.route.params?.classRoomId;
   const students = classRooms?.find?.(x => x.id == classRoomId)?.students || [];
   const refRBSheet = React.useRef<any>(null);
-
+  const evaulationBottomSheetRef = useRef<BottomSheetRef>(null);
   const [selectedStudent, setSelectedStudent] = useState<Student>(
     {} as Student,
   );
@@ -71,7 +64,7 @@ export default function StudentsScreen(
               text={t('EVULATION_ADD')}
               onPress={() => {
                 setSelectedStudent(item);
-                refRBSheet.current.open();
+                evaulationBottomSheetRef.current?.open();
               }}></Button>
           </View>
         </ListItemContainer>
@@ -106,31 +99,12 @@ export default function StudentsScreen(
             }></Button>
         </ButtonContainer>
       </Loading>
-      <RBSheet
-        ref={refRBSheet}
-        draggable
-        onClose={() => { }}
-        customStyles={{
-          wrapper: {
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          },
-          draggableIcon: {
-            backgroundColor: COLORS.grey,
-          },
-          container: {
-            backgroundColor: colors.background,
-            paddingVertical: 10,
-          },
-        }}
-        height={SIZES.height / 1.2}
-        customModalProps={{
-          statusBarTranslucent: true,
-        }}
-        customAvoidingViewProps={{
-          enabled: true,
-        }}>
+
+      <CustomBottomSheet snapPoints={["60%", "90%"]} ref={evaulationBottomSheetRef}>
+
         <QuestionsList student={selectedStudent} />
-      </RBSheet>
+
+      </CustomBottomSheet>
     </Container>
   );
 }

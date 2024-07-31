@@ -62,20 +62,23 @@ export default function UpdateClassScreen(
   };
   return (
     <Container p={10} header title={t("CLASS_INFO")} goBackShow>
-      <FormContainer
-        style={{ gap: 10 }}
-        formContainerRef={formRef}>
-        <Input
-          required
-          id="className"
-          errorMessage=""
-          placeholder={t('NAME')}
-          icon={faUser}
-          value={className.name}
-          onChangeText={e => handleChange('name', e)}
-        />
-        <Button loading={loading} borderRadius={10} onPress={updateClass} text={t('KAYDET')} />
-      </FormContainer>
+      <Container p={10} type='container'>
+        <FormContainer
+          style={{ gap: 10 }}
+          formContainerRef={formRef}>
+          <Input
+            required
+            id="className"
+            errorMessage=""
+            placeholder={t('NAME')}
+            icon={faUser}
+            value={className.name}
+            onChangeText={e => handleChange('name', e)}
+          />
+          <Button loading={loading} borderRadius={10} onPress={updateClass} text={t('KAYDET')} />
+        </FormContainer>
+      </Container>
+
     </Container>
   );
 }

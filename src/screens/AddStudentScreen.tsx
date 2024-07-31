@@ -106,82 +106,86 @@ export default function AddStudentScreen(
   };
 
   return (
-    <Container p={10} goBackShow header title="Öğrenci Ekle">
-      <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
-        <Input
-          required
-          id="firstName"
-          placeholder="Ad"
-          icon={faUser}
-          value={registerDto?.firstName}
-          onChangeText={e => handleChange('firstName', e)}
-        />
-        <Input
-          required
-          id="lastName"
-          placeholder="Soyad"
-          icon={faUser}
-          value={registerDto?.lastName}
-          onChangeText={e => handleChange('lastName', e)}
-        />
-        <Input
-          required
-          errorMessage=""
-          id="studentNo"
-          placeholder="Öğrenci okul numarası"
-          icon={faSortNumericDesc}
-          keyboardType="numeric"
-          value={registerDto?.studentNo.toString()}
-          onChangeText={e => handleChange('studentNo', e)}
-        />
-        <Input
-          required
-          errorMessage=""
-          id="parentFirstName"
-          placeholder="Veli adı"
-          icon={faUser}
-          value={registerDto?.parentFirstName}
-          onChangeText={e => handleChange('parentFirstName', e)}
-        />
-        <Input
-          required
-          errorMessage=""
-          id="parentLastName"
-          placeholder="Veli Soyadı"
-          icon={faUser}
-          value={registerDto?.parentLastName}
-          onChangeText={e => handleChange('parentLastName', e)}
-        />
-        <Input
-          required
-          id="parentPhone"
-          placeholder="Veli telefon numarası"
-          icon={faPhone}
-          keyboardType="numeric"
-          maxLength={11}
-          value={registerDto?.parentPhone}
-          onChangeText={e => handleChange('parentPhone', e)}
-        />
-        <Input
-          required
-          id="parentEmail"
-          errorMessage=""
-          autoCapitalize="none"
-          autoCorrect={false}
-          placeholder="Veli e-mail"
-          icon={faEnvelope}
-          value={registerDto?.parentEmail}
-          onChangeText={e => handleChange('parentEmail', e)}
-        />
-        <Button
-          loading={loading}
-          borderRadius={10}
-          onPress={() => {
-            handleAddStudent();
-          }}
-          text={t('KAYDET')}
-        />
-      </FormContainer>
+    <Container goBackShow header title="Öğrenci Ekle">
+      <Container p={10} type="container">
+        <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+          <Input
+            required
+            id="firstName"
+            placeholder="Ad"
+            icon={faUser}
+            value={registerDto?.firstName}
+            onChangeText={e => handleChange('firstName', e)}
+          />
+          <Input
+            required
+            id="lastName"
+            placeholder="Soyad"
+            icon={faUser}
+            value={registerDto?.lastName}
+            onChangeText={e => handleChange('lastName', e)}
+          />
+          <Input
+            required
+            errorMessage=""
+            id="studentNo"
+            placeholder="Öğrenci okul numarası"
+            icon={faSortNumericDesc}
+            keyboardType="numeric"
+            value={registerDto?.studentNo.toString()}
+            onChangeText={e => handleChange('studentNo', e)}
+          />
+          <Input
+            required
+            errorMessage=""
+            id="parentFirstName"
+            placeholder="Veli adı"
+            icon={faUser}
+            value={registerDto?.parentFirstName}
+            onChangeText={e => handleChange('parentFirstName', e)}
+          />
+          <Input
+            required
+            errorMessage=""
+            id="parentLastName"
+            placeholder="Veli Soyadı"
+            icon={faUser}
+            value={registerDto?.parentLastName}
+            onChangeText={e => handleChange('parentLastName', e)}
+          />
+          <Input
+            required
+            id="parentPhone"
+            placeholder="Veli telefon numarası"
+            icon={faPhone}
+            keyboardType="numeric"
+            maxLength={11}
+            value={registerDto?.parentPhone}
+            onChangeText={e => handleChange('parentPhone', e)}
+          />
+          <Input
+            required
+            id="parentEmail"
+            errorMessage=""
+            autoCapitalize="none"
+            autoCorrect={false}
+            placeholder="Veli e-mail"
+            icon={faEnvelope}
+            value={registerDto?.parentEmail}
+            onChangeText={e => handleChange('parentEmail', e)}
+          />
+          <Button
+            loading={loading}
+            borderRadius={10}
+            onPress={() => {
+              handleAddStudent();
+            }}
+            text={t('KAYDET')}
+          />
+        </FormContainer>
+
+      </Container>
+
     </Container>
   );
 }

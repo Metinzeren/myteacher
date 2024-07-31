@@ -1,14 +1,17 @@
-import {View, Text, Platform, Alert} from 'react-native';
-import React, {useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
-import {CalendarProvider, WeekCalendar} from 'react-native-calendars';
+import { View, Text, Platform, Alert } from 'react-native';
+import React, { useState } from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
 import Input from '../components/Input/Input';
-import {faFilter, faSearch} from '@fortawesome/free-solid-svg-icons';
+import { faFilter, faSearch } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 import Container from '../components/Container/Container';
 import useThemeColors from '../constant/useColor';
+import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomSheet/CustomBottomSheet';
+import CustomText from '../components/Text/Text';
 
 export default function CalendarScreen() {
+  const filterBottomSheetRef = React.useRef<BottomSheetRef>(null);
   return (
     <Container
       goBackShow
@@ -16,9 +19,14 @@ export default function CalendarScreen() {
       title="Ödev Takvimi"
       extraIcon={faFilter}
       extraIconPress={() => {
-        Alert.alert('Filtreleme', 'Filtreleme ekranı gelecek');
+        filterBottomSheetRef.current?.open();
       }}>
       {Platform.OS === 'android' ? <AndroidContaier /> : <IosContainer />}
+      <CustomBottomSheet ref={filterBottomSheetRef} snapPoints={["50%"]}>
+        <CustomText>
+          Buraya öğrencinin ödevlerini listeleyeceğimiz bir component gelecek
+        </CustomText>
+      </CustomBottomSheet>
     </Container>
   );
 }
@@ -26,7 +34,6 @@ const AndroidContaier = () => {
   const [selectedDay, setSelectedDay] = useState(dayjs().format('YYYY-MM-DD'));
   const [search, setSearch] = useState('');
   const colors = useThemeColors();
-
   return (
     <SafeAreaView
       style={{
@@ -51,12 +58,12 @@ const AndroidContaier = () => {
           />
         </View>
       </CalendarProvider>
-      <View style={{marginTop: 10, marginBottom: 7, marginHorizontal: 10}}>
+      <View style={{ marginTop: 10, marginBottom: 7, marginHorizontal: 10 }}>
         <Input
           id="search"
           enableFocusBorder={false}
           inputSize="md"
-          style={{backgroundColor: '#fff'}}
+          style={{ backgroundColor: '#fff' }}
           icon={faSearch}
           placeholder="Ödev Ara"
           onChangeText={text => setSearch(text)}
@@ -96,12 +103,12 @@ const IosContainer = () => {
                 selectedDayBackgroundColor: '#34495b',
               }}
             />
-            <View style={{marginHorizontal: 10}}>
+            <View style={{ marginHorizontal: 10 }}>
               <Input
                 id="search"
                 enableFocusBorder={false}
                 inputSize="md"
-                style={{backgroundColor: '#fff'}}
+                style={{ backgroundColor: '#fff' }}
                 icon={faSearch}
                 placeholder="Ödev Ara"
                 onChangeText={text => setSearch(text)}

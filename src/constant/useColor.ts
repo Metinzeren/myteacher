@@ -3,12 +3,12 @@ import useColorScheme from './useColorScheme';
 const Colors = {
   light: {
     background: '#f9f9f9',
-    primary: '#E78577',
+    primary: '#5D3EBC',
     text: '#FFF',
     secondary: '#a55eea',
     inputBorder: '#ebeff3',
     activeBorder: '#E78577',
-    iconColor: '#E78577',
+    iconColor: '#5D3EBC',
     success: '#488E48',
     descriptionColor: '#797979',
   },

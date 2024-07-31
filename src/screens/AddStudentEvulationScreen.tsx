@@ -89,99 +89,102 @@ export default function AddStudentEvulationScreen(
 
 
   return (
-    <Container p={10} goBackShow header title={t("QUESTION_ADD")}>
-      <Loading loading={loading}>
-        <EvulationContainer>
-          <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
-            <CustomText color="primaryText" fontSizes="body4">
-              {t("WRITE_QUESTION")}
-            </CustomText>
-            <Input
-              required
-              id="name"
-              placeholder={t("WRITE_QUESTION")}
-              icon={faQuestion}
-              value={registerDto?.name}
-              onChangeText={e => handleChange('name', e)}
-            />
-            <CustomText color="primaryText" fontSizes="body4">
-              {t("CHOOSE_QUESTION_TYPE")}
-            </CustomText>
-            <ButtonContainer>
-              <Button
-                style={{ flex: 1 }}
-                outline={registerDto.questionType === 'rating' ? false : true}
-                text={t("QUESTION_TYPE_STAR")}
-                onPress={() => handleChange('questionType', 'rating')}
+    <Container goBackShow header title={t("QUESTION_ADD")}>
+      <Container p={10} type='container'>
+        <Loading loading={loading}>
+          <EvulationContainer>
+            <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
+              <CustomText color="primaryText" fontSizes="body4">
+                {t("WRITE_QUESTION")}
+              </CustomText>
+              <Input
+                required
+                id="name"
+                placeholder={t("WRITE_QUESTION")}
+                icon={faQuestion}
+                value={registerDto?.name}
+                onChangeText={e => handleChange('name', e)}
               />
-              <Button
-                outline={registerDto.questionType === 'option' ? false : true}
-                text={t("QUESTION_TYPE_OPTIONAL")}
-                style={{ flex: 1 }}
-                onPress={() => handleChange('questionType', 'option')}
-              />
-              <Button
-                style={{ flex: 1 }}
-                outline={registerDto.questionType === 'text' ? false : true}
-                text={t("QUESTION_TYPE_TEXT")}
-                onPress={() => handleChange('questionType', 'text')}
-              />
-            </ButtonContainer>
+              <CustomText color="primaryText" fontSizes="body4">
+                {t("CHOOSE_QUESTION_TYPE")}
+              </CustomText>
+              <ButtonContainer>
+                <Button
+                  style={{ flex: 1 }}
+                  outline={registerDto.questionType === 'rating' ? false : true}
+                  text={t("QUESTION_TYPE_STAR")}
+                  onPress={() => handleChange('questionType', 'rating')}
+                />
+                <Button
+                  outline={registerDto.questionType === 'option' ? false : true}
+                  text={t("QUESTION_TYPE_OPTIONAL")}
+                  style={{ flex: 1 }}
+                  onPress={() => handleChange('questionType', 'option')}
+                />
+                <Button
+                  style={{ flex: 1 }}
+                  outline={registerDto.questionType === 'text' ? false : true}
+                  text={t("QUESTION_TYPE_TEXT")}
+                  onPress={() => handleChange('questionType', 'text')}
+                />
+              </ButtonContainer>
 
-            {registerDto.questionType === 'option' && (
-              <AnswerContainer>
-                <CustomText fontSizes="body4" color="primaryText">
-                  {t("ANSWER_TYPE")}
-                </CustomText>
-                <View
-                  style={{
-                    marginVertical: 10,
-                    justifyContent: 'space-between',
-                    backgroundColor: 'white',
-                    borderWidth: 1,
-                    flexDirection: 'row',
-                    padding: 10,
-                    borderRadius: 10,
-                    borderColor: colors.primary,
-                  }}>
-                  <RadioButton
-                    checked={registerDto.answerType === 'single'}
-                    label={t("QUESTION_TYPE_SINGULAR")}
-                    onPress={() => {
-                      handleChange('answerType', 'single');
-                    }}
-                  />
-                  <RadioButton
-                    checked={registerDto.answerType === 'multiple'}
-                    label={t("QUESTION_TYPE_MULTIPLE")}
-                    onPress={() => {
-                      handleChange('answerType', 'multiple');
-                    }}
-                  />
-                </View>
-                <AnswerHeader>
-                  <CustomText color="primaryText" fontSizes="body4">
-                    {t("ANSWER_ADD")}
+              {registerDto.questionType === 'option' && (
+                <AnswerContainer>
+                  <CustomText fontSizes="body4" color="primaryText">
+                    {t("ANSWER_TYPE")}
                   </CustomText>
-                  <IconButton icon={faPlus} onPress={() => setShowForm(true)} />
-                </AnswerHeader>
-                {showForm && (
-                  <AnswerForm onAddAnswer={handleAddAnswer} onClose={() => setShowForm(false)} />
-                )}
-                <AnswerList answers={answers} onDeleteAnswer={handleDeleteAnswer} />
-              </AnswerContainer>
-            )}
-          </FormContainer>
-          <Button
-            loading={loadingButton}
-            borderRadius={10}
-            onPress={() => {
-              handleAddQuestion();
-            }}
-            text={t('KAYDET')}
-          />
-        </EvulationContainer>
-      </Loading>
+                  <View
+                    style={{
+                      marginVertical: 10,
+                      justifyContent: 'space-between',
+                      backgroundColor: 'white',
+                      borderWidth: 1,
+                      flexDirection: 'row',
+                      padding: 10,
+                      borderRadius: 10,
+                      borderColor: colors.primary,
+                    }}>
+                    <RadioButton
+                      checked={registerDto.answerType === 'single'}
+                      label={t("QUESTION_TYPE_SINGULAR")}
+                      onPress={() => {
+                        handleChange('answerType', 'single');
+                      }}
+                    />
+                    <RadioButton
+                      checked={registerDto.answerType === 'multiple'}
+                      label={t("QUESTION_TYPE_MULTIPLE")}
+                      onPress={() => {
+                        handleChange('answerType', 'multiple');
+                      }}
+                    />
+                  </View>
+                  <AnswerHeader>
+                    <CustomText color="primaryText" fontSizes="body4">
+                      {t("ANSWER_ADD")}
+                    </CustomText>
+                    <IconButton icon={faPlus} onPress={() => setShowForm(true)} />
+                  </AnswerHeader>
+                  {showForm && (
+                    <AnswerForm onAddAnswer={handleAddAnswer} onClose={() => setShowForm(false)} />
+                  )}
+                  <AnswerList answers={answers} onDeleteAnswer={handleDeleteAnswer} />
+                </AnswerContainer>
+              )}
+            </FormContainer>
+            <Button
+              loading={loadingButton}
+              borderRadius={10}
+              onPress={() => {
+                handleAddQuestion();
+              }}
+              text={t('KAYDET')}
+            />
+          </EvulationContainer>
+        </Loading>
+      </Container>
+
     </Container>
   );
 }

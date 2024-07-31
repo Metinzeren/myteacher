@@ -7,25 +7,30 @@ import {
   Platform,
 } from 'react-native';
 import styled from 'styled-components';
-import {useSharedValue} from 'react-native-reanimated';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faEye, faEyeSlash, faUser} from '@fortawesome/free-regular-svg-icons';
+import { useSharedValue } from 'react-native-reanimated';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEye, faEyeSlash, faUser } from '@fortawesome/free-regular-svg-icons';
 import useThemeColors from '../../constant/useColor';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
-import {useState} from 'react';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { useState } from 'react';
 import CustomText from '../Text/Text';
-import {FormInputProps} from 'react-native-form-container';
+import { FormInputProps, InputProps } from 'react-native-form-container';
+import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
+
+interface CustomInputProps extends InputProps {
+  isBottomSheet?: boolean;
+}
 
 export default function Input({
   iconPosition = 'left',
   icon = undefined,
-
+  isBottomSheet = false,
   inputSize = 'md',
   enableFocusBorder = true,
   errorMessage,
   required,
   ...props
-}: FormInputProps) {
+}: CustomInputProps) {
   const colors = useThemeColors();
   const [passwordShow, setPasswordShow] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -60,7 +65,7 @@ export default function Input({
           color={colors.iconColor}
         />
       )}
-      <CustomInput
+      {!isBottomSheet && <CustomInput
         autoFocus={false}
         placeholderTextColor={colors.descriptionColor}
         {...props}
@@ -81,8 +86,8 @@ export default function Input({
             inputSize === 'sm'
               ? '10px'
               : Platform.OS === 'android'
-              ? '10px'
-              : '15px',
+                ? '10px'
+                : '15px',
           left:
             iconPosition === 'left' && icon !== undefined
               ? inputPaddingHorizontal
@@ -93,7 +98,45 @@ export default function Input({
               : size,
           borderColor: isFocused ? colors.activeBorder : colors.inputBorder,
         }}
-      />
+      />}
+      {
+        isBottomSheet &&
+        <CustomSheetInput
+          autoFocus={false}
+          placeholderTextColor={colors.descriptionColor}
+          {...props}
+          secureTextEntry={props.secureTextEntry && !passwordShow}
+          onFocus={e => {
+            handleFocus();
+            props.onFocus && props.onFocus(e);
+          }}
+          onBlur={e => {
+            handleBlur();
+            props.onBlur && props.onBlur(e);
+          }}
+          placeholder={
+            required ? `${props.placeholder} *` : `${props.placeholder}`
+          }
+          theme={{
+            size:
+              inputSize === 'sm'
+                ? '10px'
+                : Platform.OS === 'android'
+                  ? '10px'
+                  : '15px',
+            left:
+              iconPosition === 'left' && icon !== undefined
+                ? inputPaddingHorizontal
+                : size,
+            right:
+              iconPosition === 'right' && icon !== undefined
+                ? inputPaddingHorizontal
+                : size,
+            borderColor: isFocused ? colors.activeBorder : colors.inputBorder,
+          }}
+        />
+      }
+
       {props.secureTextEntry && (
         <PasswordIconButton
           theme={{
@@ -119,7 +162,7 @@ export default function Input({
         />
       )}
       {errorMessage && (
-        <View style={{marginTop: 7}}>
+        <View style={{ marginTop: 7 }}>
           <CustomText color="error">{errorMessage}</CustomText>
         </View>
       )}
@@ -127,6 +170,15 @@ export default function Input({
   );
 }
 const CustomInput = styled(TextInput)`
+  padding: ${props => props.theme.size} ${props => props.theme.right}
+    ${props => props.theme.size} ${props => props.theme.left};
+  width: 100%;
+  border-radius: 10px;
+  background-color: #fff;
+  color: #143722;
+  border: 1px solid ${props => props.theme.borderColor};
+`;
+const CustomSheetInput = styled(BottomSheetTextInput)`
   padding: ${props => props.theme.size} ${props => props.theme.right}
     ${props => props.theme.size} ${props => props.theme.left};
   width: 100%;

@@ -18,7 +18,7 @@ import BottomSheet, {
 
 interface BottomSheetComponentProps {
   children?: React.ReactNode;
-  snapPoints?: string[];
+  snapPoints: string[];
   indicator?: boolean;
 }
 
@@ -33,7 +33,7 @@ const CustomBottomSheet = forwardRef<BottomSheetRef, BottomSheetComponentProps>(
     const bottomSheetRef = useRef<BottomSheet>(null);
     const [isOpen, setIsOpen] = useState(false);
 
-    const cSnapPoints = useMemo(() => snapPoints, []);
+    const cSnapPoints = useMemo(() => snapPoints || ["70%"], []);
 
     useImperativeHandle(ref, () => ({
       open: () => {
@@ -62,9 +62,10 @@ const CustomBottomSheet = forwardRef<BottomSheetRef, BottomSheetComponentProps>(
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
+
         snapPoints={cSnapPoints}
         enablePanDownToClose={true}
-        enableDynamicSizing={snapPoints ? false : true}
+        containerStyle={{ zIndex: 100 }}
         backgroundStyle={styles.contentContainer}
         backdropComponent={renderBackdrop}
         handleIndicatorStyle={{ display: indicator ? 'flex' : 'none' }}

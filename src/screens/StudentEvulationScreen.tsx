@@ -94,28 +94,31 @@ export default function StudentEvulationScreen(
     );
   };
   return (
-    <Container p={10} goBackShow header title={t("QUESTION")}>
-      <Loading loading={loading}>
-        <ListContainer>
-          <CustomFlatList
-            notFoundText={t("QUESTION_NOT_FOUND")}
-            filter={(entity, value, index) => {
-              return entity.name.toLowerCase().includes(value.toLowerCase());
-            }}
-            isSearchable
-            data={questions}
-            renderItem={RenderItem}
-          />
-        </ListContainer>
-        <ButtonContainer>
-          <Button
-            borderRadius={10}
-            text={t('QUESTION_ADD')}
-            onPress={() => {
-              props.navigation.navigate('AddStudentEvulationScreen');
-            }}></Button>
-        </ButtonContainer>
-      </Loading>
+    <Container goBackShow header title={t("QUESTION")}>
+      <Container p={10} type='container'>
+        <Loading loading={loading}>
+          <ListContainer>
+            <CustomFlatList
+              notFoundText={t("QUESTION_NOT_FOUND")}
+              filter={(entity, value, index) => {
+                return entity.name.toLowerCase().includes(value.toLowerCase());
+              }}
+              isSearchable
+              data={questions}
+              renderItem={RenderItem}
+            />
+          </ListContainer>
+          <ButtonContainer>
+            <Button
+              borderRadius={10}
+              text={t('QUESTION_ADD')}
+              onPress={() => {
+                props.navigation.navigate('AddStudentEvulationScreen');
+              }}></Button>
+          </ButtonContainer>
+        </Loading>
+      </Container>
+
     </Container>
   );
 }

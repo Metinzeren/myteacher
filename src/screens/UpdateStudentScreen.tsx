@@ -35,6 +35,8 @@ import axios from 'axios';
 import { getLocalStorage } from '../utils/AsyncStorageUtils';
 import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomSheet/CustomBottomSheet';
 import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
+import CustomFlatList from '../components/Flatlist/CustomFlatList';
+import EvulationQuestionResponse from '../models/EvulationQuestionResponse';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
@@ -90,7 +92,7 @@ export default function UpdateStudentScreen(
   });
 
   const [evulation, setEvulation] = useState<Array<EvulationResponse>>([]);
-
+  const [selectedEvulation, setSelectedEvulation] = useState<EvulationResponse>({} as EvulationResponse);
   useEffect(() => {
     getEvulation();
   }, []);
@@ -180,90 +182,78 @@ export default function UpdateStudentScreen(
       },
     });
   };
-  console.log(evulation);
 
   const AbsenceContent = () => {
     return (
-      <BottomSheetScrollView style={{ flex: 0, minHeight: 100 }}>
-        <BottomSheetView style={{ minHeight: 100 }}>
-          {mockAbsence.map((absence, index) => (
-            <CardContentContainer key={index}>
-              <CustomText
-                fontSizes="body4"
-                color="textLink">{`${index + 1
-                  }.`}</CustomText>
-              <CardContentRight>
-                <TouchableOpacity
-                  onPress={() => {
-                    setSelectedImage([
-                      { url: absence.url },
-                    ] as any);
-                    setModalVisible(true);
-                  }}>
-                  <Image
-                    source={{ uri: absence.url }}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      borderRadius: 8,
-                    }}
-                  />
-                </TouchableOpacity>
+      <CustomFlatList
+        data={mockAbsence}
+        isBottomSheet
+        renderItem={({ item, index }: { item: any, index: number }) => {
+          let absence = item;
+          return <CardContentContainer key={index}>
+            <CustomText
+              fontSizes="body4"
+              color="textLink">{`${index + 1
+                }.`}</CustomText>
+            <CardContentRight>
+              <TouchableOpacity
+                onPress={() => {
+                  setSelectedImage([
+                    { url: absence.url },
+                  ] as any);
+                  setModalVisible(true);
+                }}>
+                <Image
+                  source={{ uri: absence.url }}
+                  style={{
+                    width: 150,
+                    height: 150,
+                    borderRadius: 8,
+                  }}
+                />
+              </TouchableOpacity>
 
-                <CustomText color="primaryText">
-                  {absence.date}
-                </CustomText>
-                <CustomText color="textLink">
-                  {absence.reason}
-                </CustomText>
-              </CardContentRight>
-            </CardContentContainer>
-          ))}
-
-        </BottomSheetView>
-      </BottomSheetScrollView>
+              <CustomText color="primaryText">
+                {absence.date}
+              </CustomText>
+              <CustomText color="textLink">
+                {absence.reason}
+              </CustomText>
+            </CardContentRight>
+          </CardContentContainer>
+        }}
+      />
     );
   };
 
   const EvaluationContent = () => {
     return (
-      <BottomSheetScrollView style={{ flex: 0, minHeight: 100 }}>
-        <BottomSheetView style={{ minHeight: 100 }}>
-          {evulation.map((evulationItem, index) => (
-            <EvulationCard
-              key={index}
-            >
-              {
-                evulationItem.evulationQuestions.map(
-                  (question: any, index: any) => (
-                    <CardContentContainer key={index}>
-                      <CustomText
-                        fontSizes="body4"
-                        color="textLink">{`${index + 1}.`}</CustomText>
-                      <CardContentRight>
-                        <CustomText color="primaryText">
-                          {question.question.name}
-                        </CustomText>
-                        <CustomText color="textLink">
-                          {question.answer[0]}
-                        </CustomText>
-                      </CardContentRight>
-                    </CardContentContainer>
-                  ),
-                )
-              }
-            </EvulationCard>
-          ))}
-        </BottomSheetView>
-      </BottomSheetScrollView>
+      <CustomFlatList
+        renderItem={({ item, index }: { item: EvulationQuestionResponse, index: number }) => {
+          return <CardContentContainer key={index}>
+            <CustomText
+              fontSizes="body4"
+              color="textLink">{`${index + 1}.`}</CustomText>
+            <CardContentRight>
+              <CustomText color="primaryText">
+                {item.question.name}
+              </CustomText>
+              <CustomText color="textLink">
+                {item.answer.map((answer) => answer).join(', ')}
+              </CustomText>
+            </CardContentRight>
+          </CardContentContainer>
+
+        }}
+        data={selectedEvulation.evulationQuestions}
+        isBottomSheet
+      />
     );
   };
 
-
-
   return (
     <Container
-      p={10}
+
       goBackShow
       header
       title={t('STUDENT_INFO')}
@@ -272,129 +262,134 @@ export default function UpdateStudentScreen(
         pressToDelete()
       }}>
       <Loading>
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            backgroundColor: colors.background,
-          }}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}>
-          <FormKeyboardView>
-            <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
-              <Input
-                required
-                id="firstName"
-                errorMessage=""
-                placeholder={t('FIRST_NAME')}
-                icon={faUser}
-                value={updateDto.firstName}
-                onChangeText={e => handleChange('firstName', e)}
-              />
-              <Input
-                required
-                id="lastName"
-                errorMessage=""
-                placeholder={t('LAST_NAME')}
-                icon={faUser}
-                value={updateDto.lastName}
-                onChangeText={e => handleChange('lastName', e)}
-              />
-              <Input
-                required
-                errorMessage=""
-                id="studentNo"
-                placeholder={t('STUDENT_NO')}
-                icon={faSortNumericDesc}
-                keyboardType="numeric"
-                value={updateDto.studentNo?.toString()}
-                onChangeText={e => handleChange('studentNo', e)}
-              />
-              <Input
-                required
-                errorMessage=""
-                id="parentFirstName"
-                placeholder={t('PARENT_FIRST_NAME')}
-                icon={faUser}
-                value={updateDto.parentFirstName}
-                onChangeText={e => handleChange('parentFirstName', e)}
-              />
-              <Input
-                required
-                errorMessage=""
-                id="parentLastName"
-                placeholder={t('PARENT_LAST_NAME')}
-                icon={faUser}
-                value={updateDto.parentLastName}
-                onChangeText={e => handleChange('parentLastName', e)}
-              />
-              <Input
-                required
-                id="parentPhone"
-                placeholder={t('PARENT_PHONE')}
-                icon={faPhone}
-                keyboardType="numeric"
-                maxLength={11}
-                value={updateDto.parentPhone}
-                onChangeText={e => handleChange('parentPhone', e)}
-              />
-              <Input
-                required
-                id="parentEmail"
-                errorMessage=""
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholder={t('PARENT_EMAIL')}
-                icon={faEnvelope}
-                value={updateDto.parentEmail}
-                onChangeText={e => handleChange('parentEmail', e)}
-              />
-            </FormContainer>
+        <Container p={10} type='container'>
+          <ScrollView
+            contentContainerStyle={{
+              flexGrow: 1,
+              backgroundColor: colors.background,
+            }}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}>
+            <FormKeyboardView>
+              <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+                <Input
+                  required
+                  id="firstName"
+                  errorMessage=""
+                  placeholder={t('FIRST_NAME')}
+                  icon={faUser}
+                  value={updateDto.firstName}
+                  onChangeText={e => handleChange('firstName', e)}
+                />
+                <Input
+                  required
+                  id="lastName"
+                  errorMessage=""
+                  placeholder={t('LAST_NAME')}
+                  icon={faUser}
+                  value={updateDto.lastName}
+                  onChangeText={e => handleChange('lastName', e)}
+                />
+                <Input
+                  required
+                  errorMessage=""
+                  id="studentNo"
+                  placeholder={t('STUDENT_NO')}
+                  icon={faSortNumericDesc}
+                  keyboardType="numeric"
+                  value={updateDto.studentNo?.toString()}
+                  onChangeText={e => handleChange('studentNo', e)}
+                />
+                <Input
+                  required
+                  errorMessage=""
+                  id="parentFirstName"
+                  placeholder={t('PARENT_FIRST_NAME')}
+                  icon={faUser}
+                  value={updateDto.parentFirstName}
+                  onChangeText={e => handleChange('parentFirstName', e)}
+                />
+                <Input
+                  required
+                  errorMessage=""
+                  id="parentLastName"
+                  placeholder={t('PARENT_LAST_NAME')}
+                  icon={faUser}
+                  value={updateDto.parentLastName}
+                  onChangeText={e => handleChange('parentLastName', e)}
+                />
+                <Input
+                  required
+                  id="parentPhone"
+                  placeholder={t('PARENT_PHONE')}
+                  icon={faPhone}
+                  keyboardType="numeric"
+                  maxLength={11}
+                  value={updateDto.parentPhone}
+                  onChangeText={e => handleChange('parentPhone', e)}
+                />
+                <Input
+                  required
+                  id="parentEmail"
+                  errorMessage=""
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  placeholder={t('PARENT_EMAIL')}
+                  icon={faEnvelope}
+                  value={updateDto.parentEmail}
+                  onChangeText={e => handleChange('parentEmail', e)}
+                />
+              </FormContainer>
 
-            <AccordionContainer>
-              <Accordion title={t('EVULATION')}>
-                {evulation.map((evulation, index) => (
-                  <EvulationCard
-                    onPress={() => evulationBottomSheetRef.current?.open()}
-                    key={index}>
-                    <CustomText color="primaryText">
-                      {evulation.date}
-                    </CustomText>
-                    <FontAwesomeIcon
-                      color={colors.iconColor}
-                      icon={faAngleRight}
-                    />
-                  </EvulationCard>
-                ))}
-              </Accordion>
-            </AccordionContainer>
+              <AccordionContainer>
+                <Accordion title={t('EVULATION')}>
+                  {evulation.map((evulation, index) => (
+                    <EvulationCard
+                      onPress={() => {
+                        setSelectedEvulation(evulation);
+                        evulationBottomSheetRef.current?.open()
+                      }}
+                      key={index}>
+                      <CustomText color="primaryText">
+                        {evulation.date}
+                      </CustomText>
+                      <FontAwesomeIcon
+                        color={colors.iconColor}
+                        icon={faAngleRight}
+                      />
+                    </EvulationCard>
+                  ))}
+                </Accordion>
+              </AccordionContainer>
 
-            <AccordionContainer>
-              <Accordion title={t('STUDENT_ABSENCE')}>
+              <AccordionContainer>
+                <Accordion title={t('STUDENT_ABSENCE')}>
 
-                {mockAbsence.map((absence, index) => (
-                  <AbsenceCard
-                    onPress={() => absenceBottomSheetRef.current?.open()}
-                    key={index}>
-                    <CustomText color="primaryText">{absence.date}</CustomText>
-                    <FontAwesomeIcon
-                      color={colors.iconColor}
-                      icon={faAngleRight}
-                    />
-                  </AbsenceCard>
-                ))}
-              </Accordion>
+                  {mockAbsence.map((absence, index) => (
+                    <AbsenceCard
+                      onPress={() => absenceBottomSheetRef.current?.open()}
+                      key={index}>
+                      <CustomText color="primaryText">{absence.date}</CustomText>
+                      <FontAwesomeIcon
+                        color={colors.iconColor}
+                        icon={faAngleRight}
+                      />
+                    </AbsenceCard>
+                  ))}
+                </Accordion>
 
-            </AccordionContainer>
-          </FormKeyboardView>
-          <ButtonContainer>
-            <Button
-              loading={loading}
-              borderRadius={10}
-              onPress={updateStudent}
-              text={t('KAYDET')}
-            />
-          </ButtonContainer>
-        </ScrollView>
+              </AccordionContainer>
+            </FormKeyboardView>
+            <ButtonContainer>
+              <Button
+                loading={loading}
+                borderRadius={10}
+                onPress={updateStudent}
+                text={t('KAYDET')}
+              />
+            </ButtonContainer>
+          </ScrollView>
+        </Container>
       </Loading>
       {modalVisible && (
         <Modal
@@ -409,10 +404,10 @@ export default function UpdateStudentScreen(
           </TouchableOpacity>
         </Modal>
       )}
-      <CustomBottomSheet ref={absenceBottomSheetRef}>
+      <CustomBottomSheet snapPoints={["70%", "80%"]} ref={absenceBottomSheetRef}>
         <AbsenceContent />
       </CustomBottomSheet>
-      <CustomBottomSheet ref={evulationBottomSheetRef}>
+      <CustomBottomSheet snapPoints={["70%", "80%"]} ref={evulationBottomSheetRef}>
         <EvaluationContent />
       </CustomBottomSheet>
     </Container>

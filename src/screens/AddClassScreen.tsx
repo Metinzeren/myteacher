@@ -62,25 +62,28 @@ export default function AddClassScreen(
     }
   };
   return (
-    <Container p={10} header goBackShow title={t("CLASS_ADD")}>
-      <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
-        <Input
-          required
-          id="name"
-          placeholder={t('CLASS_NAME')}
-          icon={faUser}
-          value={registerDto?.name}
-          onChangeText={e => handleChange('name', e)}
-        />
-        <Button
-          loading={loading}
-          borderRadius={10}
-          onPress={() => {
-            handleAddStudent();
-          }}
-          text={t('KAYDET')}
-        />
-      </FormContainer>
+    <Container header goBackShow title={t("CLASS_ADD")}>
+      <Container p={10} type='container'>
+        <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+          <Input
+            required
+            id="name"
+            placeholder={t('CLASS_NAME')}
+            icon={faUser}
+            value={registerDto?.name}
+            onChangeText={e => handleChange('name', e)}
+          />
+          <Button
+            loading={loading}
+            borderRadius={10}
+            onPress={() => {
+              handleAddStudent();
+            }}
+            text={t('KAYDET')}
+          />
+        </FormContainer>
+      </Container>
+
     </Container>
   );
 }

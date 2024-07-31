@@ -18,6 +18,7 @@ import AlertDialog from '../AlertDialog/AlertDialog';
 import EvulationRepository from '../../repositories/EvulationRepository';
 import EvulationResponse from '../../models/EvulationResponse';
 import { useTranslation } from 'react-i18next';
+import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 
 export default function QuestionsList({
   student,
@@ -189,18 +190,21 @@ export default function QuestionsList({
   };
 
   return (
-    <>
-      <Loading loading={loading}>
-        <View style={{ flex: 0.9 }}>
-          <CustomFlatList data={questions} renderItem={RenderItem} />
-        </View>
-        <View style={{ flex: 0.1 }}>
-          <Container px={20}>
-            <Button text={t("SAVE")} onPress={() => handleSave()} />
-          </Container>
-        </View>
-      </Loading>
-    </>
+
+
+    <Loading loading={loading}>
+
+      <Container>
+        <CustomFlatList isBottomSheet data={questions} renderItem={RenderItem} />
+      </Container>
+      <View style={{ paddingHorizontal: 10, marginVertical: 10 }}>
+        <Button text={t("SAVE")} onPress={() => handleSave()} />
+      </View>
+
+
+    </Loading>
+
+
   );
 }
 const QuestionCard = styled(View)`

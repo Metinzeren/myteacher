@@ -6,18 +6,19 @@ import {
   ActivityIndicator,
   RefreshControl,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import CustomListProps from './CustomFlatListProps';
 import Input from '../Input/Input';
-import {faSearch} from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import CustomText from '../Text/Text';
+import { BottomSheetFlatList } from '@gorhom/bottom-sheet';
 
 export default function CustomFlatList(props: CustomListProps) {
   const [onRefresh, setOnRefresh] = useState(false);
   const [search, setSearch] = useState('');
 
   const GetData = () => {
-    
+
     if (props.data) {
       if (props.filter && props.sort) {
         return props.data
@@ -48,7 +49,7 @@ export default function CustomFlatList(props: CustomListProps) {
   return (
     <>
       {props.isSearchable && (
-        <View style={{marginBottom: 10}}>
+        <View style={{ marginBottom: 10 }}>
           <Input
             icon={faSearch}
             placeholder="Ara"
@@ -61,6 +62,8 @@ export default function CustomFlatList(props: CustomListProps) {
         !props.isBottomSheet ? (
           <FlatList
             {...props}
+            showsHorizontalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             contentContainerStyle={props?.contentContainerStyle}
             data={GetData() as any}
             keyExtractor={(item, index) => index.toString()}
@@ -80,7 +83,28 @@ export default function CustomFlatList(props: CustomListProps) {
               />
             }
           />
-        ) : null
+        ) : <BottomSheetFlatList
+          {...props}
+          contentContainerStyle={props?.contentContainerStyle}
+          data={GetData() as any}
+          keyExtractor={(item, index) => index.toString()}
+
+          onEndReachedThreshold={0.5}
+          renderItem={props.renderItem}
+          refreshControl={
+            <RefreshControl
+              refreshing={onRefresh}
+              onRefresh={() => {
+                setOnRefresh(true);
+                if (props.handleRefresh) {
+                  props.handleRefresh();
+                }
+                setOnRefresh(false);
+              }}
+            />
+          }
+        />
+
       ) : (
         <View
           style={{

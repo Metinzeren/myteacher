@@ -17,6 +17,7 @@ import { getResourceByKey } from '../lang/i18n'
 import AlertDialog from '../components/AlertDialog/AlertDialog'
 import { useQuestions } from '../context/StudentEvulationContext'
 import { useTranslation } from 'react-i18next'
+import CustomText from '../components/Text/Text'
 export default function UpdateStudentEvulationScreen(
     props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentEvulationScreen'>
 ) {
@@ -104,69 +105,80 @@ export default function UpdateStudentEvulationScreen(
     };
     return (
         <Container
-            p={10}
+
             goBackShow
             header
             title={t("QUESTION_INFO")}
             extraIcon={faTrash}
         >
-            <Loading>
-                <FormKeyboardView>
-                    <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
-                        <Input
-                            required
-                            id="name"
-                            errorMessage=""
-                            placeholder="Soru"
-                            icon={faQuestion}
-                            value={updateDto.name}
-                            onChangeText={e => handleChange('name', e)}
-                        />
-                        {updateDto.questionType === "option" && updateDto.answer?.map((answer, index) => (
+            <Container type='container' p={10}>
+                <Loading>
+                    <FormKeyboardView>
+                        <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+                            <CustomText color="primaryText" fontSizes="body4">Soru</CustomText>
                             <Input
-                                key={index}
                                 required
-                                id={`answer_${index}`}
+                                id="name"
                                 errorMessage=""
-                                placeholder="Cevap"
-                                icon={faReply}
-                                value={answer}
-                                onChangeText={e => handleChange('answer', e, index)}
+                                placeholder="Soru"
+                                icon={faQuestion}
+                                value={updateDto.name}
+                                onChangeText={e => handleChange('name', e)}
                             />
-                        ))}
-                        <Dropdown
-                            style={{ backgroundColor: "white", padding: 10, borderRadius: 10 }}
-                            data={questionTypes}
-                            labelField="label"
-                            valueField="value"
-                            placeholder="Soru Türü Seçin"
-                            value={updateDto.questionType}
-                            onChange={item => handleChange('questionType', item.value)}
-                        />
-                        {updateDto.questionType === "option" && (
-                            <>
-                                <Dropdown
-                                    style={{ backgroundColor: "white", padding: 12, borderRadius: 10, borderColor: "red" }}
-                                    data={answerTypes}
-                                    labelField="label"
-                                    valueField="value"
-                                    placeholder="Cevap Türü Seçin"
-                                    value={updateDto.answerType}
-                                    onChange={item => handleChange('answerType', item.value)}
-                                />
-                            </>
-                        )}
 
-                    </FormContainer>
+                            <CustomText color="primaryText" fontSizes="body4">Soru türü</CustomText>
 
-                </FormKeyboardView>
-            </Loading>
-            <Button
-                loading={loading}
-                borderRadius={10}
-                onPress={handleUpdateQuestion}
-                text="Kaydet"
-            />
+                            <Dropdown
+                                style={{ backgroundColor: "white", padding: 10, borderRadius: 10 }}
+                                data={questionTypes}
+                                labelField="label"
+                                valueField="value"
+                                placeholder="Soru Türü Seçin"
+                                value={updateDto.questionType}
+                                onChange={item => handleChange('questionType', item.value)}
+                            />
+                            {updateDto.questionType === "option" && (
+                                <>
+                                    <CustomText color="primaryText" fontSizes="body4">Cevap Türü</CustomText>
+                                    <Dropdown
+                                        style={{ backgroundColor: "white", padding: 12, borderRadius: 10, borderColor: "red" }}
+                                        data={answerTypes}
+                                        labelField="label"
+                                        valueField="value"
+                                        placeholder="Cevap Türü Seçin"
+                                        value={updateDto.answerType}
+                                        onChange={item => handleChange('answerType', item.value)}
+                                    />
+                                </>
+                            )}
+                            {updateDto.questionType === "option" && updateDto.answer?.map((answer, index) => (
+                                <>
+                                    <CustomText key={index} color="primaryText" fontSizes="body4">Cevap {index + 1}</CustomText>
+                                    <Input
+
+                                        required
+                                        id={`answer_${index}`}
+                                        errorMessage=""
+                                        placeholder="Cevap"
+                                        icon={faReply}
+                                        value={answer}
+                                        onChangeText={e => handleChange('answer', e, index)}
+                                    />
+                                </>
+
+                            ))}
+                        </FormContainer>
+
+                    </FormKeyboardView>
+                </Loading>
+                <Button
+                    loading={loading}
+                    borderRadius={10}
+                    onPress={handleUpdateQuestion}
+                    text="Kaydet"
+                />
+            </Container>
+
         </Container>
     )
 }

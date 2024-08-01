@@ -1,9 +1,9 @@
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
-import {SvgType} from '../../types/type';
-import {G, Path, Svg} from 'react-native-svg';
+import { SvgType } from '../../types/type';
+import { G, Path, Svg } from 'react-native-svg';
 
-export default function BookSvgIcon({height = 60, width = 60}: SvgType) {
+export default function BookSvgIcon({ height = 60, width = 60 }: SvgType) {
   return (
     <Svg height={height} width={width} role="img" viewBox="0 0 64 64">
       <Path
@@ -58,7 +58,7 @@ export default function BookSvgIcon({height = 60, width = 60}: SvgType) {
         d="M35 38s-5.2 1.9-4.2 5.6c1 3.8 5.1 1.5 5.1 1.5l25.7-12.7s-1.4-4 1.2-6.7L35 38z"
         fill="#d9e3e8"></Path>
 
-      <Path fill="#ed4c5c" d="M39.4 0L64 25.4L34.9 37.5L16.2 6.6z"></Path>
+      <Path fill="#ECA45B" d="M39.4 0L64 25.4L34.9 37.5L16.2 6.6z"></Path>
 
       <Path fill="#ffffff" d="M40.1 5.8l4.8 5.3l-17.7 6.7L23 11z"></Path>
 
@@ -72,7 +72,7 @@ export default function BookSvgIcon({height = 60, width = 60}: SvgType) {
 
       <Path
         d="M30.5 44.9c-2.8-6.3 4.5-7.4 4.5-7.4L16.2 6.6s-4.3-.1-4.3 4.5c0 1.9.8 3.4.8 3.4l17.8 30.4"
-        fill="#c94747"></Path>
+        fill="#ECA45B"></Path>
     </Svg>
   );
 }

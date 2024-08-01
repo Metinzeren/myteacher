@@ -60,7 +60,7 @@ export const FONTWEIGHT = {
 export const COLORS = {
   primaryText: '#34495e',
   textBlack: '#000',
-  textLink: '#5D3EBC',
+  textLink: '#ECA45B',
   grey: 'grey',
   error: '#ff0000',
   white: '#fff',
@@ -74,5 +74,6 @@ export const COLORS = {
   grey3: '#f0f0f0',
   grey4: '#ebebeb',
   grey5: '#d8d8d8',
+  descriptionColor: '#797979',
 
 };

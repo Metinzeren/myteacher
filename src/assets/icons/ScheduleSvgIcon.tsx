@@ -1,9 +1,9 @@
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
-import {Circle, G, Path, Rect, Svg} from 'react-native-svg';
-import {SvgType} from '../../types/type';
+import { Circle, G, Path, Rect, Svg } from 'react-native-svg';
+import { SvgType } from '../../types/type';
 
-export default function ScheduleSvgIcon({width = 45, height = 45}: SvgType) {
+export default function ScheduleSvgIcon({ width = 45, height = 45 }: SvgType) {
   return (
     <Svg height={height} width={width} viewBox="0 0 48 48">
       <Path

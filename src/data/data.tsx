@@ -5,18 +5,23 @@ import ScheduleSvgIcon from '../assets/icons/ScheduleSvgIcon';
 export const homeMenu = [
   {
     name: 'Sınıflar',
-    icon: <BookSvgIcon height={35} width={50} />,
+    icon: <BookSvgIcon height={60} width={80} />,
     link: 'ClassRoomScreen',
   },
   {
     name: 'Ödevler',
-    icon: <BookSvgIcon height={35} width={50} />,
+    icon: <BookSvgIcon height={60} width={80} />,
     link: 'CalendarScreen',
   },
   {
     name: 'Öğrenci Değerlendirme Soruları',
-    icon: <GroupSvgIcon height={35} width={50} />,
+    icon: <GroupSvgIcon height={60} width={80} />,
     link: 'StudentEvulationScreen',
+  },
+  {
+    name: 'Öğrenci Devamsızlık',
+    icon: <ScheduleSvgIcon height={60} width={80} />,
+    link: 'AddAbsenceScreen',
   },
 ];
 

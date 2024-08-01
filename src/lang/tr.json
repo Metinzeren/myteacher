@@ -6,6 +6,9 @@
     "ADD": "Ekle",
     "SAVE": "Kaydet",
     "UPDATE": "Güncelle",
+    "END_DATE": "Bitiş tarihi",
+    "START_DATE": "Başlangıç tarihi",
+    "DESCRIPTION": "Açıklama",
     "DELETE": "Sil",
     "OKAY": "Tamam",
     "WARNING": "Uyarı",
@@ -117,6 +120,13 @@
     "parentLastName": "Lütfen velinizin soyadını girin",
     "parentPhone": "Lütfen velinizin telefon numarasını girin",
     "parentEmail": "Lütfen velinizin e-posta adresini girin"
+  },
+  "addAbsenceForm": {
+    "date": "Lütfen tarihi girin",
+    "startDate": "Lütfen başlangıç tarihini girin",
+    "endDate": "Lütfen bitiş tarihini girin",
+    "student": "Lütfen öğrenciyi seçin",
+    "description": "Lütfen açıklamayı girin"
   },
   "addClassRoomForm": {
     "name": "Lütfen sınıf adını girin!"

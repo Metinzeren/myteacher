@@ -21,12 +21,12 @@ import StudentEvulationScreen from '../screens/StudentEvulationScreen';
 import { getLocalStorage, setLocalStorage } from '../utils/AsyncStorageUtils';
 import AddStudentEvulationScreen from '../screens/AddStudentEvulationScreen';
 import UpdateStudentEvulationScreen from '../screens/UpdateStudentEvulationScreen';
+import AddAbsenceScreen from '../screens/AddAbsenceScreen';
 const RootNavigator = () => {
   const Stack = createStackNavigator<RootStackParamList>();
   const [authUser, setAuth] = useState(null);
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async user => {
-      // console.log(await user?.getIdToken());
 
       if (user) {
         setAuth(user as any);
@@ -158,6 +158,13 @@ const RootNavigator = () => {
           <Stack.Screen
             name="UpdateStudentEvulationScreen"
             component={UpdateStudentEvulationScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Stack.Screen
+            name="AddAbsenceScreen"
+            component={AddAbsenceScreen}
             options={{
               headerShown: false,
             }}

@@ -1,4 +1,4 @@
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
 import React, { useCallback, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
@@ -24,6 +24,7 @@ import IconButton from '../components/IconButton/IconButton';
 import Loading from '../components/Loading/Loading';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import { useTranslation } from 'react-i18next';
+import CustomFlatList from '../components/Flatlist/CustomFlatList';
 
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
@@ -142,19 +143,12 @@ const HomeScreen = (
                   onPress={() => props.navigation.navigate(item?.link as any)}
                   key={index}>
                   <MenuItem>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <IconContainer>
                       {item?.icon}
-                      <CustomText fontSizes="h5" color="primaryText" center>
+                      <CustomText fontSizes="body5" color="primaryText" center>
                         {item.name}
                       </CustomText>
-                    </View>
-                    <MenuItemButton>
-                      <FontAwesomeIcon
-                        icon={faAngleRight}
-                        color={colors.iconColor}
-                        size={20}
-                      />
-                    </MenuItemButton>
+                    </IconContainer>
                   </MenuItem>
                 </TouchableOpacity>
               ))}
@@ -190,13 +184,25 @@ const HomeScreen = (
     </Container>
   );
 };
+const screenWidth = Dimensions.get('window').width;
 const HomeBottomContainer = styled(View)`
+  flex: 1;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 10px;
+  margin-horizontal: 10px;
 `;
 const NoSearchContainer = styled(View)`
   flex: 1;
   justify-content: space-between;
   flex-direction: column;
 `;
+
+const IconContainer = styled(View)`
+  flex-direction: column;
+  align-items: center;
+ width: ${screenWidth * 0.3}px;`
+  ;
 const HomeTopContainer = styled(View)`
   margin-horizontal: 10px;
   margin-top: 10px;
@@ -206,18 +212,16 @@ const HomeTopContainer = styled(View)`
   gap: 10px;
 `;
 const MenuItem = styled(View)`
-  flex-direction: row;
-  padding-vertical: 10px;
+  flex-basis: 80%;
+  height: 120px;
+  margin: 10px; 
+  padding: 15px;
   background-color: #fff;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 10px;
-  margin-horizontal: 10px;
-  margin-top: 10px;
-  padding-right: 10px;
-  border-radius: 5px;
-  border-width: 1px;
-  border-color: #ddd;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  elevation: 3;
 `;
 const MenuItemButton = styled(TouchableOpacity)``;
 const LogoutButton = styled(View)`

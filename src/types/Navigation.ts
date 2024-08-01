@@ -23,4 +23,5 @@ export type RootStackParamList = {
   StudentEvulationScreen: undefined;
   AddStudentEvulationScreen: undefined;
   UpdateStudentEvulationScreen: { questionId: string }
+  AddAbsenceScreen: undefined;
 };

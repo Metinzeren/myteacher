@@ -1,9 +1,9 @@
-import {View, Text} from 'react-native';
+import { View, Text } from 'react-native';
 import React from 'react';
-import {G, Path, Polygon, Rect, Svg} from 'react-native-svg';
-import {SvgType} from '../../types/type';
+import { G, Path, Polygon, Rect, Svg } from 'react-native-svg';
+import { SvgType } from '../../types/type';
 
-export default function GroupSvgIcon({height = 45, width = 45}: SvgType) {
+export default function GroupSvgIcon({ height = 45, width = 45 }: SvgType) {
   return (
     <Svg height={height} width={width} viewBox="0 0 449.943 449.943">
       <G>
@@ -34,7 +34,7 @@ export default function GroupSvgIcon({height = 45, width = 45}: SvgType) {
             <G id="XMLID_22_">
               <G>
                 <Path
-                  fill="#ED4C5C"
+                  fill="#ECA45B"
                   d="M175.17,198.272c2.59,3.69,5.27,7.15,8.04,10.4l-8.43,4.01c-28.06,13.35-51.8,34.24-68.67,60.41
 						c-13.72,21.29-22.32,45.29-25.31,70.31c-30.49-8.31-58.05-23.72-80.8-44.35v-0.11c0-53.06,31.05-98.86,75.96-120.24
 						c16.88,16.84,36.64,25.91,57.14,25.91c13.43,0,26.55-3.89,38.74-11.31C172.91,194.982,174.03,196.642,175.17,198.272z"

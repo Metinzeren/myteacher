@@ -7,6 +7,9 @@
     "ADD": "Add",
     "UPDATE": "Update",
     "DELETE": "Delete",
+    "END_DATE": "End date",
+    "START_DATE": "Start date",
+    "DESCRIPTION": "Description",
     "OKAY": "Okay",
     "WARNING": "Warning",
     "ERROR": "Error",
@@ -120,5 +123,12 @@
   },
   "addClassRoomForm": {
     "name": "Please enter the class name!"
+  },
+  "addAbsenceForm": {
+    "date": "Please enter the date",
+    "startDate": "Please enter the start date",
+    "endDate": "Please enter the end date",
+    "student": "Please select the student",
+    "description": "Please enter the description"
   }
 }

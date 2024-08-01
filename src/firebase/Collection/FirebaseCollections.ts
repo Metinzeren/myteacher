@@ -3,6 +3,7 @@ const FirebaseCollections = {
   CLASSROOMS: 'classrooms',
   QUESTIONS: 'questions',
   EVULATIONS: 'evaluations',
-  USERS: 'users'
+  USERS: 'users',
+  ABSENTEEISMS: 'absenteeisms',
 };
 export default FirebaseCollections;

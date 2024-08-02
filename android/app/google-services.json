@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "53633082621",
+    "firebase_url": "https://my-teacher-553bb-default-rtdb.firebaseio.com",
+    "project_id": "my-teacher-553bb",
+    "storage_bucket": "my-teacher-553bb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:53633082621:android:b44ab0eba43b4274858a94",
+        "android_client_info": {
+          "package_name": "com.myteacher"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjjyJYP3eAv2HG8HFutfQbnFe-OWcLawI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

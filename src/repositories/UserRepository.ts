@@ -6,7 +6,7 @@ import {
   getDocs,
   setDoc,
 } from 'firebase/firestore';
-import {db} from '../firebase/config';
+import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import User from '../models/User';
 
@@ -21,7 +21,7 @@ class UserRepository {
     return UserRepository.instance;
   }
 
-  private constructor() {}
+  private constructor() { }
 
   async addUser(user: User) {
     const userDoc = doc(this.userCollection);

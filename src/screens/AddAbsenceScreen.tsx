@@ -1,10 +1,10 @@
-import { View, Text, Keyboard, Image, StyleSheet, PermissionsAndroid } from 'react-native';
+import { View, Text, Keyboard, Image, StyleSheet, PermissionsAndroid, ScrollView } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import { useTranslation } from 'react-i18next';
 import FormContainer, { FormContainerRef } from '../components/FormContainer';
 import Input from '../components/Input/Input';
-import { faAdd, faCalendar, faCamera, faFileAlt } from '@fortawesome/free-solid-svg-icons';
+import { faAdd, faCalendar, faCamera, faFileAlt, faTrash } from '@fortawesome/free-solid-svg-icons';
 import Button from '../components/Button/Button';
 import Absenteeism from '../models/Absenteeism';
 import uuid from 'react-native-uuid';
@@ -21,11 +21,16 @@ import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/nati
 import { RootStackParamList } from '../types/Navigation';
 import { getLocalStorage } from '../utils/AsyncStorageUtils';
 import UserRepository from '../repositories/UserRepository';
-
+import CustomText from '../components/Text/Text';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { initStorage } from '../firebase/config';
+import { format } from 'date-fns';
 export default function AddAbsenceScreen(
     props: NativeStackScreenProps<RootStackParamList, 'AddAbsenceScreen'>,
 
 ) {
+
+
     const { t } = useTranslation();
     const formRef = useRef<FormContainerRef>(null);
     const AbsenteeismRepo = AbsenteeismRepository.getInstance();
@@ -36,6 +41,7 @@ export default function AddAbsenceScreen(
     const [loading, setLoading] = useState<boolean>(false);
     const [imageUri, setImageUri] = useState<string | null>(null);
     const [userInfo, setUserInfo] = useState({} as any);
+    const today = format(new Date(), 'yyyy-MM-dd');
     const [registerDto, setRegisterDto] = useState<Absenteeism>({
         id: uuid.v4().toString(),
         studentId: '',
@@ -56,6 +62,7 @@ export default function AddAbsenceScreen(
     const StartDateCalendar = () => {
         return (
             <Calendar
+                minDate={today}
                 onDayPress={(day: any) => {
                     handleChange('startDate', day.dateString);
                     startDateBottomSheetRef.current?.close();
@@ -67,6 +74,7 @@ export default function AddAbsenceScreen(
     const EndDateCalendar = () => {
         return (
             <Calendar
+                minDate={today}
                 onDayPress={(day: any) => {
                     handleChange('endDate', day.dateString);
                     endDateBottomSheetRef.current?.close();
@@ -170,31 +178,72 @@ export default function AddAbsenceScreen(
         if (isEmpty) {
             Keyboard.dismiss();
             setLoading(true);
+            let photoUrl = '';
+
+            if (imageUri) {
+                let bytes = await fetch(imageUri).then((res) => res.blob());
+                let storageRef = ref(initStorage, `absenteeism/${userInfo.id}/${registerDto.id}`);
+                await uploadBytes(storageRef, bytes);
+                photoUrl = await getDownloadURL(storageRef);
+
+                console.log(photoUrl);
+
+            }
+
+
             let data = {
                 studentId: userInfo.id,
                 startDate: registerDto.startDate,
                 endDate: registerDto.endDate,
                 description: registerDto.description,
-                photo: registerDto.photo,
+                photo: photoUrl,
                 classRoomId: userInfo.classRoomId,
+            };
+
+            try {
+                await AbsenteeismRepo.addAbsenteeism(data);
+                AlertDialog.showModal({
+                    title: t("SUCCESS"),
+                    message: t("CLASS_ADD_SUCCESS"),
+                    onConfirm() {
+                        props.navigation.goBack();
+                    },
+                });
+            } catch (e) {
+                console.log(e);
+            } finally {
+                setLoading(false);
+                setImageUri(null);
             }
-            const entity = await AbsenteeismRepo.addAbsenteeism(data);
-            setLoading(false);
-            AlertDialog.showModal({
-                title: t("SUCCESS"),
-                message: t("CLASS_ADD_SUCCESS"),
-                onConfirm() {
-                    props.navigation.goBack();
-                },
-            });
         }
     };
+
 
 
     return (
         <Container goBackShow title={t("STUDENT_ABSENCE")} header>
             <Container p={10} type='container'>
                 <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+                    <View>
+                        <CustomText fontSizes='body4' color='primaryText'>{t("ADD_PHOTO")} <CustomText fontSizes='body6' color='textLink'>({t("OPTIONAL")})</CustomText> </CustomText>
+                    </View>
+                    <AddPhotoContainer>
+                        <IconContainer>
+                            <IconButton onPress={() => photoButtonRef.current?.open()} icon={faAdd} />
+                        </IconContainer>
+                        <ImageContainer>
+                            {imageUri && <StyledImage source={{ uri: imageUri }} />}
+                            {imageUri && (
+                                <DeleteIconContainer>
+                                    <IconButton iconSize={15} backgroundColor='#fff' iconColor='orange' onPress={() => {
+                                        setRegisterDto({ ...registerDto, photo: '' });
+                                        setImageUri(null)
+                                    }} icon={faTrash} />
+                                </DeleteIconContainer>
+                            )}
+                        </ImageContainer>
+                    </AddPhotoContainer>
+
                     <PlaceholderInput
                         required
                         id='startDate'
@@ -222,10 +271,6 @@ export default function AddAbsenceScreen(
                         onChangeText={e => handleChange('description', e)}
                     />
 
-                    <AddPhotoContainer>
-                        <IconButton onPress={() => photoButtonRef.current?.open()} icon={faAdd} />
-                    </AddPhotoContainer>
-                    {imageUri && <Image source={{ uri: imageUri }} width={100} height={100} />}
 
 
 
@@ -267,7 +312,38 @@ const ButtonContainer = styled(View)`
 `
 const AddPhotoContainer = styled(View)`
     flex-direction: row;
-    gap: 10px;
     justify-content: flex-start;
     align-items: center;
-`
+    height:100px;
+`;
+
+const ImageContainer = styled(View)`
+    position: relative;
+    height: 100px;
+     `;
+
+const IconContainer = styled(View)`
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    margin-right: 10px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: #ebeff3;
+    padding: 0px 5px; 
+    height: 100px;
+`;
+
+const DeleteIconContainer = styled(View)`
+    position: absolute;
+    top: 0;
+    right: 0;
+`;
+
+const StyledImage = styled(Image)`
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-color: #ebeff3;
+`;

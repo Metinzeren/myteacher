@@ -1,11 +1,11 @@
-import {View, Text, TouchableOpacity, ActivityIndicator} from 'react-native';
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import React from 'react';
-import {TouchableOpacityProps} from 'react-native-gesture-handler';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
-import {SIZES} from '../../constant/theme';
+import { TouchableOpacityProps } from 'react-native-gesture-handler';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { SIZES } from '../../constant/theme';
 import styled from 'styled-components';
 import useThemeColors from '../../constant/useColor';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 
 interface IconButtonProps extends TouchableOpacityProps {
   icon: IconProp;
@@ -14,6 +14,7 @@ interface IconButtonProps extends TouchableOpacityProps {
   loading?: boolean;
   backgroundColor?: string;
   borderRadius?: number;
+  iconColor?: string;
 }
 
 export default function IconButton({
@@ -22,6 +23,7 @@ export default function IconButton({
   loading,
   iconSize = 15,
   backgroundColor,
+  iconColor,
   borderRadius = SIZES.radius_sm,
   ...props
 }: IconButtonProps) {
@@ -50,13 +52,13 @@ export default function IconButton({
         backgroundColor: outline
           ? 'transparent'
           : loading
-          ? '#ddd'
-          : backgroundColor || colors.primary,
+            ? '#ddd'
+            : backgroundColor || colors.primary,
       }}>
       {loading ? (
         <ActivityIndicator color={'white'} />
       ) : (
-        icon && <Icon size={iconSize} icon={icon} color={colors.text} />
+        icon && <Icon size={iconSize} icon={icon} color={iconColor ? iconColor : colors.text} />
       )}
     </CustomIconButton>
   );

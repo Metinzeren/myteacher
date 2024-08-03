@@ -185,9 +185,6 @@ export default function AddAbsenceScreen(
                 let storageRef = ref(initStorage, `absenteeism/${userInfo.id}/${registerDto.id}`);
                 await uploadBytes(storageRef, bytes);
                 photoUrl = await getDownloadURL(storageRef);
-
-                console.log(photoUrl);
-
             }
 
 

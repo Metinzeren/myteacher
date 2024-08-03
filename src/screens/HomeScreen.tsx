@@ -1,5 +1,5 @@
 import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
@@ -24,8 +24,6 @@ import IconButton from '../components/IconButton/IconButton';
 import Loading from '../components/Loading/Loading';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import { useTranslation } from 'react-i18next';
-import CustomFlatList from '../components/Flatlist/CustomFlatList';
-
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
 ) => {
@@ -37,6 +35,7 @@ const HomeScreen = (
   const [focusToSearch, setFocusToSearch] = useState(false);
   const [searchStudents, setSearchStudents] = useState<Array<ClassRoom>>([]);
   const [searchLoading, setSearchLoading] = useState(false);
+
   return (
     <Container title={focusToSearch ? t('SEARCH_RESULTS') : t('HOME')} header showNotification={!focusToSearch}>
       <ScrollView

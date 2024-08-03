@@ -12,31 +12,34 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import '../lang/i18n';
+import DevicesRepository from '../repositories/DeviceRepository';
 
 export default function LoginScreen(props: any) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const deviceRepo = DevicesRepository.getInstance();
 
-  const handleLogin = () => {
+
+  const handleLogin = async () => {
     setLoading(true);
-    signInWithEmailAndPassword(auth, email, password)
-      .then(userCredential => {
-        const user = userCredential.user;
-      })
-      .catch(error => {
-        const errorCode = error.code;
-        const errorMessage = error.message;
-        AlertDialog.showModal({
-          title: errorCode,
-          message: errorMessage,
-        });
-      })
-      .finally(() => {
-        setLoading(false);
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+    } catch (error: any) {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      AlertDialog.showModal({
+        title: errorCode,
+        message: errorMessage,
       });
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   return (
     <Container>

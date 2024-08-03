@@ -6,9 +6,10 @@ import {
   getDocs,
   setDoc,
 } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import {db} from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import User from '../models/User';
+import {getUserId} from '../utils/AsyncStorageUtils';
 
 class UserRepository {
   private static instance: UserRepository;
@@ -21,7 +22,7 @@ class UserRepository {
     return UserRepository.instance;
   }
 
-  private constructor() { }
+  private constructor() {}
 
   async addUser(user: User) {
     const userDoc = doc(this.userCollection);
@@ -43,6 +44,12 @@ class UserRepository {
     const userDoc = doc(this.userCollection, userId);
     const userSnapshot = await getDoc(userDoc);
     return userSnapshot.data() as User;
+  }
+  async getClassRoomIdByUserId() {
+    let userId = await getUserId();
+    const userDoc = doc(this.userCollection, userId);
+    const userSnapshot = await getDoc(userDoc);
+    return userSnapshot.data()?.classRoomId;
   }
 
   async getAllUsers() {

@@ -1,5 +1,6 @@
 import BookSvgIcon from '../assets/icons/BookSvgIcon';
 import GroupSvgIcon from '../assets/icons/GroupSvgIcon';
+import LogoutSvgIcon from '../assets/icons/LogoutSvgIcon';
 import ScheduleSvgIcon from '../assets/icons/ScheduleSvgIcon';
 
 export const homeMenu = [
@@ -22,6 +23,11 @@ export const homeMenu = [
     name: 'Öğrenci Devamsızlık',
     icon: <ScheduleSvgIcon height={60} width={80} />,
     link: 'AddAbsenceScreen',
+  },
+  {
+    name: 'Çıkış Yap',
+    icon: <LogoutSvgIcon height={60} width={80} />,
+    link: '',
   },
 ];
 

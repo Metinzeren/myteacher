@@ -1,6 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export const setLocalStorage = async (
   key: string,
   value: any,
@@ -21,7 +20,14 @@ export const getLocalStorage = async (key: string): Promise<any> => {
     console.error('Error retrieving value from AsyncStorage:', e);
   }
 };
-
+export const getUserFromCollection = async (): Promise<any> => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('authUser');
+    return jsonValue != null ? JSON.parse(jsonValue).userCollection : null;
+  } catch (e) {
+    console.error('Error retrieving value from AsyncStorage:', e);
+  }
+};
 export const getUserId = async (): Promise<any> => {
   try {
     const jsonValue = await AsyncStorage.getItem('authUser');
@@ -30,4 +36,3 @@ export const getUserId = async (): Promise<any> => {
     console.error('Error retrieving value from AsyncStorage:', e);
   }
 };
-

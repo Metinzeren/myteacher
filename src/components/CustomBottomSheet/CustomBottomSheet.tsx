@@ -9,7 +9,7 @@ import React, {
   useLayoutEffect,
   useCallback,
 } from 'react';
-import { View, Text, StyleSheet, LayoutChangeEvent } from 'react-native';
+import {View, Text, StyleSheet, LayoutChangeEvent} from 'react-native';
 import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetBackgroundProps,
@@ -29,11 +29,11 @@ export interface BottomSheetRef {
 
 const CustomBottomSheet = forwardRef<BottomSheetRef, BottomSheetComponentProps>(
   (props, ref) => {
-    const { children, snapPoints, indicator = true } = props;
+    const {children, snapPoints, indicator = true} = props;
     const bottomSheetRef = useRef<BottomSheet>(null);
     const [isOpen, setIsOpen] = useState(false);
 
-    const cSnapPoints = useMemo(() => snapPoints || ["70%"], []);
+    const cSnapPoints = useMemo(() => snapPoints ?? ['70%'], []);
 
     useImperativeHandle(ref, () => ({
       open: () => {
@@ -62,17 +62,14 @@ const CustomBottomSheet = forwardRef<BottomSheetRef, BottomSheetComponentProps>(
       <BottomSheet
         ref={bottomSheetRef}
         index={-1}
-
         snapPoints={cSnapPoints}
         enablePanDownToClose={true}
-        containerStyle={{ zIndex: 100 }}
+        containerStyle={{zIndex: 100}}
         backgroundStyle={styles.contentContainer}
         backdropComponent={renderBackdrop}
-        handleIndicatorStyle={{ display: indicator ? 'flex' : 'none' }}
+        handleIndicatorStyle={{display: indicator ? 'flex' : 'none'}}
         onChange={handleSheetChanges}>
-
         {isOpen && children}
-
       </BottomSheet>
     );
   },

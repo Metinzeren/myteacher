@@ -1,9 +1,16 @@
-import React, { useRef, useState, useEffect } from 'react';
-import { View, TouchableOpacity, Modal, ScrollView, Image, Text } from 'react-native';
+import React, {useRef, useState, useEffect} from 'react';
+import {
+  View,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  Image,
+  Text,
+} from 'react-native';
 import styled from 'styled-components';
 import Container from '../components/Container/Container';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
 import Loading from '../components/Loading/Loading';
 import FormContainer from '../components/FormContainer';
 import Input from '../components/Input/Input';
@@ -15,33 +22,36 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import { FormContainerRef } from '../components/FormContainer';
+import {FormContainerRef} from '../components/FormContainer';
 import Student from '../models/Student';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Button from '../components/Button/Button';
-import { t } from 'i18next';
+import {t} from 'i18next';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import { useClassRooms } from '../context/ClassRoomContext';
+import {useClassRooms} from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView';
 import Accordion from '../components/Accordion/Accordion';
-import { getResourceByKey } from '../lang/i18n';
+import {getResourceByKey} from '../lang/i18n';
 import EvulationRepository from '../repositories/EvulationRepository';
 import EvulationResponse from '../models/EvulationResponse';
 import CustomText from '../components/Text/Text';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
 import useThemeColors from '../constant/useColor';
 import axios from 'axios';
-import { getLocalStorage } from '../utils/AsyncStorageUtils';
-import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomSheet/CustomBottomSheet';
-import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
+import {getLocalStorage} from '../utils/AsyncStorageUtils';
+import CustomBottomSheet, {
+  BottomSheetRef,
+} from '../components/CustomBottomSheet/CustomBottomSheet';
+import {BottomSheetScrollView, BottomSheetView} from '@gorhom/bottom-sheet';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import EvulationQuestionResponse from '../models/EvulationQuestionResponse';
+import {deleteStudent} from '../firebase/FirebaseApi';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
 ) {
-  const { classRooms, deleteStudentFromClassRoom, updateStudentInClassRoom } =
+  const {classRooms, deleteStudentFromClassRoom, updateStudentInClassRoom} =
     useClassRooms();
   const studentFromParam = props.route.params.student;
   const studentId = props.route.params.studentId;
@@ -92,7 +102,9 @@ export default function UpdateStudentScreen(
   });
 
   const [evulation, setEvulation] = useState<Array<EvulationResponse>>([]);
-  const [selectedEvulation, setSelectedEvulation] = useState<EvulationResponse>({} as EvulationResponse);
+  const [selectedEvulation, setSelectedEvulation] = useState<EvulationResponse>(
+    {} as EvulationResponse,
+  );
   useEffect(() => {
     getEvulation();
   }, []);
@@ -153,16 +165,10 @@ export default function UpdateStudentScreen(
             parentId: student.parentId,
           };
 
-          const response = await axios.delete(
-            'https://europe-west1-my-teacher-553bb.cloudfunctions.net/deleteStudent',
-            {
-              headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`,
-              },
-              data: data,
-            },
-          );
+          const response = deleteStudent({
+            accessToken,
+            data,
+          });
 
           deleteStudentFromClassRoom(
             classRoomId,
@@ -188,39 +194,34 @@ export default function UpdateStudentScreen(
       <CustomFlatList
         data={mockAbsence}
         isBottomSheet
-        renderItem={({ item, index }: { item: any, index: number }) => {
+        renderItem={({item, index}: {item: any; index: number}) => {
           let absence = item;
-          return <CardContentContainer key={index}>
-            <CustomText
-              fontSizes="body4"
-              color="textLink">{`${index + 1
-                }.`}</CustomText>
-            <CardContentRight>
-              <TouchableOpacity
-                onPress={() => {
-                  setSelectedImage([
-                    { url: absence.url },
-                  ] as any);
-                  setModalVisible(true);
-                }}>
-                <Image
-                  source={{ uri: absence.url }}
-                  style={{
-                    width: 150,
-                    height: 150,
-                    borderRadius: 8,
-                  }}
-                />
-              </TouchableOpacity>
+          return (
+            <CardContentContainer key={index}>
+              <CustomText fontSizes="body4" color="textLink">{`${
+                index + 1
+              }.`}</CustomText>
+              <CardContentRight>
+                <TouchableOpacity
+                  onPress={() => {
+                    setSelectedImage([{url: absence.url}] as any);
+                    setModalVisible(true);
+                  }}>
+                  <Image
+                    source={{uri: absence.url}}
+                    style={{
+                      width: 150,
+                      height: 150,
+                      borderRadius: 8,
+                    }}
+                  />
+                </TouchableOpacity>
 
-              <CustomText color="primaryText">
-                {absence.date}
-              </CustomText>
-              <CustomText color="textLink">
-                {absence.reason}
-              </CustomText>
-            </CardContentRight>
-          </CardContentContainer>
+                <CustomText color="primaryText">{absence.date}</CustomText>
+                <CustomText color="textLink">{absence.reason}</CustomText>
+              </CardContentRight>
+            </CardContentContainer>
+          );
         }}
       />
     );
@@ -229,21 +230,28 @@ export default function UpdateStudentScreen(
   const EvaluationContent = () => {
     return (
       <CustomFlatList
-        renderItem={({ item, index }: { item: EvulationQuestionResponse, index: number }) => {
-          return <CardContentContainer key={index}>
-            <CustomText
-              fontSizes="body4"
-              color="textLink">{`${index + 1}.`}</CustomText>
-            <CardContentRight>
-              <CustomText color="primaryText">
-                {item.question.name}
-              </CustomText>
-              <CustomText color="textLink">
-                {item.answer.map((answer) => answer).join(', ')}
-              </CustomText>
-            </CardContentRight>
-          </CardContentContainer>
-
+        renderItem={({
+          item,
+          index,
+        }: {
+          item: EvulationQuestionResponse;
+          index: number;
+        }) => {
+          return (
+            <CardContentContainer key={index}>
+              <CustomText fontSizes="body4" color="textLink">{`${
+                index + 1
+              }.`}</CustomText>
+              <CardContentRight>
+                <CustomText color="primaryText">
+                  {item.question.name}
+                </CustomText>
+                <CustomText color="textLink">
+                  {item.answer.map(answer => answer).join(', ')}
+                </CustomText>
+              </CardContentRight>
+            </CardContentContainer>
+          );
         }}
         data={selectedEvulation.evulationQuestions}
         isBottomSheet
@@ -253,16 +261,15 @@ export default function UpdateStudentScreen(
 
   return (
     <Container
-
       goBackShow
       header
       title={t('STUDENT_INFO')}
       extraIcon={faTrash}
       extraIconPress={() => {
-        pressToDelete()
+        pressToDelete();
       }}>
       <Loading>
-        <Container p={10} type='container'>
+        <Container p={10} type="container">
           <ScrollView
             contentContainerStyle={{
               flexGrow: 1,
@@ -271,7 +278,7 @@ export default function UpdateStudentScreen(
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}>
             <FormKeyboardView>
-              <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
+              <FormContainer style={{gap: 10}} formContainerRef={formRef}>
                 <Input
                   required
                   id="firstName"
@@ -347,7 +354,7 @@ export default function UpdateStudentScreen(
                     <EvulationCard
                       onPress={() => {
                         setSelectedEvulation(evulation);
-                        evulationBottomSheetRef.current?.open()
+                        evulationBottomSheetRef.current?.open();
                       }}
                       key={index}>
                       <CustomText color="primaryText">
@@ -364,12 +371,13 @@ export default function UpdateStudentScreen(
 
               <AccordionContainer>
                 <Accordion title={t('STUDENT_ABSENCE')}>
-
                   {mockAbsence.map((absence, index) => (
                     <AbsenceCard
                       onPress={() => absenceBottomSheetRef.current?.open()}
                       key={index}>
-                      <CustomText color="primaryText">{absence.date}</CustomText>
+                      <CustomText color="primaryText">
+                        {absence.date}
+                      </CustomText>
                       <FontAwesomeIcon
                         color={colors.iconColor}
                         icon={faAngleRight}
@@ -377,7 +385,6 @@ export default function UpdateStudentScreen(
                     </AbsenceCard>
                   ))}
                 </Accordion>
-
               </AccordionContainer>
             </FormKeyboardView>
             <ButtonContainer>
@@ -399,15 +406,19 @@ export default function UpdateStudentScreen(
           <ImageViewer imageUrls={selectedImage} />
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
-            style={{ position: 'absolute', top: 40, right: 20 }}>
+            style={{position: 'absolute', top: 40, right: 20}}>
             <CustomText color="white">Close</CustomText>
           </TouchableOpacity>
         </Modal>
       )}
-      <CustomBottomSheet snapPoints={["70%", "80%"]} ref={absenceBottomSheetRef}>
+      <CustomBottomSheet
+        snapPoints={['70%', '80%']}
+        ref={absenceBottomSheetRef}>
         <AbsenceContent />
       </CustomBottomSheet>
-      <CustomBottomSheet snapPoints={["70%", "80%"]} ref={evulationBottomSheetRef}>
+      <CustomBottomSheet
+        snapPoints={['70%', '80%']}
+        ref={evulationBottomSheetRef}>
         <EvaluationContent />
       </CustomBottomSheet>
     </Container>
@@ -440,7 +451,7 @@ const CardContentContainer = styled(View)`
   background-color: #fff;
   padding: 15px;
   gap: 5px;
-  margin:15px;
+  margin: 15px;
   margin-horizontal: 2px;
   border-radius: 8px;
   flex-direction: row;

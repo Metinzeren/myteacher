@@ -8,12 +8,12 @@ import {
   updateDoc,
   arrayUnion,
 } from 'firebase/firestore';
-import { db } from '../firebase/config';
+import {db} from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import ClassRoom from '../models/ClassRoom';
 import Student from '../models/Student';
-import { getUserId } from '../utils/AsyncStorageUtils';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import {getUserId} from '../utils/AsyncStorageUtils';
+import {getFunctions, httpsCallable} from 'firebase/functions';
 
 class ClassRoomRepository {
   private static instance: ClassRoomRepository;
@@ -25,7 +25,7 @@ class ClassRoomRepository {
     return ClassRoomRepository.instance;
   }
 
-  private constructor() { }
+  private constructor() {}
 
   async addClassRoom(classRoom: ClassRoom) {
     const classRoomDoc = doc(this.classRoomCollection);
@@ -66,7 +66,11 @@ class ClassRoomRepository {
     return student;
   }
 
-  async removeStudentFromClassRoom(classRoomId: string, studentId: string, parentId: string) {
+  async removeStudentFromClassRoom(
+    classRoomId: string,
+    studentId: string,
+    parentId: string,
+  ) {
     const classRoomDoc = doc(this.classRoomCollection, classRoomId);
     const classRoomSnapshot = await getDoc(classRoomDoc);
     if (classRoomSnapshot.exists()) {
@@ -81,8 +85,6 @@ class ClassRoomRepository {
 
     const userDoc = doc(db, 'users', parentId);
     await deleteDoc(userDoc);
-
-
   }
 
   async updateStudentInClassRoom(classRoomId: string, updatedStudent: Student) {
@@ -110,6 +112,11 @@ class ClassRoomRepository {
         ),
       );
     return filteredClassRooms;
+  }
+  async getTeachersByClassRoomId(classRoomId: string): Promise<string[]> {
+    const classRoomDoc = doc(this.classRoomCollection, classRoomId);
+    const classRoomSnapshot = await getDoc(classRoomDoc);
+    return classRoomSnapshot.data()?.teachers;
   }
 }
 

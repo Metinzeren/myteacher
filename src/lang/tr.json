@@ -148,5 +148,9 @@
   },
   "addClassRoomForm": {
     "name": "Lütfen sınıf adını girin!"
+  },
+  "notifications": {
+    "ABSENTEEISM_NOTIFICATION_TITLE": "Devamsızlık bildirimi",
+    "ABSENTEEISM_NOTIFICATION_BODY": "Öğrenci devamsızlık yaptı"
   }
 }

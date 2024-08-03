@@ -148,5 +148,9 @@
     "endDate": "Please enter the end date",
     "student": "Please select the student",
     "description": "Please enter the description"
+  },
+  "notifications": {
+    "ABSENTEEISM_NOTIFICATION_TITLE": "Devamsızlık bildirimi",
+    "ABSENTEEISM_NOTIFICATION_BODY": "Öğrenci devamsızlık yaptı"
   }
 }

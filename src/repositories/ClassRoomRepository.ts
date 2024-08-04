@@ -100,6 +100,15 @@ class ClassRoomRepository {
       });
     }
   }
+  async getStudentByStudentId(studentId: string) {
+    const querySnapshot = await getDocs(this.classRoomCollection);
+    const filteredClassRooms = querySnapshot.docs
+      .map(doc => doc.data() as ClassRoom)
+      .filter(classRoom =>
+        classRoom.students.some(student => student.newStudentId === studentId),
+      );
+    return filteredClassRooms;
+  }
   async getStudentByStudentNameForQuery(name: string) {
     const querySnapshot = await getDocs(this.classRoomCollection);
     const filteredClassRooms = querySnapshot.docs

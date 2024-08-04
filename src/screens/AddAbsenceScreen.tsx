@@ -195,6 +195,7 @@ export default function AddAbsenceScreen(
       getUser();
     });
   }, []);
+
   const sendAbsenceNotification = async ({
     id,
     notificationType,
@@ -203,10 +204,11 @@ export default function AddAbsenceScreen(
     notificationType: string;
   }) => {
     let notificationLanguage = getResourceByKey('notifications');
-
     let userId = await getUserId();
     let classRoomId = await UserRepo.getClassRoomIdByUserId();
     let teachers = await ClassRoomRepo.getTeachersByClassRoomId(classRoomId);
+
+
 
     let data = {
       from: userId,
@@ -214,6 +216,8 @@ export default function AddAbsenceScreen(
       data: {
         id,
         notificationType,
+        studentId: userInfo.studentId,
+        classRoomId: userInfo.classRoomId
       },
       title: notificationLanguage.ABSENTEEISM_NOTIFICATION_TITLE,
       body: `${notificationLanguage.ABSENTEEISM_NOTIFICATION_BODY}`,

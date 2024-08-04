@@ -56,19 +56,7 @@ class UserRepository {
     const userSnapshot = await getDocs(this.userCollection);
     return userSnapshot.docs.map(doc => doc.data() as User);
   }
-  async getParentDetailsByUserId(userId: string) {
-    const userDoc = doc(this.userCollection, userId);
-    const userSnapshot = await getDoc(userDoc);
-    const userData = userSnapshot.data();
-    console.log(userData);
 
-    if (userData?.role === 'parent') {
-      return {
-        classRoomId: userData.classRoomId,
-        studentId: userData.studentId,
-      };
-    }
-  }
 }
 
 export default UserRepository;

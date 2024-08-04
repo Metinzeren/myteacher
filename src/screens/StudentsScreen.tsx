@@ -14,7 +14,6 @@ import { useClassRooms } from '../context/ClassRoomContext';
 import QuestionsList from '../components/QuestionsList/QuestionsList';
 import useThemeColors from '../constant/useColor';
 import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomSheet/CustomBottomSheet';
-import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
@@ -23,7 +22,6 @@ export default function StudentsScreen(
   const { classRooms } = useClassRooms();
   const classRoomId = props.route.params?.classRoomId;
   const students = classRooms?.find?.(x => x.id == classRoomId)?.students || [];
-  const refRBSheet = React.useRef<any>(null);
   const evaulationBottomSheetRef = useRef<BottomSheetRef>(null);
   const [selectedStudent, setSelectedStudent] = useState<Student>(
     {} as Student,

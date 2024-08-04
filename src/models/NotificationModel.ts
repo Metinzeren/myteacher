@@ -4,6 +4,8 @@ interface NotificationModel {
   data: {
     id: string;
     notificationType: string;
+    studentId: string;
+    classRoomId: string;
   };
   title: string;
   body: string;

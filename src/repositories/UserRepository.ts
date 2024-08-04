@@ -6,10 +6,10 @@ import {
   getDocs,
   setDoc,
 } from 'firebase/firestore';
-import {db} from '../firebase/config';
+import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import User from '../models/User';
-import {getUserId} from '../utils/AsyncStorageUtils';
+import { getUserId } from '../utils/AsyncStorageUtils';
 
 class UserRepository {
   private static instance: UserRepository;
@@ -22,7 +22,7 @@ class UserRepository {
     return UserRepository.instance;
   }
 
-  private constructor() {}
+  private constructor() { }
 
   async addUser(user: User) {
     const userDoc = doc(this.userCollection);
@@ -55,6 +55,19 @@ class UserRepository {
   async getAllUsers() {
     const userSnapshot = await getDocs(this.userCollection);
     return userSnapshot.docs.map(doc => doc.data() as User);
+  }
+  async getParentDetailsByUserId(userId: string) {
+    const userDoc = doc(this.userCollection, userId);
+    const userSnapshot = await getDoc(userDoc);
+    const userData = userSnapshot.data();
+    console.log(userData);
+
+    if (userData?.role === 'parent') {
+      return {
+        classRoomId: userData.classRoomId,
+        studentId: userData.studentId,
+      };
+    }
   }
 }
 

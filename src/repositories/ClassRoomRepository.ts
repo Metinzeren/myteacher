@@ -8,12 +8,12 @@ import {
   updateDoc,
   arrayUnion,
 } from 'firebase/firestore';
-import {db} from '../firebase/config';
+import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import ClassRoom from '../models/ClassRoom';
 import Student from '../models/Student';
-import {getUserId} from '../utils/AsyncStorageUtils';
-import {getFunctions, httpsCallable} from 'firebase/functions';
+import { getUserId } from '../utils/AsyncStorageUtils';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
 class ClassRoomRepository {
   private static instance: ClassRoomRepository;
@@ -25,7 +25,7 @@ class ClassRoomRepository {
     return ClassRoomRepository.instance;
   }
 
-  private constructor() {}
+  private constructor() { }
 
   async addClassRoom(classRoom: ClassRoom) {
     const classRoomDoc = doc(this.classRoomCollection);
@@ -118,6 +118,7 @@ class ClassRoomRepository {
     const classRoomSnapshot = await getDoc(classRoomDoc);
     return classRoomSnapshot.data()?.teachers;
   }
+
 }
 
 export default ClassRoomRepository;

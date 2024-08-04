@@ -1,28 +1,28 @@
-import {View, TouchableOpacity, StyleSheet, Dimensions} from 'react-native';
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
   faAngleRight,
   faClose,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
 import useThemeColors from '../constant/useColor';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
-import {homeMenu} from '../data/data';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
+import { homeMenu } from '../data/data';
 import Button from '../components/Button/Button';
-import {signOut} from 'firebase/auth';
-import {auth} from '../firebase/config';
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase/config';
 import Input from '../components/Input/Input';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import ClassRoom from '../models/ClassRoom';
 import IconButton from '../components/IconButton/IconButton';
 import Loading from '../components/Loading/Loading';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import {useTranslation} from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 
 import useFcmToken from '../hooks/useFcmToken';
@@ -33,11 +33,11 @@ const HomeScreen = (
 ) => {
   const deviceRepo = DevicesRepository.getInstance();
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const {user} = useUser() as any;
+  const { user } = useUser() as any;
 
-  const {fcmToken} = useFcmToken();
+  const { fcmToken } = useFcmToken();
 
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [searchStudent, setSearchStudent] = useState('');
   const [focusToSearch, setFocusToSearch] = useState(false);
@@ -57,7 +57,7 @@ const HomeScreen = (
     });
   };
 
-  const MenuItemCard = ({item, index}: {item: any; index: number}) => {
+  const MenuItemCard = ({ item, index }: { item: any; index: number }) => {
     let maxItem = homeMenu.length;
     let isEven = maxItem % 2 === 0;
     let isLastItem = index === maxItem - 1;
@@ -96,55 +96,54 @@ const HomeScreen = (
             setLoading(false);
           });
       },
-      onCancel() {},
+      onCancel() { },
     });
   };
+
   return (
     <Container
       title={focusToSearch ? t('SEARCH_RESULTS') : t('HOME')}
       header
       showNotification={!focusToSearch}>
       <HomeTopContainer>
-        <CustomText fontSizes="h5" color="primaryText" center>
+        {/* <CustomText fontSizes="h5" color="primaryText" center>
           {user.firstName} {user.lastName}
-        </CustomText>
-        {user.role === 'teeacher' && (
-          <View style={{flex: 1}}>
-            <Input
-              autoCapitalize="none"
-              placeholder={t('SEARCH_STUDENT')}
-              icon={faSearch}
-              value={searchStudent}
-              onChangeText={search => {
-                if (search.length === 0) {
-                  setSearchStudents([]);
-                }
-                setSearchStudent(search);
-              }}
-              onSubmitEditing={async () => {
-                setSearchLoading(true);
-                const result =
-                  await classRoomRepo.getStudentByStudentNameForQuery(
-                    searchStudent,
-                  );
-                setSearchLoading(false);
-                setSearchStudents(result);
-              }}
-              onFocus={() => {
-                if (searchStudent.length === 0 && searchStudents.length !== 0) {
-                  setSearchStudents([]);
-                }
-                setFocusToSearch(true);
-              }}
-              inputMode="search"
-              onBlur={() => {
-                if (searchStudent === '' && searchStudents.length === 0) {
-                  setFocusToSearch(false);
-                }
-              }}
-            />
-          </View>
-        )}
+        </CustomText> */}
+        <View style={{ flex: 1 }}>
+          <Input
+            autoCapitalize="none"
+            placeholder={t('SEARCH_STUDENT')}
+            icon={faSearch}
+            value={searchStudent}
+            onChangeText={search => {
+              if (search.length === 0) {
+                setSearchStudents([]);
+              }
+              setSearchStudent(search);
+            }}
+            onSubmitEditing={async () => {
+              setSearchLoading(true);
+              const result =
+                await classRoomRepo.getStudentByStudentNameForQuery(
+                  searchStudent,
+                );
+              setSearchLoading(false);
+              setSearchStudents(result);
+            }}
+            onFocus={() => {
+              if (searchStudent.length === 0 && searchStudents.length !== 0) {
+                setSearchStudents([]);
+              }
+              setFocusToSearch(true);
+            }}
+            inputMode="search"
+            onBlur={() => {
+              if (searchStudent === '' && searchStudents.length === 0) {
+                setFocusToSearch(false);
+              }
+            }}
+          />
+        </View>
         {focusToSearch && (
           <IconButton
             onPress={() => {
@@ -202,7 +201,7 @@ const HomeScreen = (
               <CustomFlatList
                 numColumns={2}
                 data={homeMenu}
-                renderItem={({item, index}: {item: any; index: number}) => {
+                renderItem={({ item, index }: { item: any; index: number }) => {
                   return (
                     <MenuItemCard
                       index={index}

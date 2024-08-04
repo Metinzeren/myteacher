@@ -7,10 +7,10 @@ import {
   PermissionsAndroid,
   ScrollView,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
-import {useTranslation} from 'react-i18next';
-import FormContainer, {FormContainerRef} from '../components/FormContainer';
+import { useTranslation } from 'react-i18next';
+import FormContainer, { FormContainerRef } from '../components/FormContainer';
 import Input from '../components/Input/Input';
 import {
   faAdd,
@@ -22,33 +22,33 @@ import {
 import Button from '../components/Button/Button';
 import Absenteeism from '../models/Absenteeism';
 import uuid from 'react-native-uuid';
-import {Calendar} from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import CustomBottomSheet, {
   BottomSheetRef,
 } from '../components/CustomBottomSheet/CustomBottomSheet';
 import PlaceholderInput from '../components/PlaceholderInput/PlaceholderInput';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import styled from 'styled-components';
 import IconButton from '../components/IconButton/IconButton';
-import {getResourceByKey} from '../lang/i18n';
+import { getResourceByKey } from '../lang/i18n';
 import AbsenteeismRepository from '../repositories/AbsenteeismRepository';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
-import {getLocalStorage, getUserId} from '../utils/AsyncStorageUtils';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
+import { getLocalStorage, getUserId } from '../utils/AsyncStorageUtils';
 import UserRepository from '../repositories/UserRepository';
 import CustomText from '../components/Text/Text';
-import {getDownloadURL, ref, uploadBytes} from 'firebase/storage';
-import {initStorage} from '../firebase/config';
-import {format} from 'date-fns';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import { initStorage } from '../firebase/config';
+import { format } from 'date-fns';
 import NotificationModel from '../models/NotificationModel';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import {sendNotification} from '../firebase/FirebaseApi';
+import { sendNotification } from '../firebase/FirebaseApi';
 import dayjs from 'dayjs';
 export default function AddAbsenceScreen(
   props: NativeStackScreenProps<RootStackParamList, 'AddAbsenceScreen'>,
 ) {
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const formRef = useRef<FormContainerRef>(null);
   const AbsenteeismRepo = AbsenteeismRepository.getInstance();
   const UserRepo = UserRepository.getInstance();
@@ -59,6 +59,7 @@ export default function AddAbsenceScreen(
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState({} as any);
+  const [showAddPhotoContent, setShowAddPhotoContent] = useState(false)
   const today = format(new Date(), 'yyyy-MM-dd');
   const [registerDto, setRegisterDto] = useState<Absenteeism>({
     id: uuid.v4().toString(),
@@ -92,7 +93,7 @@ export default function AddAbsenceScreen(
   const EndDateCalendar = () => {
     return (
       <Calendar
-        minDate={today}
+        minDate={today && registerDto.startDate}
         onDayPress={(day: any) => {
           handleChange('endDate', day.dateString);
           endDateBottomSheetRef.current?.close();
@@ -188,6 +189,7 @@ export default function AddAbsenceScreen(
     const response = await UserRepo.getUser(user.uid);
     setUserInfo(response);
   };
+
   useEffect(() => {
     props.navigation.addListener('focus', () => {
       getUser();
@@ -204,7 +206,6 @@ export default function AddAbsenceScreen(
 
     let userId = await getUserId();
     let classRoomId = await UserRepo.getClassRoomIdByUserId();
-    console.log('classRoomId: ' + classRoomId);
     let teachers = await ClassRoomRepo.getTeachersByClassRoomId(classRoomId);
 
     let data = {
@@ -263,6 +264,7 @@ export default function AddAbsenceScreen(
           onConfirm() {
             props.navigation.goBack();
           },
+          disableCloseOnTouchOutside: true,
         });
       } catch (e) {
         console.log(e);
@@ -276,7 +278,7 @@ export default function AddAbsenceScreen(
   return (
     <Container goBackShow title={t('STUDENT_ABSENCE')} header>
       <Container p={10} type="container">
-        <FormContainer style={{gap: 10}} formContainerRef={formRef}>
+        <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
           <View>
             <CustomText fontSizes="body4" color="primaryText">
               {t('ADD_PHOTO')}{' '}
@@ -293,7 +295,7 @@ export default function AddAbsenceScreen(
               />
             </IconContainer>
             <ImageContainer>
-              {imageUri && <StyledImage source={{uri: imageUri}} />}
+              {imageUri && <StyledImage source={{ uri: imageUri }} />}
               {imageUri && (
                 <DeleteIconContainer>
                   <IconButton
@@ -301,7 +303,7 @@ export default function AddAbsenceScreen(
                     backgroundColor="#fff"
                     iconColor="orange"
                     onPress={() => {
-                      setRegisterDto({...registerDto, photo: ''});
+                      setRegisterDto({ ...registerDto, photo: '' });
                       setImageUri(null);
                     }}
                     icon={faTrash}
@@ -317,9 +319,8 @@ export default function AddAbsenceScreen(
             value={
               registerDto.startDate
                 ? dayjs(registerDto?.startDate).format('DD.MM.YYYY')
-                : 'Tarih Seçiniz'
+                : ` ${t('START_DATE')}`
             }
-            placeholder={t('START_DATE')}
             onPress={() => {
               startDateBottomSheetRef.current?.open();
             }}
@@ -330,9 +331,8 @@ export default function AddAbsenceScreen(
             value={
               registerDto.endDate
                 ? dayjs(registerDto?.endDate).format('DD.MM.YYYY')
-                : 'Tarih Seçiniz'
+                : ` ${t('END_DATE')}`
             }
-            placeholder={t('END_DATE')}
             onPress={() => {
               endDateBottomSheetRef.current?.open();
             }}

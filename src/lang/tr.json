@@ -151,6 +151,19 @@
   },
   "notifications": {
     "ABSENTEEISM_NOTIFICATION_TITLE": "Devamsızlık bildirimi",
-    "ABSENTEEISM_NOTIFICATION_BODY": "Öğrenci devamsızlık yaptı"
+    "ABSENTEEISM_NOTIFICATION_BODY": "Öğrenci devamsızlık yaptı",
+    "NOT_TYPE_ABSENTEEISM": "Devamsızlık",
+    "NOT_TYPE_HOMEWORK": "Ödev",
+    "NOT": "Bildirim",
+    "NOT_TYPE": "Bildirim türü",
+    "NOT_DATE": "Bildirim tarihi",
+    "NOT_TITLE": "Bildirim başlığı",
+    "NOT_BODY": "Bildirim içeriği",
+    "NOT_ADD": "Bildirim ekle",
+    "NOT_DESCRIPTION": "Bildirim açıklaması",
+    "NOT_ADD_SUCCESS": "Bildirim başarıyla eklendi",
+    "NOT_NOT_FOUND": "Bildirim bulunamadı",
+    "NOT_DELETE": "Bildirimi sil",
+    "NOT_DELETE_SUCCESS": "Bildirim başarıyla silindi"
   }
 }

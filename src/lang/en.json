@@ -151,6 +151,12 @@
   },
   "notifications": {
     "ABSENTEEISM_NOTIFICATION_TITLE": "Devamsızlık bildirimi",
-    "ABSENTEEISM_NOTIFICATION_BODY": "Öğrenci devamsızlık yaptı"
+    "ABSENTEEISM_NOTIFICATION_BODY": "Öğrenci devamsızlık yaptı",
+    "NOT_TYPE": "Notifications type",
+    "NOT_TYPE_ABSENTEEISM": "Absenteeism",
+    "NOT_TYPE_HOMEWORK": "Homework",
+    "NOT": "Notification",
+    "NOT_DATE": "Notification date",
+    "NOT_DESCRIPTION": "Notification description"
   }
 }

@@ -36,7 +36,7 @@ export default function AddStudentScreen(
     lastName: '',
     studentNo: '',
     parentEmail: '',
-    newStudentId: uuid.v4().toString(),
+    id: uuid.v4().toString(),
     parentFirstName: '',
     parentLastName: '',
     parentPhone: '',
@@ -69,7 +69,7 @@ export default function AddStudentScreen(
           studentNo: registerDto.studentNo,
           parentFirstName: registerDto.parentFirstName,
           parentLastName: registerDto.parentLastName,
-          newStudentId: registerDto.newStudentId,
+          id: registerDto.id,
         };
         const response = await axios.post(
           'https://europe-west1-my-teacher-553bb.cloudfunctions.net/createUser',
@@ -83,7 +83,8 @@ export default function AddStudentScreen(
 
         if (response.status === 201) {
 
-          addStudentFromClassRoom(classRoomId, registerDto);
+          let student = response.data.student as Student;
+          addStudentFromClassRoom(classRoomId, student);
 
           AlertDialog.showModal({
             title: 'Başarılı',

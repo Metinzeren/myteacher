@@ -11,6 +11,8 @@
     "START_DATE": "Start date",
     "DESCRIPTION": "Description",
     "OPTIONAL": "Optional",
+    "APPROVE": "Approve",
+    "REJECT": "Reject",
     "OKAY": "Okay",
     "WARNING": "Warning",
     "ERROR": "Error",

@@ -76,7 +76,7 @@ class ClassRoomRepository {
     if (classRoomSnapshot.exists()) {
       const classRoom = classRoomSnapshot.data() as ClassRoom;
       const updatedStudents = classRoom.students.filter(
-        student => student.newStudentId !== studentId,
+        student => student.id !== studentId,
       );
       await updateDoc(classRoomDoc, {
         students: updatedStudents,
@@ -93,22 +93,15 @@ class ClassRoomRepository {
     if (classRoomSnapshot.exists()) {
       const classRoom = classRoomSnapshot.data() as ClassRoom;
       const updatedStudents = classRoom.students.map(student =>
-        student.newStudentId === updatedStudent.id ? updatedStudent : student,
+        student.id === updatedStudent.id ? updatedStudent : student,
       );
       await updateDoc(classRoomDoc, {
         students: updatedStudents,
       });
     }
+    return updatedStudent;
   }
-  async getStudentByStudentId(studentId: string) {
-    const querySnapshot = await getDocs(this.classRoomCollection);
-    const filteredClassRooms = querySnapshot.docs
-      .map(doc => doc.data() as ClassRoom)
-      .filter(classRoom =>
-        classRoom.students.some(student => student.newStudentId === studentId),
-      );
-    return filteredClassRooms;
-  }
+
   async getStudentByStudentNameForQuery(name: string) {
     const querySnapshot = await getDocs(this.classRoomCollection);
     const filteredClassRooms = querySnapshot.docs

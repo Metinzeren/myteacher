@@ -21,6 +21,8 @@ import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomShe
 import AbsenteeismRepository from '../repositories/AbsenteeismRepository';
 import Absenteeism from '../models/Absenteeism';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import dayjs from 'dayjs';
+import Button from '../components/Button/Button';
 
 export default function NotificationScreen(
   props: NativeStackScreenProps<RootStackParamList, 'NotificationScreen'>,
@@ -51,6 +53,7 @@ export default function NotificationScreen(
 
   const getNotificiationWithStudents = async () => {
     let userInfo = await getUserFromCollection();
+
     setLoading(true);
     await NotificationRepo.getNotificationWithStudents(userInfo.id)
       .then(res => {
@@ -173,8 +176,22 @@ export default function NotificationScreen(
             </ApprovedTopContainer>
 
             <ApprovedBottomContainer>
-              <CustomText color="dark" fontSizes='body3'>{t("DESCRIPTION")}:</CustomText>
-              <CustomText color="dark">{selectedAbsence?.description}</CustomText>
+              <BottomContent>
+                <View>
+                  <CustomText color="darkCyan" fontSizes='body3'>{t("DESCRIPTION")}</CustomText>
+                  <CustomText color="dark">{selectedAbsence?.description}</CustomText>
+                </View>
+                <View>
+                  <CustomText color="darkCyan" fontSizes='body3'>{t("ABSENCE_DATE")}</CustomText>
+                  <CustomText color="dark">{dayjs(selectedAbsence?.startDate).format('DD.MM.YYYY')} - {dayjs(selectedAbsence?.endDate).format('DD.MM.YYYY')}</CustomText>
+                </View>
+
+              </BottomContent>
+
+              <BottomButtonContainer>
+                <Button text={t("APPROVE")} />
+                <Button backgroundColor='#E57373' text={t("REJECT")} />
+              </BottomButtonContainer>
             </ApprovedBottomContainer>
           </ApprovedContentContainer>
           {showPhotoModal && (
@@ -241,11 +258,27 @@ const ApprovedContentContainer = styled(View)`
 `;
 const ApprovedTopContainer = styled(View)`
   align-items: center;
-  background-color: #fff;
 `;
 const ApprovedBottomContainer = styled(View)`
   flex: 1;
-  align-items: flex-start;
+  flex-direction: column;
+  justify-content: space-between;
   padding: 20px;
+  border-radius: 8px;
+  margin-top: 10px;
   background-color: #fff;
+`;
+
+const BottomContent = styled(View)`
+  width: 100%;
+  flex:1;
+  flex-direction: column;
+  gap: 10px;
+`;
+const BottomButtonContainer = styled(View)`
+  flex-direction: column;
+  justify-content: flex-end;
+  width: 100%;
+  margin-top: 20px;
+  gap: 10px;
 `;

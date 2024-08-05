@@ -63,7 +63,9 @@ class NotificationRepository {
         return await Promise.all(
             notifications.map(async notification => {
                 const classRooms = await this.ClassRepo.getClassRoom(notification.data.classRoomId);
-                const student = classRooms.students.find(student => student.newStudentId === notification.data.studentId);
+                const student = classRooms.students.find(student => student.id === notification.data.studentId);
+                console.log(student, "ahahahah");
+
                 return {
                     ...notification,
                     student

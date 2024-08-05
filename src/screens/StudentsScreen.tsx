@@ -33,7 +33,7 @@ export default function StudentsScreen(
       <ListItem
         onPress={() =>
           props.navigation.navigate('UpdateStudentScreen', {
-            studentId: item.newStudentId as string,
+            studentId: item.id as string,
             classRoomId: classRoomId,
           })
         }
@@ -75,12 +75,12 @@ export default function StudentsScreen(
         <ListContainer>
           <CustomFlatList
             notFoundText={t("STUDENT_NOT_FOUND")}
-            filter={(entity, value, index) => {
-              return (
-                entity.firstName.toLowerCase().includes(value.toLowerCase()) ||
-                entity.lastName.toLowerCase().includes(value.toLowerCase())
-              );
-            }}
+            // filter={(entity, value, index) => {
+            //   return (
+            //     entity.firstName.toLowerCase().includes(value.toLowerCase()) ||
+            //     entity.lastName.toLowerCase().includes(value.toLowerCase())
+            //   );
+            // }}
             isSearchable
             data={students}
             renderItem={RenderItem}

@@ -33,7 +33,7 @@ export default function QuestionsList({
   const [questions, setQuestions] = useState<Array<Questions>>([]);
   const [loading, setLoading] = useState(true);
   const [evulation, setEvulation] = useState<Evulation>({
-    studentId: student.newStudentId as string,
+    studentId: student.id as string,
     date: '2021-08-01',
     evulationQuestions: [],
   });
@@ -167,6 +167,8 @@ export default function QuestionsList({
     let evulationQuestions = evulation.evulationQuestions.filter(
       question => question.answer.length > 0,
     );
+    console.log(evulation);
+
     if (evulationQuestions.length === 0) {
       AlertDialog.showModal({
         title: t('ERROR'),

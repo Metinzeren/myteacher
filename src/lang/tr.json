@@ -10,6 +10,8 @@
     "START_DATE": "Başlangıç tarihi",
     "DESCRIPTION": "Açıklama",
     "DELETE": "Sil",
+    "APPROVE": "Onayla",
+    "REJECT": "Reddet",
     "OPTIONAL": "İsteğe bağlı",
     "OKAY": "Tamam",
     "WARNING": "Uyarı",

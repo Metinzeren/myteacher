@@ -23,12 +23,12 @@ class StudentRepository {
 
   async addStudent(student: Student) {
     const studentDoc = doc(this.studentCollection);
-    student.newStudentId = studentDoc.id;
+    student.id = studentDoc.id;
     await setDoc(studentDoc, student);
     return student
   }
   async updateStudent(student: Student) {
-    const studentDoc = doc(this.studentCollection, student.newStudentId);
+    const studentDoc = doc(this.studentCollection, student.id);
     await setDoc(studentDoc, student);
   }
   async deleteStudent(studentId: string) {

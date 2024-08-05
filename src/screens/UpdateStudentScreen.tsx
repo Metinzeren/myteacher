@@ -1,4 +1,4 @@
-import React, {useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import {
   View,
   TouchableOpacity,
@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import Container from '../components/Container/Container';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Loading from '../components/Loading/Loading';
 import FormContainer from '../components/FormContainer';
 import Input from '../components/Input/Input';
@@ -22,36 +22,36 @@ import {
   faTrash,
   faUser,
 } from '@fortawesome/free-solid-svg-icons';
-import {FormContainerRef} from '../components/FormContainer';
+import { FormContainerRef } from '../components/FormContainer';
 import Student from '../models/Student';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import Button from '../components/Button/Button';
-import {t} from 'i18next';
+import { t } from 'i18next';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import {useClassRooms} from '../context/ClassRoomContext';
+import { useClassRooms } from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView';
 import Accordion from '../components/Accordion/Accordion';
-import {getResourceByKey} from '../lang/i18n';
+import { getResourceByKey } from '../lang/i18n';
 import EvulationRepository from '../repositories/EvulationRepository';
 import EvulationResponse from '../models/EvulationResponse';
 import CustomText from '../components/Text/Text';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import useThemeColors from '../constant/useColor';
 import axios from 'axios';
-import {getLocalStorage} from '../utils/AsyncStorageUtils';
+import { getLocalStorage } from '../utils/AsyncStorageUtils';
 import CustomBottomSheet, {
   BottomSheetRef,
 } from '../components/CustomBottomSheet/CustomBottomSheet';
-import {BottomSheetScrollView, BottomSheetView} from '@gorhom/bottom-sheet';
+import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import EvulationQuestionResponse from '../models/EvulationQuestionResponse';
-import {deleteStudent} from '../firebase/FirebaseApi';
+import { deleteStudent } from '../firebase/FirebaseApi';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
 ) {
-  const {classRooms, deleteStudentFromClassRoom, updateStudentInClassRoom} =
+  const { classRooms, deleteStudentFromClassRoom, updateStudentInClassRoom } =
     useClassRooms();
   const studentFromParam = props.route.params.student;
   const studentId = props.route.params.studentId;
@@ -87,7 +87,7 @@ export default function UpdateStudentScreen(
     studentFromParam ??
     (classRooms
       ?.find?.(c => c.id == classRoomId)
-      ?.students.find(d => d.newStudentId === studentId) as Student);
+      ?.students.find(d => d.id === studentId) as Student);
 
   const [updateDto, setUpdateDto] = useState<Student>({
     id: student?.id,
@@ -99,6 +99,7 @@ export default function UpdateStudentScreen(
     parentLastName: student?.parentLastName,
     parentPhone: student?.parentPhone,
     absenteeism: student?.absenteeism,
+    parentId: student?.parentId,
   });
 
   const [evulation, setEvulation] = useState<Array<EvulationResponse>>([]);
@@ -111,7 +112,7 @@ export default function UpdateStudentScreen(
 
   const getEvulation = async () => {
     const evulation = await evulationRepo.getEvulationWithQuestions(
-      student.newStudentId as string,
+      student.id as string,
     );
     setEvulation(evulation);
   };
@@ -123,7 +124,7 @@ export default function UpdateStudentScreen(
     }));
   };
 
-  const updateStudent = async () => {
+  const updateStudent = () => {
     const isEmpty = formRef.current?.validate(
       getResourceByKey('addStudentForm'),
     );
@@ -133,12 +134,19 @@ export default function UpdateStudentScreen(
       AlertDialog.showModal({
         title: t('WARNING'),
         message: t('STUDENT_EDIT'),
-        onConfirm() {
-          classRoomRepo.updateStudentInClassRoom(classRoomId, updateDto);
-          setLoading(false);
-          updateStudentInClassRoom(classRoomId, updateDto);
-          AlertDialog.dismiss();
-          props.navigation.goBack();
+        onConfirm: async () => { // onConfirm fonksiyonunu async olarak tanımlıyoruz
+          try {
+            const response = await classRoomRepo.updateStudentInClassRoom(classRoomId, updateDto);
+
+            updateStudentInClassRoom(classRoomId, updateDto);
+            AlertDialog.dismiss();
+            props.navigation.goBack();
+          } catch (error) {
+            console.error(error);
+            // Hata durumunda gerekli işlemleri yapabilirsiniz
+          } finally {
+            setLoading(false);
+          }
         },
         onCancel() {
           setLoading(false);
@@ -161,7 +169,7 @@ export default function UpdateStudentScreen(
           const accessToken = user?.stsTokenManager?.accessToken;
           let data = {
             classRoomId: classRoomId,
-            studentId: student.newStudentId,
+            studentId: student.id,
             parentId: student.parentId,
           };
 
@@ -172,7 +180,7 @@ export default function UpdateStudentScreen(
 
           deleteStudentFromClassRoom(
             classRoomId,
-            student.newStudentId as string,
+            student.id as string,
           );
           AlertDialog.dismiss();
           props.navigation.goBack();
@@ -194,21 +202,20 @@ export default function UpdateStudentScreen(
       <CustomFlatList
         data={mockAbsence}
         isBottomSheet
-        renderItem={({item, index}: {item: any; index: number}) => {
+        renderItem={({ item, index }: { item: any; index: number }) => {
           let absence = item;
           return (
             <CardContentContainer key={index}>
-              <CustomText fontSizes="body4" color="textLink">{`${
-                index + 1
-              }.`}</CustomText>
+              <CustomText fontSizes="body4" color="textLink">{`${index + 1
+                }.`}</CustomText>
               <CardContentRight>
                 <TouchableOpacity
                   onPress={() => {
-                    setSelectedImage([{url: absence.url}] as any);
+                    setSelectedImage([{ url: absence.url }] as any);
                     setModalVisible(true);
                   }}>
                   <Image
-                    source={{uri: absence.url}}
+                    source={{ uri: absence.url }}
                     style={{
                       width: 150,
                       height: 150,
@@ -239,9 +246,8 @@ export default function UpdateStudentScreen(
         }) => {
           return (
             <CardContentContainer key={index}>
-              <CustomText fontSizes="body4" color="textLink">{`${
-                index + 1
-              }.`}</CustomText>
+              <CustomText fontSizes="body4" color="textLink">{`${index + 1
+                }.`}</CustomText>
               <CardContentRight>
                 <CustomText color="primaryText">
                   {item.question.name}
@@ -278,7 +284,7 @@ export default function UpdateStudentScreen(
             showsHorizontalScrollIndicator={false}
             showsVerticalScrollIndicator={false}>
             <FormKeyboardView>
-              <FormContainer style={{gap: 10}} formContainerRef={formRef}>
+              <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
                 <Input
                   required
                   id="firstName"
@@ -406,7 +412,7 @@ export default function UpdateStudentScreen(
           <ImageViewer imageUrls={selectedImage} />
           <TouchableOpacity
             onPress={() => setModalVisible(false)}
-            style={{position: 'absolute', top: 40, right: 20}}>
+            style={{ position: 'absolute', top: 40, right: 20 }}>
             <CustomText color="white">Close</CustomText>
           </TouchableOpacity>
         </Modal>

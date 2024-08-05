@@ -38,4 +38,5 @@ export default function FirebaseNotifications() {
     });
     return null;
   };
+  return null;
 }

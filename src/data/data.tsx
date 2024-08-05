@@ -49,3 +49,15 @@ export const homeWidget = [
     count: '31',
   },
 ];
+export const Flags = [
+  {
+    languageName: 'Türkçe',
+    languageCode: 'tr',
+    languageIcon: require('../assets/flags/turkey.png'),
+  },
+  {
+    languageName: 'English',
+    languageCode: 'en',
+    languageIcon: require('../assets/flags/usa.png'),
+  },
+];

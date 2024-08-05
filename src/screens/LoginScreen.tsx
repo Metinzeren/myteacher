@@ -1,33 +1,34 @@
-import { View, TouchableOpacity, Text } from 'react-native';
+import {View, TouchableOpacity, Text} from 'react-native';
 import styled from 'styled-components/native';
-import { faEnvelope, faLock } from '@fortawesome/free-solid-svg-icons';
+import {faEnvelope, faLock} from '@fortawesome/free-solid-svg-icons';
 
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import Button from '../components/Button/Button';
 import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
 import CustomText from '../components/Text/Text';
-import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase/config';
+import {useState} from 'react';
+import {signInWithEmailAndPassword} from 'firebase/auth';
+import {auth} from '../firebase/config';
 import '../lang/i18n';
 import DevicesRepository from '../repositories/DeviceRepository';
+import Footer from '../components/Footer/Footer';
 
 export default function LoginScreen(props: any) {
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const deviceRepo = DevicesRepository.getInstance();
-
 
   const handleLogin = async () => {
     setLoading(true);
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const user = userCredential.user;
-
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password,
+      );
     } catch (error: any) {
       const errorCode = error.code;
       const errorMessage = error.message;
@@ -40,11 +41,9 @@ export default function LoginScreen(props: any) {
     }
   };
 
-
   return (
     <Container>
       <LoginTopContainer>
-
         <CustomText color="textLink" center fontSizes="h1">
           Öğretmenim
         </CustomText>
@@ -77,7 +76,7 @@ export default function LoginScreen(props: any) {
             handleLogin();
           }}
           borderRadius={10}
-          text={t('Giriş')}
+          text={t('LOGIN')}
         />
       </FormContainer>
       <RegisterContainer>
@@ -87,6 +86,7 @@ export default function LoginScreen(props: any) {
           <CustomText color={'textLink'}>Hesap oluştur</CustomText>
         </TouchableOpacity>
       </RegisterContainer>
+      <Footer />
     </Container>
   );
 }

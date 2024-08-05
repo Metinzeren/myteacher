@@ -4,7 +4,7 @@ import en from './en.json';
 import tr from './tr.json';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
-  getLanguage,
+  getLanguage as getLanguageAsync,
   getLocalStorage,
   setLanguage,
   setLocalStorage,
@@ -16,7 +16,7 @@ const resources = {
 };
 const initI18n = async () => {
   try {
-    let storedLanguage = await getLanguage();
+    let storedLanguage = await getLanguageAsync();
     if (storedLanguage === undefined) {
       await setLanguage('tr');
       storedLanguage = 'tr';
@@ -38,6 +38,15 @@ const initI18n = async () => {
   } catch (error) {
     console.error('Error initializing i18n:', error);
   }
+};
+export const getLanguage = () => i18n.language;
+
+export type Resource = keyof typeof tr | keyof typeof en;
+
+export const getResourceByKey = (key: Resource) => {
+  let language = getLanguage();
+  let res = resources as any;
+  return res[language][key];
 };
 
 export default initI18n;

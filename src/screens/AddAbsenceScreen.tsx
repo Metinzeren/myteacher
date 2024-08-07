@@ -69,6 +69,7 @@ export default function AddAbsenceScreen(
     endDate: '',
     description: '',
     photo: '',
+    isApproved: 'pending',
   });
 
   const handleChange = (key: keyof typeof registerDto, value: string) => {
@@ -254,6 +255,7 @@ export default function AddAbsenceScreen(
         description: registerDto.description,
         photo: photoUrl,
         classRoomId: userInfo.classRoomId,
+        isApproved: registerDto.isApproved,
       };
 
       try {

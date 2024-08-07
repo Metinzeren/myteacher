@@ -7,7 +7,7 @@ interface Absenteeism {
     description: string;
     photo?: string;
     type?: string;
-    status?: 'pending' | 'approved' | 'rejected';
+    isApproved?: 'pending' | 'approved' | 'rejected';
     notes?: string;
 }
 export default Absenteeism;

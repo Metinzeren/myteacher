@@ -1,8 +1,11 @@
-import {useEffect} from 'react';
+import { useEffect } from 'react';
 import messaging from '@react-native-firebase/messaging';
 
 import AlertDialog from '../components/AlertDialog/AlertDialog';
+import { getResourceByKey } from '../lang/i18n';
 export default function FirebaseNotifications() {
+
+  const notificationLanguage = getResourceByKey("notifications");
   useEffect(() => {
     console.log('Firebase Notifications');
     const onMessage = messaging().onMessage(async remoteMessage => {
@@ -26,15 +29,17 @@ export default function FirebaseNotifications() {
       onNotificationOpenedApp();
     };
   }, []);
-
+  let getTranslatedText = (key: string) => {
+    return notificationLanguage[key];
+  };
   const getNotificationContent = (data: any, remoteMessage?: any) => {
-    let notificationType = data?.notificationType;
+    // let notificationType = data?.notificationType;
+    let isTranslate = data?.isTranslate;
     let notificationTitle = remoteMessage?.notification?.title;
     let notificationBody = remoteMessage?.notification?.body;
-    console.log(data, remoteMessage);
     AlertDialog.showModal({
-      title: notificationTitle,
-      message: notificationBody,
+      title: isTranslate === "true" ? getTranslatedText(notificationTitle) : notificationTitle,
+      message: isTranslate === "true" ? getTranslatedText(notificationBody) : notificationBody,
     });
     return null;
   };

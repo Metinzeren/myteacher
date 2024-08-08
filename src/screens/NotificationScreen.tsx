@@ -5,7 +5,7 @@ import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/nati
 import { RootStackParamList } from '../types/Navigation';
 import NotificationRepository from '../repositories/NotificationRepository';
 import Loading from '../components/Loading/Loading';
-import { getUserFromCollection, getUserId } from '../utils/AsyncStorageUtils';
+import { getUserAccesToken, getUserFromCollection, getUserId } from '../utils/AsyncStorageUtils';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import styled from 'styled-components';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -23,6 +23,9 @@ import Absenteeism from '../models/Absenteeism';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import dayjs from 'dayjs';
 import Button from '../components/Button/Button';
+import { sendconfirmAbsenceNotification } from '../firebase/FirebaseApi';
+import ClassRoomRepository from '../repositories/ClassRoomRepository';
+import { use } from 'i18next';
 
 export default function NotificationScreen(
   props: NativeStackScreenProps<RootStackParamList, 'NotificationScreen'>,
@@ -31,10 +34,11 @@ export default function NotificationScreen(
   const AbsenceRepo = AbsenteeismRepository.getInstance();
   let notificationLanguage = getResourceByKey('notifications');
   const [loading, setLoading] = useState(false);
+  const [loadingAbsence, setLoadingAbsence] = useState(false)
   const notificationsApprovedRef = useRef<BottomSheetRef>(null);
+  const ClassRoomRepo = ClassRoomRepository.getInstance();
   const [showPhotoModal, setShowPhotoModal] = useState(false)
   const [selectedImage, setSelectedImage] = useState<any>([])
-  const [loadingAbsence, setLoadingAbsence] = useState(false)
   const [selectedNotification, setSelectedNotification] = useState({} as NotificationResponse);
   const [selectedAbsence, setSelectedAbsence] = useState<Absenteeism | undefined>(undefined);
   const colors = useThemeColors();
@@ -68,8 +72,8 @@ export default function NotificationScreen(
   }
 
   const renderDate = (timestamp: any) => {
-    const date = timestamp.toDate();
-    return date.toLocaleString('tr-TR', {
+    const date = timestamp?.toDate();
+    return date?.toLocaleString('tr-TR', {
       timeZone: 'Europe/Istanbul',
       year: 'numeric',
       month: 'long',
@@ -80,14 +84,28 @@ export default function NotificationScreen(
     });
   };
 
-
+  // yok buldum zaten
   const RenderItem = ({ item, index }: { item: NotificationResponse; index: number }) => {
+
+    const getNotificationTitle = () => {
+      if (item.data.isTranslate) {
+        return notificationLanguage[item.title]
+      }
+      return item.title
+    }
+    const getNotificationBody = () => {
+      if (item.data.isTranslate) {
+        return notificationLanguage[item.body]
+      }
+      return item.body
+    }
 
     return (
       <ListItem
         onPress={() => {
           getAbsenceById(item);
           notificationsApprovedRef.current?.open()
+          NotificationRepo.updateNotificationReadStatus(item.id!, true);
         }}
         key={index}>
         {item.isRead ? (
@@ -105,7 +123,7 @@ export default function NotificationScreen(
           <ListItemContainer >
             <CustomText color={"dark"}>{notificationLanguage.NOT}:</CustomText>
             <CustomText color={"dark"}>
-              {item?.title}
+              {getNotificationTitle()}
             </CustomText>
           </ListItemContainer>
           <ListItemContainer>
@@ -123,7 +141,6 @@ export default function NotificationScreen(
       </ListItem>
     );
   };
-
   const getAbsenceById = async (notification: NotificationResponse) => {
     setLoadingAbsence(true);
     try {
@@ -135,6 +152,39 @@ export default function NotificationScreen(
     }
     setLoadingAbsence(false);
   };
+  const handleApproveButton = async (status: string) => {
+    let userId = await getUserId();
+    let accessToken = await getUserAccesToken();
+    setLoadingAbsence(true)
+    let data = {
+      id: selectedAbsence?.id,
+      status: status,
+      classRoomId: selectedAbsence?.classRoomId,
+      studentId: selectedAbsence?.studentId,
+      from: userId,
+      title: "ABSENTEEISM_NOTIFICATION_TITLE",
+      body: status === "approved" ? "ABSENTEEISM_STATUS_APPROVED" : "ABSENTEEISM_STATUS_REJECTED",
+      data: {
+        id: selectedAbsence?.id,
+        notificationType: "absence",
+        studentId: selectedAbsence?.studentId,
+        classRoomId: selectedAbsence?.classRoomId,
+        isTranslate: "true"
+      }
+    }
+    if (accessToken) {
+      await sendconfirmAbsenceNotification({
+        data: data,
+        accessToken: accessToken
+      });
+      notificationsApprovedRef.current?.close();
+      setLoadingAbsence(false)
+    } else {
+      console.error('Access token not found');
+    }
+  }
+
+
   const ApprovedContent = () => {
 
     return (
@@ -185,13 +235,22 @@ export default function NotificationScreen(
                   <CustomText color="darkCyan" fontSizes='body3'>{t("ABSENCE_DATE")}</CustomText>
                   <CustomText color="dark">{dayjs(selectedAbsence?.startDate).format('DD.MM.YYYY')} - {dayjs(selectedAbsence?.endDate).format('DD.MM.YYYY')}</CustomText>
                 </View>
+                <View>
+                  <CustomText color="darkCyan" fontSizes='body3'>{t(notificationLanguage.ABSENTEEISM_STATUS)}</CustomText>
+                  <CustomText color="dark">
+                    {selectedAbsence?.isApproved === "pending" && `${t("WAITING_FOR_APPROVAL")}` ||
+                      selectedAbsence?.isApproved === "approved" && `${t("APPROVED")}` ||
+                      selectedAbsence?.isApproved === "rejected" && `${t("REJECTED")}` ||
+                      "Durum bilinmiyor"}
+                  </CustomText>
+                </View>
 
               </BottomContent>
 
-              <BottomButtonContainer>
-                <Button text={t("APPROVE")} />
-                <Button backgroundColor='#E57373' text={t("REJECT")} />
-              </BottomButtonContainer>
+              {selectedAbsence?.isApproved === "pending" && <BottomButtonContainer>
+                <Button onPress={() => handleApproveButton("approved")} text={t("APPROVE")} />
+                <Button onPress={() => handleApproveButton("rejected")} backgroundColor='#E57373' text={t("REJECT")} />
+              </BottomButtonContainer>}
             </ApprovedBottomContainer>
           </ApprovedContentContainer>
           {showPhotoModal && (
@@ -214,7 +273,7 @@ export default function NotificationScreen(
 
 
   return (
-    <Container goBackShow header title="Bildirimler">
+    <Container goBackShow header title={notificationLanguage.NOT}>
       <Loading loading={loading}>
         <Container type="container">
           <CustomFlatList

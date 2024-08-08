@@ -120,6 +120,11 @@ class ClassRoomRepository {
     const classRoomSnapshot = await getDoc(classRoomDoc);
     return classRoomSnapshot.data()?.teachers;
   }
+  async getParentByClassRoomId(classRoomId: string): Promise<string> {
+    const classRoomDoc = doc(this.classRoomCollection, classRoomId);
+    const classRoomSnapshot = await getDoc(classRoomDoc);
+    return classRoomSnapshot.data()?.parent;
+  }
 
 }
 

@@ -21,6 +21,9 @@
     "SUCCESS": "Başarılı",
     "LOGOUT": "Çıkış Yap",
     "HOME": "Ana Sayfa",
+    "WAITING_FOR_APPROVAL": "Onay bekleniyor",
+    "APPROVED": "Onaylandı",
+    "REJECTED": "Reddedildi",
     "STUDENT_ABSENCE": "Öğrenci devamsızlığı",
     "ABSENCE": "Devamsızlık",
     "ABSENCE_ADD": "Devamsızlık ekle",
@@ -166,6 +169,9 @@
     "NOT_ADD_SUCCESS": "Bildirim başarıyla eklendi",
     "NOT_NOT_FOUND": "Bildirim bulunamadı",
     "NOT_DELETE": "Bildirimi sil",
-    "NOT_DELETE_SUCCESS": "Bildirim başarıyla silindi"
+    "NOT_DELETE_SUCCESS": "Bildirim başarıyla silindi",
+    "ABSENTEEISM_STATUS": "Devamsızlık durumu",
+    "ABSENTEEISM_STATUS_APPROVED": "İzin isteğiniz onaylandı",
+    "ABSENTEEISM_STATUS_REJECTED": "İzin isteğiniz reddedildi"
   }
 }

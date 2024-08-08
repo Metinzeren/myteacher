@@ -37,6 +37,15 @@ export const getUserId = async (): Promise<any> => {
     console.error('Error retrieving value from AsyncStorage:', e);
   }
 };
+
+export const getUserAccesToken = async (): Promise<any> => {
+  try {
+    const jsonValue = await AsyncStorage.getItem('authUser');
+    return jsonValue != null ? JSON.parse(jsonValue).accessToken : '';
+  } catch (e) {
+    console.error('Error retrieving value from AsyncStorage:', e);
+  }
+}
 export const getLanguage = async (): Promise<any> => {
   try {
     const jsonValue = await AsyncStorage.getItem('language');

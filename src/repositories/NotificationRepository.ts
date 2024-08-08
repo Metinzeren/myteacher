@@ -50,8 +50,12 @@ class NotificationRepository {
         );
         const querySnapshot = await getDocs(notificationsQuery);
 
-        return querySnapshot.docs.map(doc => doc.data() as NotificationModel);
+        return querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data() as NotificationModel
+        }));
     }
+
 
     async getAllNotifications() {
         const notificationSnapshot = await getDocs(this.notificationCollection);
@@ -64,7 +68,6 @@ class NotificationRepository {
             notifications.map(async notification => {
                 const classRooms = await this.ClassRepo.getClassRoom(notification.data.classRoomId);
                 const student = classRooms.students.find(student => student.id === notification.data.studentId);
-                console.log(student, "ahahahah");
 
                 return {
                     ...notification,
@@ -74,6 +77,10 @@ class NotificationRepository {
         );
 
 
+    }
+    async updateNotificationReadStatus(notificationId: string, isRead: boolean) {
+        const notificationDoc = doc(this.notificationCollection, notificationId);
+        await setDoc(notificationDoc, { isRead }, { merge: true });
     }
 
 }

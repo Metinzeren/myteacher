@@ -6,6 +6,7 @@ interface NotificationModel {
     notificationType: string;
     studentId: string;
     classRoomId: string;
+    isTranslate?: string;
   };
   title: string;
   body: string;

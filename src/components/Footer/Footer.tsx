@@ -1,23 +1,28 @@
-import {View, TouchableOpacity, Image, ScrollView} from 'react-native';
-import React, {useState} from 'react';
+import { View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CustomText from '../Text/Text';
 import useThemeColors from '../../constant/useColor';
 import dayjs from 'dayjs';
 
-import {useTranslation} from 'react-i18next';
-import {Flags} from '../../data/data';
+import { useTranslation } from 'react-i18next';
+import { Flags } from '../../data/data';
 import i18next from 'i18next';
-import {setLanguage} from '../../utils/AsyncStorageUtils';
+import { setLanguage, setLocalStorage } from '../../utils/AsyncStorageUtils';
 
 export default function Footer() {
   const colors = useThemeColors();
 
-  const selectedLang = Flags.find(x => x.languageCode === i18next.language);
+  const [selectedLang, setSelectedLang] = useState<any>({});
   const [showOtherLanguages, setShowOtherLanguages] = useState(
     selectedLang ? false : true,
   );
-  const {t} = useTranslation();
+  const { t } = useTranslation();
+
+  useEffect(() => {
+    const selected = Flags.find(x => x.languageCode === i18next.language);
+    setSelectedLang(selected);
+  }, [i18next.language]);
 
   return (
     <FooterContainer>
@@ -29,8 +34,8 @@ export default function Footer() {
               setShowOtherLanguages(!showOtherLanguages);
             }}>
             <Image
-              source={selectedLang.languageIcon}
-              style={{width: 25, height: 25}}
+              source={selectedLang?.languageIcon}
+              style={{ width: 25, height: 25 }}
             />
             <CustomText color="tertiary">
               {selectedLang.languageName}
@@ -47,13 +52,14 @@ export default function Footer() {
                   <FlagsContainer
                     activeOpacity={0.7}
                     key={i}
-                    onPress={() => {
-                      setLanguage(x.languageCode);
+                    onPress={async () => {
+                      await setLocalStorage('language', x.languageCode);
+                      i18next.changeLanguage(x.languageCode);
                       setShowOtherLanguages(!showOtherLanguages);
                     }}>
                     <Image
                       source={x.languageIcon}
-                      style={{width: 25, height: 25}}
+                      style={{ width: 25, height: 25 }}
                     />
                     <CustomText color="tertiary">{x.languageName}</CustomText>
                   </FlagsContainer>
@@ -63,7 +69,7 @@ export default function Footer() {
           </View>
         )}
       </FooterHelpContainer>
-      <FooterText theme={{colors}}>
+      <FooterText theme={{ colors }}>
         © {dayjs().format('YYYY')} {t('copyright')}
       </FooterText>
     </FooterContainer>

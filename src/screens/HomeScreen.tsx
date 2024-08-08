@@ -28,6 +28,7 @@ import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import useFcmToken from '../hooks/useFcmToken';
 import DevicesRepository from '../repositories/DeviceRepository';
 import useUser from '../hooks/useUser';
+import Footer from '../components/Footer/Footer';
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
 ) => {
@@ -218,6 +219,7 @@ const HomeScreen = (
           </HomeBottomContainer>
         </NoSearchContainer>
       )}
+      <Footer />
     </Container>
   );
 };

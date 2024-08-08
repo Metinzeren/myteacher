@@ -249,7 +249,7 @@ export default function AddAbsenceScreen(
       }
 
       let data = {
-        studentId: userInfo.id,
+        studentId: userInfo.studentId,
         startDate: registerDto.startDate,
         endDate: registerDto.endDate,
         description: registerDto.description,

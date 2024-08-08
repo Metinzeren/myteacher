@@ -22,6 +22,9 @@
     "HOME": "Home",
     "SEARCH": "Search",
     "SEARCH_RESULTS": "Search Results",
+    "WAITING_FOR_APPROVAL": "Waiting for approval",
+    "APPROVED": "Approved",
+    "REJECTED": "Rejected",
     "ADD_PHOTO": "Add photo",
     "ABSENCE": "Absence",
     "ABSENCE_ADD": "Add absence",
@@ -152,13 +155,16 @@
     "description": "Please enter the description"
   },
   "notifications": {
-    "ABSENTEEISM_NOTIFICATION_TITLE": "Devamsızlık bildirimi",
+    "ABSENTEEISM_NOTIFICATION_TITLE": "Absenteeism notification",
     "ABSENTEEISM_NOTIFICATION_BODY": "Öğrenci devamsızlık yaptı",
     "NOT_TYPE": "Notifications type",
     "NOT_TYPE_ABSENTEEISM": "Absenteeism",
     "NOT_TYPE_HOMEWORK": "Homework",
     "NOT": "Notification",
     "NOT_DATE": "Notification date",
-    "NOT_DESCRIPTION": "Notification description"
+    "NOT_DESCRIPTION": "Notification description",
+    "ABSENTEEISM_STATUS": "Absenteeism status",
+    "ABSENTEEISM_STATUS_APPROVED": "Your leave request has been approved",
+    "ABSENTEEISM_STATUS_REJECTED": "Your leave request has been rejected"
   }
 }

@@ -6,7 +6,7 @@ import {
   getDocs,
   setDoc,
 } from 'firebase/firestore';
-import {db} from '../firebase/config';
+import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
 import Absenteeism from '../models/Absenteeism';
 
@@ -24,7 +24,7 @@ class AbsenteeismRepository {
     return AbsenteeismRepository.instance;
   }
 
-  private constructor() {}
+  private constructor() { }
 
   async addAbsenteeism(absenteeism: Absenteeism) {
     const absenteeismDoc = doc(this.absenteeismCollection);
@@ -38,7 +38,7 @@ class AbsenteeismRepository {
       throw new Error('Absenteeism ID is required to update');
     }
     const absenteeismDoc = doc(this.absenteeismCollection, absenteeism.id);
-    await setDoc(absenteeismDoc, absenteeism, {merge: true});
+    await setDoc(absenteeismDoc, absenteeism, { merge: true });
   }
 
   async deleteAbsenteeism(absenteeismId: string) {
@@ -55,6 +55,10 @@ class AbsenteeismRepository {
   async getAllAbsenteeisms() {
     const absenteeismSnapshot = await getDocs(this.absenteeismCollection);
     return absenteeismSnapshot.docs.map(doc => doc.data() as Absenteeism);
+  }
+  async updateAbsenteeismApprovalStatus(absenteeismId: string, isApproved: string) {
+    const absenteeismDoc = doc(this.absenteeismCollection, absenteeismId);
+    await setDoc(absenteeismDoc, { isApproved }, { merge: true });
   }
 }
 

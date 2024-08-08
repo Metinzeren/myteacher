@@ -1,9 +1,9 @@
-import {AppRegistry, LogBox, Platform} from 'react-native';
-import {name as appName} from './app.json';
+import { AppRegistry, LogBox, Platform } from 'react-native';
+import { name as appName } from './app.json';
 import RootNavigator from './src/navigation/RootNavigator';
 import 'react-native-gesture-handler';
-import {NavigationContainer} from '@react-navigation/native';
-import {ModalPortal} from 'react-native-modals';
+import { NavigationContainer } from '@react-navigation/native';
+import { ModalPortal } from 'react-native-modals';
 import KeyboardManager from 'react-native-keyboard-manager';
 
 import StudentProvider from './src/context/StudentContext';
@@ -13,8 +13,9 @@ import InitCollection from './src/firebase/Collection/InitCollection';
 import ClassRoomProvider from './src/context/ClassRoomContext';
 import QuestionProvider from './src/context/StudentEvulationContext';
 import Evulation from './src/models/Evulation';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import initI18n from './src/lang/i18n';
+import SplashScreen from 'react-native-splash-screen';
 
 LogBox.ignoreAllLogs();
 const MyTeacher = () => {
@@ -35,10 +36,14 @@ const MyTeacher = () => {
     KeyboardManager.setShouldResignOnTouchOutside(true);
     KeyboardManager.setShouldPlayInputClicks(true);
     KeyboardManager.resignFirstResponder();
-    KeyboardManager.isKeyboardShowing().then(isShowing => {});
+    KeyboardManager.isKeyboardShowing().then(isShowing => { });
   }
   const [isI18nReady, setI18nReady] = useState(false);
-
+  useEffect(() => {
+    if (Platform.OS === 'android') {
+      SplashScreen.hide();
+    }
+  }, [])
   useEffect(() => {
     const init = async () => {
       await initI18n();
@@ -49,6 +54,8 @@ const MyTeacher = () => {
   if (!isI18nReady) {
     return null;
   }
+
+
   const initDb = () => {
     const initClassRoom: ClassRoom = {
       name: 'Sınıf Adı',

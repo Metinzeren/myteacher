@@ -8,37 +8,48 @@ import {
 
 import styled from 'styled-components';
 import useThemeColors from '../../constant/useColor';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faAngleLeft, faBars} from '@fortawesome/free-solid-svg-icons';
-import {DrawerActions, useNavigation} from '@react-navigation/native';
-import {faBell} from '@fortawesome/free-regular-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faAngleLeft, faBars } from '@fortawesome/free-solid-svg-icons';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { faBell } from '@fortawesome/free-regular-svg-icons';
 import CustomText from '../Text/Text';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 export interface HeaderProps {
   title?: string;
   showNotification?: boolean;
   goBackShow?: boolean;
+  isHome?: boolean;
   onShowNotification?: () => void;
   extraIcon?: IconProp;
   extraIconPress?: () => void;
+  userName?: string;
 }
 export default function Header({
   title,
   showNotification = false,
   goBackShow = false,
+  isHome = false,
   onShowNotification,
   extraIcon,
+  userName,
   extraIconPress,
 }: HeaderProps) {
   const navigation = useNavigation();
   const colors = useThemeColors();
+
+
   return (
     <HeaderContainer
       theme={{
         background: colors.primary,
       }}>
       <Container>
+        {isHome && (
+          <NameContainer>
+            <NameText adjustsFontSizeToFit={true}>{userName}</NameText>
+          </NameContainer>
+        )}
         {goBackShow && (
           <IconLeft
             hitSlop={15}
@@ -102,12 +113,21 @@ const IconLeft = styled(TouchableOpacity)`
   position: absolute;
   left: 20px;
 `;
+const NameContainer = styled(View)`
+  position: absolute;
+  left: 20px;
+`;
 const IconRight = styled(TouchableOpacity)``;
 const TitleContainer = styled(View)`
   position: absolute;
 `;
 const HeaderTitle = styled(CustomText)`
   font-size: 20px;
+  color: #fff;
+  font-weight: bold;
+`;
+const NameText = styled(CustomText)`
+  font-size: 12px;
   color: #fff;
   font-weight: bold;
 `;

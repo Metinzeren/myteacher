@@ -98,18 +98,6 @@
     "SEARCH_STUDENT": "Öğrenci ara",
     "STUDENT_COUNT": "Öğrenci sayısı",
     "STUDENT_NOT_FOUND": "Öğrenci bulunamadı",
-    "HOMEWORK_ADD": "Ödev ekle",
-    "HOMEWORK_EDIT": "Ödevi düzenle",
-    "HOMEWORK_DELETE": "Ödevi sil",
-    "HOMEWORK_ADD_SUCCESS": "Ödev başarıyla eklendi",
-    "HOMEWORK_EDIT_SUCCESS": "Ödev başarıyla düzenlendi",
-    "HOMEWORK_DELETE_SUCCESS": "Ödev başarıyla silindi",
-    "HOMEWORK_ADD_ERROR": "Ödev eklenemedi",
-    "HOMEWORK_EDIT_ERROR": "Ödev düzenlenemedi",
-    "HOMEWORK_DELETE_ERROR": "Ödev silinemedi",
-    "HOMEWORK_UPLOAD": "Ödev yükle",
-    "HOMEWORK_UPLOAD_SUCCESS": "Ödev başarıyla yüklendi",
-    "HOMEWORK_UPLOAD_ERROR": "Ödev yüklenemedi",
     "NAME": "Ad",
     "FIRST_NAME": "Ad",
     "LAST_NAME": "Soyad",
@@ -173,5 +161,19 @@
     "ABSENTEEISM_STATUS": "Devamsızlık durumu",
     "ABSENTEEISM_STATUS_APPROVED": "İzin isteğiniz onaylandı",
     "ABSENTEEISM_STATUS_REJECTED": "İzin isteğiniz reddedildi"
+  },
+  "homeworks": {
+    "HOMEWORK_ADD": "Ödev ekle",
+    "HOMEWORK_EDIT": "Ödevi düzenle",
+    "HOMEWORK_DELETE": "Ödevi sil",
+    "HOMEWORK_ADD_SUCCESS": "Ödev başarıyla eklendi",
+    "HOMEWORK_EDIT_SUCCESS": "Ödev başarıyla düzenlendi",
+    "HOMEWORK_DELETE_SUCCESS": "Ödev başarıyla silindi",
+    "HOMEWORK_ADD_ERROR": "Ödev eklenemedi",
+    "HOMEWORK_EDIT_ERROR": "Ödev düzenlenemedi",
+    "HOMEWORK_DELETE_ERROR": "Ödev silinemedi",
+    "HOMEWORK_UPLOAD": "Ödev yükle",
+    "HOMEWORK_UPLOAD_SUCCESS": "Ödev başarıyla yüklendi",
+    "HOMEWORK_UPLOAD_ERROR": "Ödev yüklenemedi"
   }
 }

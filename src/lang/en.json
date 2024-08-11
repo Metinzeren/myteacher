@@ -98,18 +98,6 @@
     "SEARCH_STUDENT": "Search student",
     "STUDENT_COUNT": "Number of students",
     "STUDENT_NOT_FOUND": "Student not found",
-    "HOMEWORK_ADD": "Add homework",
-    "HOMEWORK_EDIT": "Edit homework",
-    "HOMEWORK_DELETE": "Delete homework",
-    "HOMEWORK_ADD_SUCCESS": "Homework added successfully",
-    "HOMEWORK_EDIT_SUCCESS": "Homework edited successfully",
-    "HOMEWORK_DELETE_SUCCESS": "Homework deleted successfully",
-    "HOMEWORK_ADD_ERROR": "Homework could not be added",
-    "HOMEWORK_EDIT_ERROR": "Homework could not be edited",
-    "HOMEWORK_DELETE_ERROR": "Homework could not be deleted",
-    "HOMEWORK_UPLOAD": "Upload homework",
-    "HOMEWORK_UPLOAD_SUCCESS": "Homework uploaded successfully",
-    "HOMEWORK_UPLOAD_ERROR": "Homework could not be uploaded",
     "NAME": "Name",
     "FIRST_NAME": "First name",
     "LAST_NAME": "Last name",
@@ -166,5 +154,19 @@
     "ABSENTEEISM_STATUS": "Absenteeism status",
     "ABSENTEEISM_STATUS_APPROVED": "Your leave request has been approved",
     "ABSENTEEISM_STATUS_REJECTED": "Your leave request has been rejected"
+  },
+  "homeworks": {
+    "HOMEWORK_ADD": "Add homework",
+    "HOMEWORK_EDIT": "Edit homework",
+    "HOMEWORK_DELETE": "Delete homework",
+    "HOMEWORK_ADD_SUCCESS": "Homework added successfully",
+    "HOMEWORK_EDIT_SUCCESS": "Homework edited successfully",
+    "HOMEWORK_DELETE_SUCCESS": "Homework deleted successfully",
+    "HOMEWORK_ADD_ERROR": "Homework could not be added",
+    "HOMEWORK_EDIT_ERROR": "Homework could not be edited",
+    "HOMEWORK_DELETE_ERROR": "Homework could not be deleted",
+    "HOMEWORK_UPLOAD": "Upload homework",
+    "HOMEWORK_UPLOAD_SUCCESS": "Homework uploaded successfully",
+    "HOMEWORK_UPLOAD_ERROR": "Homework could not be uploaded"
   }
 }

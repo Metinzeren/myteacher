@@ -47,6 +47,9 @@ import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import EvulationQuestionResponse from '../models/EvulationQuestionResponse';
 import { deleteStudent } from '../firebase/FirebaseApi';
+import AbsenteeismRepository from '../repositories/AbsenteeismRepository';
+import Absenteeism from '../models/Absenteeism';
+import dayjs from 'dayjs';
 
 export default function UpdateStudentScreen(
   props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentScreen'>,
@@ -55,11 +58,13 @@ export default function UpdateStudentScreen(
     useClassRooms();
   const studentFromParam = props.route.params.student;
   const studentId = props.route.params.studentId;
+  let notificationLanguage = getResourceByKey('notifications');
   const classRoomId = props.route.params.classRoomId;
   const [loading, setLoading] = useState(false);
   const colors = useThemeColors();
   const classRoomRepo = ClassRoomRepository.getInstance();
   const evulationRepo = EvulationRepository.getInstance();
+  const AbsenteeismRepo = AbsenteeismRepository.getInstance();
   const formRef = useRef<FormContainerRef>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState([]);
@@ -106,8 +111,11 @@ export default function UpdateStudentScreen(
   const [selectedEvulation, setSelectedEvulation] = useState<EvulationResponse>(
     {} as EvulationResponse,
   );
+  const [absenteeisms, setAbsenteeisms] = useState([]);
+  const [selectedAbsence, setSelectedAbsence] = useState<Absenteeism>()
   useEffect(() => {
     getEvulation();
+    getAbsenteeisms()
   }, []);
 
   const getEvulation = async () => {
@@ -116,6 +124,12 @@ export default function UpdateStudentScreen(
     );
     setEvulation(evulation);
   };
+
+  const getAbsenteeisms = async () => {
+    const absences = await AbsenteeismRepo.getAbsenteeismByStudentId(student.id as string);
+    setAbsenteeisms(absences as any);
+
+  }
 
   const handleChange = (key: keyof Student, value: string) => {
     setUpdateDto(prevState => ({
@@ -134,7 +148,7 @@ export default function UpdateStudentScreen(
       AlertDialog.showModal({
         title: t('WARNING'),
         message: t('STUDENT_EDIT'),
-        onConfirm: async () => { // onConfirm fonksiyonunu async olarak tanımlıyoruz
+        onConfirm: async () => {
           try {
             const response = await classRoomRepo.updateStudentInClassRoom(classRoomId, updateDto);
 
@@ -143,7 +157,7 @@ export default function UpdateStudentScreen(
             props.navigation.goBack();
           } catch (error) {
             console.error(error);
-            // Hata durumunda gerekli işlemleri yapabilirsiniz
+
           } finally {
             setLoading(false);
           }
@@ -199,38 +213,43 @@ export default function UpdateStudentScreen(
 
   const AbsenceContent = () => {
     return (
-      <CustomFlatList
-        data={mockAbsence}
-        isBottomSheet
-        renderItem={({ item, index }: { item: any; index: number }) => {
-          let absence = item;
-          return (
-            <CardContentContainer key={index}>
-              <CustomText fontSizes="body4" color="textLink">{`${index + 1
-                }.`}</CustomText>
-              <CardContentRight>
-                <TouchableOpacity
-                  onPress={() => {
-                    setSelectedImage([{ url: absence.url }] as any);
-                    setModalVisible(true);
-                  }}>
-                  <Image
-                    source={{ uri: absence.url }}
-                    style={{
-                      width: 150,
-                      height: 150,
-                      borderRadius: 8,
-                    }}
-                  />
-                </TouchableOpacity>
+      <CardContentContainer >
+        <CardContentRight>
+          <TouchableOpacity
+            onPress={() => {
+              setSelectedImage([{ url: selectedAbsence?.photo }] as any);
+              setModalVisible(true);
+            }}>
+            {selectedAbsence?.photo && <Image
+              source={{ uri: selectedAbsence?.photo }}
+              style={{
+                width: 150,
+                height: 150,
+                borderRadius: 8,
+              }}
+            />}
+          </TouchableOpacity>
+          <Fields>
+            <CustomText color="darkCyan" fontSizes='body3'>{t("ABSENCE_DATE")}</CustomText>
+            <CustomText color="dark">{dayjs(selectedAbsence?.startDate).format('DD.MM.YYYY')} - {dayjs(selectedAbsence?.endDate).format('DD.MM.YYYY')}</CustomText>
+          </Fields>
+          <Fields>
+            <CustomText color="darkCyan" fontSizes='body3'>{t("DESCRIPTION")}</CustomText>
+            <CustomText color="dark">{selectedAbsence?.description}</CustomText>
+          </Fields>
+          <Fields>
+            <CustomText color="darkCyan" fontSizes='body3'>{t(notificationLanguage.ABSENTEEISM_STATUS)}</CustomText>
+            <CustomText color="dark">
+              {selectedAbsence?.isApproved === "pending" && `${t("WAITING_FOR_APPROVAL")}` ||
+                selectedAbsence?.isApproved === "approved" && `${t("APPROVED")}` ||
+                selectedAbsence?.isApproved === "rejected" && `${t("REJECTED")}` ||
+                "Durum bilinmiyor"}
+            </CustomText>
+          </Fields>
 
-                <CustomText color="primaryText">{absence.date}</CustomText>
-                <CustomText color="textLink">{absence.reason}</CustomText>
-              </CardContentRight>
-            </CardContentContainer>
-          );
-        }}
-      />
+        </CardContentRight>
+      </CardContentContainer>
+
     );
   };
 
@@ -377,12 +396,15 @@ export default function UpdateStudentScreen(
 
               <AccordionContainer>
                 <Accordion title={t('STUDENT_ABSENCE')}>
-                  {mockAbsence.map((absence, index) => (
+                  {absenteeisms.map((absence, index) => (
                     <AbsenceCard
-                      onPress={() => absenceBottomSheetRef.current?.open()}
+                      onPress={() => {
+                        setSelectedAbsence(absence)
+                        absenceBottomSheetRef.current?.open()
+                      }}
                       key={index}>
                       <CustomText color="primaryText">
-                        {absence.date}
+                        {absence.startDate}
                       </CustomText>
                       <FontAwesomeIcon
                         color={colors.iconColor}
@@ -418,7 +440,7 @@ export default function UpdateStudentScreen(
         </Modal>
       )}
       <CustomBottomSheet
-        snapPoints={['70%', '80%']}
+        snapPoints={['80%', '50%']}
         ref={absenceBottomSheetRef}>
         <AbsenceContent />
       </CustomBottomSheet>
@@ -460,12 +482,8 @@ const CardContentContainer = styled(View)`
   margin: 15px;
   margin-horizontal: 2px;
   border-radius: 8px;
-  flex-direction: row;
+  flex:1;
   margin-bottom: 10px;
-  elevation: 2;
-  shadow-color: #000;
-  shadow-opacity: 0.1;
-  shadow-radius: 5px;
 `;
 
 const ButtonContainer = styled(View)`
@@ -478,5 +496,8 @@ const CardContentRight = styled(View)`
   flex-direction: column;
   gap: 5px;
   flex: 1;
-  justify-content: center;
+`;
+const Fields = styled(View)`
+  flex-direction: column;
+  gap: 5px;
 `;

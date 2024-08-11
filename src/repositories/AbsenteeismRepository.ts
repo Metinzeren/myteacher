@@ -2,9 +2,12 @@ import {
   collection,
   deleteDoc,
   doc,
+  Firestore,
   getDoc,
   getDocs,
+  query,
   setDoc,
+  where,
 } from 'firebase/firestore';
 import { db } from '../firebase/config';
 import FirebaseCollections from '../firebase/Collection/FirebaseCollections';
@@ -56,10 +59,18 @@ class AbsenteeismRepository {
     const absenteeismSnapshot = await getDocs(this.absenteeismCollection);
     return absenteeismSnapshot.docs.map(doc => doc.data() as Absenteeism);
   }
-  async updateAbsenteeismApprovalStatus(absenteeismId: string, isApproved: string) {
-    const absenteeismDoc = doc(this.absenteeismCollection, absenteeismId);
-    await setDoc(absenteeismDoc, { isApproved }, { merge: true });
+
+  async getAbsenteeismByStudentId(studentId: string,) {
+    const absenteeismQuery = query(
+      this.absenteeismCollection,
+      where('studentId', '==', studentId)
+    );
+    const querySnapshot = await getDocs(absenteeismQuery);
+
+    const absenteeisms = querySnapshot.docs.map(doc => doc.data());
+    return absenteeisms;
   }
+
 }
 
 export default AbsenteeismRepository;

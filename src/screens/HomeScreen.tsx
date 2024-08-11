@@ -105,11 +105,10 @@ const HomeScreen = (
     <Container
       title={focusToSearch ? t('SEARCH_RESULTS') : t('HOME')}
       header
+      isHome={true}
+      userName={user ? user.firstName + ' ' + user.lastName : ''}
       showNotification={!focusToSearch}>
       <HomeTopContainer>
-        {/* <CustomText fontSizes="h5" color="primaryText" center>
-          {user.firstName} {user.lastName}
-        </CustomText> */}
         <View style={{ flex: 1 }}>
           <Input
             autoCapitalize="none"

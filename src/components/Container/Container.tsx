@@ -24,14 +24,18 @@ interface ContainerProps extends HeaderProps {
   pb?: number;
   px?: number;
   py?: number;
+  isHome?: boolean;
+  userName?: string;
 }
 
 export default function Container({
   children,
   header,
   goBackShow = false,
+  isHome = false,
   type = 'page',
   bgColor,
+  userName,
   ...props
 }: ContainerProps) {
   const colors = useThemeColors();
@@ -71,7 +75,7 @@ export default function Container({
       style={{
         backgroundColor: bgColor ? bgColor : colors.background,
       }}>
-      {header && <Header {...props} goBackShow={goBackShow} />}
+      {header && <Header {...props} isHome={isHome} userName={userName} goBackShow={goBackShow} />}
       {type === 'container' ? (
         <View
           style={{

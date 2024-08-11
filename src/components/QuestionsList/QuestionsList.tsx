@@ -23,6 +23,7 @@ import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 export default function QuestionsList({
   student,
   answers,
+
 }: {
   student: Student;
   answers?: EvulationResponse[];
@@ -167,22 +168,32 @@ export default function QuestionsList({
     let evulationQuestions = evulation.evulationQuestions.filter(
       question => question.answer.length > 0,
     );
-    console.log(evulation);
 
     if (evulationQuestions.length === 0) {
       AlertDialog.showModal({
         title: t('ERROR'),
-        message: 'Lütfen tüm soruları cevaplayınız',
+        message: 'Lütfen önce soru ekleyiniz',
       });
+      return;
     }
-    const entity = await evulationRepo.addEvulation(evulation);
-    if (entity) {
-      AlertDialog.showModal({
-        title: t('SUCCESS'),
-        message: 'Değerlendirme başarılı bir şekilde kaydedildi.',
-        type: 'success',
-      });
-    } else {
+
+    try {
+      const entity = await evulationRepo.addEvulation(evulation);
+      if (entity) {
+        AlertDialog.showModal({
+          title: t('SUCCESS'),
+          message: 'Değerlendirme başarılı bir şekilde kaydedildi.',
+          type: 'success',
+        });
+      } else {
+        AlertDialog.showModal({
+          title: t('ERROR'),
+          message: 'Değerlendirme kaydedilirken bir hata oluştu.',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      console.error("Error during evaluation save:", error);
       AlertDialog.showModal({
         title: t('ERROR'),
         message: 'Değerlendirme kaydedilirken bir hata oluştu.',
@@ -190,6 +201,7 @@ export default function QuestionsList({
       });
     }
   };
+
 
   return (
 

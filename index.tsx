@@ -15,6 +15,7 @@ import QuestionProvider from './src/context/StudentEvulationContext';
 import Evulation from './src/models/Evulation';
 import { useEffect, useState } from 'react';
 import initI18n from './src/lang/i18n';
+import HomeworkProvider from './src/context/HomeworkContext';
 
 LogBox.ignoreAllLogs();
 const MyTeacher = () => {
@@ -73,8 +74,10 @@ const MyTeacher = () => {
       <ClassRoomProvider>
         <StudentProvider>
           <QuestionProvider>
-            <RootNavigator />
-            <ModalPortal />
+            <HomeworkProvider>
+              <RootNavigator />
+              <ModalPortal />
+            </HomeworkProvider>
           </QuestionProvider>
         </StudentProvider>
       </ClassRoomProvider>

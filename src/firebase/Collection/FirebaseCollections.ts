@@ -7,5 +7,6 @@ const FirebaseCollections = {
   ABSENTEEISMS: 'absenteeisms',
   DEVICES: 'devices',
   NOTIFICATIONS: 'notifications',
+  HOMEWORKS: 'homeworks',
 };
 export default FirebaseCollections;

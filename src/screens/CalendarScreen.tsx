@@ -1,4 +1,4 @@
-import { View, Text, Platform, Alert, PermissionsAndroid, Image, ScrollView } from 'react-native';
+import { View, Platform, PermissionsAndroid, Image, ScrollView } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Calendar, CalendarProvider, WeekCalendar } from 'react-native-calendars';
@@ -14,7 +14,6 @@ import Button from '../components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { getResourceByKey } from '../lang/i18n';
 import FormContainer, { FormContainerRef } from 'react-native-form-container';
-import uuid from 'react-native-uuid';
 import { add, format, set } from 'date-fns';
 import IconButton from '../components/IconButton/IconButton';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -24,11 +23,11 @@ import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import ClassRoom from '../models/ClassRoom';
 import Loading from '../components/Loading/Loading';
 import Student from '../models/Student';
+import { useHomeworks } from '../context/HomeworkContext';
 
 export default function CalendarScreen() {
   const filterBottomSheetRef = useRef<BottomSheetRef>(null);
   const addHomeworkBottomSheetRef = useRef<BottomSheetRef>(null);
-  const photoButtonRef = useRef<BottomSheetRef>(null);
   const formRef = useRef<FormContainerRef>(null);
   const classRoomRepo = ClassRoomRepository.getInstance();
   const { t } = useTranslation();
@@ -36,30 +35,12 @@ export default function CalendarScreen() {
   const [loadingClassRooms, setLoadingClassRooms] = useState(false)
   const [loadingStudents, setLoadingStudents] = useState(false)
   const today = format(new Date(), 'yyyy-MM-dd');
-  const [classRooms, setClassRooms] = useState<Array<ClassRoom>>([]);
-  const [students, setstudents] = useState<Array<Student>>([]);
+  const [selectedStudents, setSelectedStudents] = useState<Array<Student>>([]);
   const [imageUri, setImageUri] = useState<string | null>(null);
   let homeworkLanguage = getResourceByKey('homeworks');
+  const { registerDto, handleChange, setRegisterDto, removeStudent, removeClassRoom, students, setStudents, classRooms, setClassRooms, selectedClassRooms, setSelectedClassRooms } = useHomeworks();
   const [bottomSheetType, setBottomSheetType] = useState('saveStep');
-  const [registerDto, setRegisterDto] = useState<Homework>({
-    title: '',
-    description: '',
-    id: uuid.v4().toString(),
-    photo: [],
-    endDate: "",
-    isCompleted: false,
-    type: "",
-    teacherId: "",
-    classroomId: "",
-    studentId: "",
-    startDate: "",
-  });
-  const handleChange = (key: keyof typeof registerDto, value: string) => {
-    setRegisterDto({
-      ...registerDto,
-      [key]: value,
-    });
-  };
+
   const handleSelectImage = () => {
     const options = {
       mediaType: 'photo' as const,
@@ -77,6 +58,7 @@ export default function CalendarScreen() {
         const uri = response.assets[0].uri;
         setImageUri(uri || null);
         handleChange('photo', uri || '');
+        setBottomSheetType("saveStep");
       }
     });
   };
@@ -86,14 +68,12 @@ export default function CalendarScreen() {
         <Button
           text="Select Image"
           onPress={() => {
-            photoButtonRef.current?.close();
             handleSelectImage();
           }}
         />
         <Button
           text="Take Photo"
           onPress={() => {
-            photoButtonRef.current?.close();
             requestCameraPermission();
           }}
         />
@@ -139,6 +119,8 @@ export default function CalendarScreen() {
         const uri = response.assets[0].uri;
         setImageUri(uri || null);
         handleChange('photo', uri || '');
+        setBottomSheetType("saveStep");
+
       }
     });
   };
@@ -202,28 +184,24 @@ export default function CalendarScreen() {
   };
 
   const loadStudents = () => {
+
     setLoadingStudents(true);
     classRoomRepo
-      .getStudentsByClassRoomId(registerDto.classroomId as string)
+      .getStudentsByClassRoomId(selectedClassRooms?.id as string)
       .then(res => {
-        setstudents(res)
+
+        setStudents(res)
       })
       .finally(() => {
         setLoadingStudents(false);
       });
   }
 
-  const AddHomeworkContent = () => {
-    return (
-      <Container p={10} type='container'>
-        <ScrollView
-          contentContainerStyle={{
-            flexGrow: 1,
-            backgroundColor: colors.background,
-          }}
-          showsHorizontalScrollIndicator={false}
-          showsVerticalScrollIndicator={false}>
-          {bottomSheetType === "saveStep" && <View style={{ flex: 1 }}>
+  const RenderItem = () => {
+    switch (bottomSheetType) {
+      case "saveStep":
+        return (
+          <View style={{ flex: 1 }}>
             <View style={{ flex: 1 }}>
               <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
                 <View>
@@ -237,7 +215,10 @@ export default function CalendarScreen() {
                 <AddPhotoContainer>
                   <IconContainer>
                     <IconButton
-                      onPress={() => photoButtonRef.current?.open()}
+                      onPress={() =>
+                        setBottomSheetType("photoStep")
+
+                      }
                       icon={faAdd}
                     />
                   </IconContainer>
@@ -261,177 +242,220 @@ export default function CalendarScreen() {
                 </AddPhotoContainer>
                 <Input
                   required
+                  id='title'
                   placeholder="Ödev adı"
                   icon={faUser}
-                  value={registerDto?.title}
-                  onChangeText={e => handleChange('title', e)}
+                  value={registerDto.title}
+                  onChangeText={(text) => handleChange('title', text)}
                 />
                 <Input
                   required
+                  id='description'
                   placeholder="Ödev açıklaması"
                   icon={faUser}
                   multiline
                   value={registerDto?.description}
-                  onChangeText={e => handleChange('description', e)}
+                  onChangeText={(e) => handleChange('description', e)}
                 />
-                <PlaceholderInput
-                  required
-                  id="startDate"
-                  value={
-                    registerDto.startDate
-                      ? dayjs(registerDto?.startDate).format('DD.MM.YYYY')
-                      : ` ${t('START_DATE')}`
-                  }
-                  onPress={() => {
-                    setBottomSheetType("startCalendarStep");
-                  }}
-                />
-                <PlaceholderInput
-                  required
-                  id="endDate"
-                  value={
-                    registerDto.endDate
-                      ? dayjs(registerDto?.endDate).format('DD.MM.YYYY')
-                      : ` ${t('END_DATE')}`
-                  }
-                  onPress={() => {
-                    setBottomSheetType("endCalendarStep");
-                  }}
-                />
-                <PlaceholderInput
-                  required
-                  id="type"
-                  value={registerDto.type || ` ${t('TYPE')}`}
-                  onPress={() => setBottomSheetType("selectTypeStep")}
-                />
-                <PlaceholderInput
-                  required
-                  id="type"
-                  value={registerDto.type || ` ${t('TYPE')}`}
-                  onPress={() => {
-                    loadClassRoom()
-                    setBottomSheetType("selectClassroom")
-                  }}
-                />
+                <View style={{ flex: 1, flexDirection: "row" }}>
+                  <PlaceholderInput
+                    style={{ flex: 1 }}
+                    required
+                    id="startDate"
+                    value={
+                      registerDto.startDate
+                        ? dayjs(registerDto?.startDate).format('DD.MM.YYYY')
+                        : ` ${t('START_DATE')}`
+                    }
+                    onPress={() => {
+                      setBottomSheetType("startCalendarStep");
+                    }}
+                  />
+                  <PlaceholderInput
+                    required
+                    style={{ flex: 1 }}
+                    id="endDate"
+                    value={
+                      registerDto.endDate
+                        ? dayjs(registerDto?.endDate).format('DD.MM.YYYY')
+                        : ` ${t('END_DATE')}`
+                    }
+                    onPress={() => {
+                      setBottomSheetType("endCalendarStep");
+                    }}
+                  />
+                </View>
                 <PlaceholderInput
                   required
                   id="type"
                   value={registerDto.type || ` ${t('TYPE')}`}
+                  onPress={() => setBottomSheetType("typeStep")}
+                />
+                <PlaceholderInput
+                  required
+                  id="classRoom"
+                  value={selectedClassRooms.length > 0 ? selectedClassRooms.map((x) => x.name).join(', ') : ` ${t('CLASSROOM')}`}
                   onPress={() => {
-                    loadStudents()
-                    setBottomSheetType("selectStudentStep")
+                    loadClassRoom();
+                    setBottomSheetType("selectClassStep");
+                  }}
+                />
+                <PlaceholderInput
+                  required
+                  id="students"
+                  value={selectedStudents.length > 0 ? selectedStudents.map((x) => x.firstName).join(', ') : ` ${t('TYPE')}`}
+                  onPress={() => {
+                    loadStudents();
+                    setBottomSheetType("selectStudentStep");
                   }}
                 />
               </FormContainer>
             </View>
-            <View style={{ flex: 0.1 }}>
+          </View>
+        );
+      case "typeStep":
+        return (
+          <View style={{ flex: 1, gap: 50 }}>
+            <IconButton
+              icon={faAngleLeft}
+              style={{ justifyContent: "flex-start" }}
+              onPress={() => setBottomSheetType("saveStep")}
+            />
+            <Buttons>
               <Button
-                borderRadius={10}
-                onPress={() => addHomeworkBottomSheetRef.current?.open()}
-                text={t("SAVE")}
-              ></Button>
-            </View>
-          </View>}
-          {bottomSheetType === "selectTypeStep" && (
-            <View style={{ flex: 1, gap: 50 }}>
-              <IconButton
-                icon={faAngleLeft}
-                style={{ justifyContent: "flex-start" }}
-                onPress={() => setBottomSheetType("saveStep")}
+                text="Günlük ödev"
+                onPress={() => {
+                  handleChange("type", "daily");
+                  setBottomSheetType("saveStep");
+                }}
               />
-
+              <Button
+                text="Performans ödevi"
+                onPress={() => {
+                  handleChange("type", "performance");
+                  setBottomSheetType("saveStep");
+                }}
+              />
+            </Buttons>
+          </View>
+        );
+      case "selectClassStep":
+        return (
+          <View style={{ flex: 1, gap: 50 }}>
+            <IconButton
+              icon={faAngleLeft}
+              style={{ justifyContent: "flex-start" }}
+              onPress={() => setBottomSheetType("saveStep")}
+            />
+            <Loading loading={loadingClassRooms}>
               <Buttons>
-                <Button
-                  text="Günlük ödev"
-                  onPress={() => {
-                    handleChange("type", "daily");
-                    setBottomSheetType("saveStep");
-                  }}
-                />
-                <Button
-                  text="Performans ödevi"
-                  onPress={() => {
-                    handleChange("type", "performance");
-                    setBottomSheetType("saveStep");
-                  }}
-                />
+                {classRooms.map((item, index) => (
+                  <Button
+                    key={index}
+                    text={item.name}
+                    onPress={() => {
+                      if (registerDto?.classroomId?.includes(item.id as string)) {
+                        setSelectedClassRooms(selectedClassRooms.filter(classroom => classroom.id !== item.id));
+                        removeClassRoom(item.id as string);
+                      }
+                      else {
+                        setSelectedClassRooms([...selectedClassRooms, item]);
+                        handleChange("classroomId", item.id as string);
+                      }
+                    }}
+                  />
+                ))}
               </Buttons>
-            </View>
-          )}
-          {
-            bottomSheetType === "startCalendarStep" && <StartDateCalendar />
-          }
-          {
-            bottomSheetType === "endCalendarStep" && <EndDateCalendar />
-          }
-          {
-            bottomSheetType === "selectClassroom" && <View style={{ flex: 1, gap: 50 }}>
-              <IconButton
-                icon={faAngleLeft}
-                style={{ justifyContent: "flex-start" }}
-                onPress={() => setBottomSheetType("saveStep")}
-              />
-              <Loading loading={loadingClassRooms}>
+            </Loading>
+          </View>
+        );
+      case "startCalendarStep":
+        return <StartDateCalendar />;
+      case "endCalendarStep":
+        return <EndDateCalendar />;
+      case "selectStudentStep":
 
-                <Buttons>
-                  {classRooms.map((item, index) => (
-                    <Button
-                      key={index}
-                      text={item.name}
-                      onPress={() => {
-                        handleChange("classroomId", item.id as string);
-                        setBottomSheetType("saveStep");
-                      }}
-                    />
-                  ))}
-                </Buttons>
-              </Loading>
 
-            </View>
-          }
-          {
-            bottomSheetType === "selectStudentStep" && <View style={{ flex: 1, gap: 50 }}>
+        return (
+          <View style={{ flex: 1, gap: 50 }}>
+            <IconButton
+              icon={faAngleLeft}
+              style={{ justifyContent: "flex-start" }}
+              onPress={() => setBottomSheetType("saveStep")}
+            />
+            <Loading loading={loadingStudents}>
+              <Buttons>
+                {students.map((item, index) => (
+                  <Button
+                    key={index}
+                    backgroundColor={registerDto?.studentId?.includes(item.id as string) ? colors.activeBorder : undefined}
+                    text={item.firstName}
+                    onPress={() => {
+                      if (registerDto?.studentId?.includes(item.id as string)) {
+                        setSelectedStudents(selectedStudents.filter(student => student.id !== item.id));
+                        removeStudent(item.id as string);
+                      }
+                      else {
+                        setSelectedStudents([...selectedStudents, item]);
+                        handleChange("studentId", item.id as string);
+                      }
+                    }}
+                  />
+                ))}
+              </Buttons>
+            </Loading>
+          </View>
+        );
+      case "photoStep":
+        return <PhotoButtonContent />;
+      default:
+        return null;
+    }
+  }
 
-              <IconButton
-                icon={faAngleLeft}
-                style={{ justifyContent: "flex-start" }}
-                onPress={() => setBottomSheetType("saveStep")}
-              />
-              <Loading loading={loadingStudents}>
 
-                <Buttons>
-                  {students.map((item, index) => (
-                    <Button
-                      key={index}
-                      text={item.firstName}
-                      onPress={() => {
-                        handleChange("classroomId", item.id as string);
-                        setBottomSheetType("saveStep");
-                      }}
-                    />
-                  ))}
-                </Buttons>
-              </Loading>
 
-            </View>
-          }
+  const AddHomeworkContent = () => {
+    return (
+      <Container p={10} type='container'>
+        <ScrollView
+          contentContainerStyle={{
+            flexGrow: 1,
+            backgroundColor: colors.background,
+          }}
+          showsHorizontalScrollIndicator={false}
+          showsVerticalScrollIndicator={false}>
+          <RenderItem />
         </ScrollView>
+        {bottomSheetType === "saveStep" && <View >
+          <Button
+            borderRadius={10}
+            onPress={() => {
+              handleAddHomework();
+            }}
+            text={t("SAVE")}
+          ></Button>
+        </View>}
       </Container>
     )
   }
 
+  const handleAddHomework = () => {
+    let isEmpty = formRef.current?.validate(getResourceByKey('addHomeworksForm'));
+
+  }
 
   const getSnapPoints = () => {
-    if (bottomSheetType === "selectTypeStep") {
+    if (bottomSheetType === "typeStep" || bottomSheetType === "photoStep") {
       return ['50%', '40%'];
-    } else if (bottomSheetType === "selectClassroom" || bottomSheetType === "selectStudentStep") {
+    } else if (bottomSheetType === "selectClassStep" || bottomSheetType === "selectStudentStep") {
       return ['90%', '80%'];
     }
     else if (bottomSheetType === "startCalendarStep" || bottomSheetType === "endCalendarStep") {
       return ['60%', '55%'];
     }
     else {
-      return ['70%', '80%'];
+      return ['80%', '95%'];
     }
   };
 
@@ -463,9 +487,6 @@ export default function CalendarScreen() {
       </CustomBottomSheet>
       <CustomBottomSheet ref={addHomeworkBottomSheetRef} snapPoints={getSnapPoints()}>
         <AddHomeworkContent />
-      </CustomBottomSheet>
-      <CustomBottomSheet snapPoints={['20%', '40%']} ref={photoButtonRef}>
-        <PhotoButtonContent />
       </CustomBottomSheet>
     </Container>
   );
@@ -607,7 +628,6 @@ const ImageContainer = styled(View)`
 const Buttons = styled(View)`
   flex-direction: column;
   gap: 10px;
-  margin-horizontal: 10px;
 `;
 const StyledImage = styled(Image)`
   width: 100px;

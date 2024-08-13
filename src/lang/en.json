@@ -168,5 +168,13 @@
     "HOMEWORK_UPLOAD": "Upload homework",
     "HOMEWORK_UPLOAD_SUCCESS": "Homework uploaded successfully",
     "HOMEWORK_UPLOAD_ERROR": "Homework could not be uploaded"
+  },
+  "addHomeworksForm": {
+    "title": "Please enter the title",
+    "dueDate": "Please enter the due date",
+    "description": "Please enter the description",
+    "type": "Please select the type",
+    "class": "Please select the class",
+    "student": "Please select the student"
   }
 }

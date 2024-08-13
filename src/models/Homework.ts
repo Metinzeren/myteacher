@@ -6,8 +6,8 @@ interface Homework {
     isCompleted: boolean;
     type: string;
     teacherId: string;
-    classroomId?: string;
-    studentId?: string;
+    classroomId?: string[];
+    studentId?: string[];
     startDate: string;
     photo: string[];
 }

@@ -175,5 +175,13 @@
     "HOMEWORK_UPLOAD": "Ödev yükle",
     "HOMEWORK_UPLOAD_SUCCESS": "Ödev başarıyla yüklendi",
     "HOMEWORK_UPLOAD_ERROR": "Ödev yüklenemedi"
+  },
+  "addHomeworksForm": {
+    "title": "Please enter the title",
+    "dueDate": "Please enter the due date",
+    "description": "Please enter the description",
+    "type": "Please select the type",
+    "class": "Please select the class",
+    "student": "Please select the student"
   }
 }

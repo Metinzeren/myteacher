@@ -254,7 +254,6 @@ export default function AddHomeWorkContent() {
                 id="description"
                 placeholder="Ödev açıklaması"
                 icon={faUser}
-                multiline
               />
               <PlaceholderInput
                 onPress={() => {

@@ -52,8 +52,7 @@ const HomeworkProvider = ({children}: HomeworkProviderProps) => {
       setBottomSheetType,
       handleChangeHomeWork,
     };
-  }, [bottomSheetType, homework, setHomework, handleChangeHomeWork]);
-  console.log(homework.classRoom, 'homework.classRoom');
+  }, [bottomSheetType, handleChangeHomeWork]);
   return (
     <HomeworkContext.Provider value={value}>
       {children}

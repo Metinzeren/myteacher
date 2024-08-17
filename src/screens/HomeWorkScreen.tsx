@@ -15,7 +15,6 @@ import styled from 'styled-components';
 import Button from '../components/Button/Button';
 import {useTranslation} from 'react-i18next';
 import {getResourceByKey} from '../lang/i18n';
-import {useHomeworks} from '../context/HomeworkContext';
 import AddHomeWorkContent from '../BottomSheetContents/AddHomeWorkContent';
 
 export default function CalendarScreen() {

@@ -1,12 +1,12 @@
-import { View, Text, Keyboard } from 'react-native';
-import React, { useRef, useState } from 'react';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
+import {View, Text, Keyboard} from 'react-native';
+import React, {useRef, useState} from 'react';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
 import Container from '../components/Container/Container';
-import FormContainer, { FormContainerRef } from '../components/FormContainer';
+import FormContainer, {FormContainerRef} from '../components/FormContainer';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
-import { faPlus, faQuestion, faUser } from '@fortawesome/free-solid-svg-icons';
+import {faPlus, faQuestion, faUser} from '@fortawesome/free-solid-svg-icons';
 import Questions from '../models/Questions';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
@@ -18,10 +18,10 @@ import useThemeColors from '../constant/useColor';
 import AnswerForm from '../components/AnswerForm/AnswerForm';
 import AnswerList from '../components/AnswerList/AnswerList';
 import Loading from '../components/Loading/Loading';
-import { getUserId } from '../utils/AsyncStorageUtils';
-import { useQuestions } from '../context/StudentEvulationContext';
-import { t } from 'i18next';
-import { useTranslation } from 'react-i18next';
+import {getUserId} from '../utils/AsyncStorageUtils';
+import {useQuestions} from '../context/StudentEvulationContext';
+import {t} from 'i18next';
+import {useTranslation} from 'react-i18next';
 
 export default function AddStudentEvulationScreen(
   props: NativeStackScreenProps<
@@ -30,10 +30,10 @@ export default function AddStudentEvulationScreen(
   >,
 ) {
   const colors = useThemeColors();
-  const { t } = useTranslation()
+  const {t} = useTranslation();
   const formRef = useRef<FormContainerRef>(null);
   const [loading, setLoading] = useState(false);
-  const [loadingButton, setLoadingButton] = useState(false)
+  const [loadingButton, setLoadingButton] = useState(false);
   const [registerDto, setRegisterDto] = useState<Questions>({
     id: '',
     name: '',
@@ -49,19 +49,20 @@ export default function AddStudentEvulationScreen(
       [key]: value,
     });
   };
-  const { addQuestion } = useQuestions()
+  const {addQuestion} = useQuestions();
   const handleAddQuestion = async () => {
     let isEmpty = formRef.current?.validate();
-    let userId = await getUserId()
-    let addedUserIdFromTeacher = { ...registerDto, teacherId: [userId] };
-
+    let userId = await getUserId();
+    let addedUserIdFromTeacher = {...registerDto, teacherId: [userId]};
 
     if (isEmpty) {
       Keyboard.dismiss();
       setLoadingButton(true);
-      const entity = await questionRepo.addQuestion(addedUserIdFromTeacher as any);
+      const entity = await questionRepo.addQuestion(
+        addedUserIdFromTeacher as any,
+      );
       setLoadingButton(false);
-      addQuestion(entity as any)
+      addQuestion(entity as any);
 
       AlertDialog.showModal({
         title: t('SUCCESS'),
@@ -87,44 +88,43 @@ export default function AddStudentEvulationScreen(
     handleChange('answer', newAnswers);
   };
 
-
   return (
-    <Container goBackShow header title={t("QUESTION_ADD")}>
-      <Container p={10} type='container'>
+    <Container goBackShow header title={t('QUESTION_ADD')}>
+      <Container p={10} type="container">
         <Loading loading={loading}>
           <EvulationContainer>
-            <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
+            <FormContainer style={{gap: 20}} formContainerRef={formRef}>
               <CustomText color="primaryText" fontSizes="body4">
-                {t("WRITE_QUESTION")}
+                {t('WRITE_QUESTION')}
               </CustomText>
               <Input
                 required
                 id="name"
-                placeholder={t("WRITE_QUESTION")}
+                placeholder={t('WRITE_QUESTION')}
                 icon={faQuestion}
                 value={registerDto?.name}
                 onChangeText={e => handleChange('name', e)}
               />
               <CustomText color="primaryText" fontSizes="body4">
-                {t("CHOOSE_QUESTION_TYPE")}
+                {t('CHOOSE_QUESTION_TYPE')}
               </CustomText>
               <ButtonContainer>
                 <Button
-                  style={{ flex: 1 }}
+                  style={{flex: 1}}
                   outline={registerDto.questionType === 'rating' ? false : true}
-                  text={t("QUESTION_TYPE_STAR")}
+                  text={t('QUESTION_TYPE_STAR')}
                   onPress={() => handleChange('questionType', 'rating')}
                 />
                 <Button
                   outline={registerDto.questionType === 'option' ? false : true}
-                  text={t("QUESTION_TYPE_OPTIONAL")}
-                  style={{ flex: 1 }}
+                  text={t('QUESTION_TYPE_OPTIONAL')}
+                  style={{flex: 1}}
                   onPress={() => handleChange('questionType', 'option')}
                 />
                 <Button
-                  style={{ flex: 1 }}
+                  style={{flex: 1}}
                   outline={registerDto.questionType === 'text' ? false : true}
-                  text={t("QUESTION_TYPE_TEXT")}
+                  text={t('QUESTION_TYPE_TEXT')}
                   onPress={() => handleChange('questionType', 'text')}
                 />
               </ButtonContainer>
@@ -132,7 +132,7 @@ export default function AddStudentEvulationScreen(
               {registerDto.questionType === 'option' && (
                 <AnswerContainer>
                   <CustomText fontSizes="body4" color="primaryText">
-                    {t("ANSWER_TYPE")}
+                    {t('ANSWER_TYPE')}
                   </CustomText>
                   <View
                     style={{
@@ -147,14 +147,14 @@ export default function AddStudentEvulationScreen(
                     }}>
                     <RadioButton
                       checked={registerDto.answerType === 'single'}
-                      label={t("QUESTION_TYPE_SINGULAR")}
+                      label={t('QUESTION_TYPE_SINGULAR')}
                       onPress={() => {
                         handleChange('answerType', 'single');
                       }}
                     />
                     <RadioButton
                       checked={registerDto.answerType === 'multiple'}
-                      label={t("QUESTION_TYPE_MULTIPLE")}
+                      label={t('QUESTION_TYPE_MULTIPLE')}
                       onPress={() => {
                         handleChange('answerType', 'multiple');
                       }}
@@ -162,14 +162,23 @@ export default function AddStudentEvulationScreen(
                   </View>
                   <AnswerHeader>
                     <CustomText color="primaryText" fontSizes="body4">
-                      {t("ANSWER_ADD")}
+                      {t('ANSWER_ADD')}
                     </CustomText>
-                    <IconButton icon={faPlus} onPress={() => setShowForm(true)} />
+                    <IconButton
+                      icon={faPlus}
+                      onPress={() => setShowForm(true)}
+                    />
                   </AnswerHeader>
                   {showForm && (
-                    <AnswerForm onAddAnswer={handleAddAnswer} onClose={() => setShowForm(false)} />
+                    <AnswerForm
+                      onAddAnswer={handleAddAnswer}
+                      onClose={() => setShowForm(false)}
+                    />
                   )}
-                  <AnswerList answers={answers} onDeleteAnswer={handleDeleteAnswer} />
+                  <AnswerList
+                    answers={answers}
+                    onDeleteAnswer={handleDeleteAnswer}
+                  />
                 </AnswerContainer>
               )}
             </FormContainer>
@@ -184,7 +193,6 @@ export default function AddStudentEvulationScreen(
           </EvulationContainer>
         </Loading>
       </Container>
-
     </Container>
   );
 }
@@ -204,5 +212,5 @@ const AnswerHeader = styled(View)`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  margin-bottom:10px;
+  margin-bottom: 10px;
 `;

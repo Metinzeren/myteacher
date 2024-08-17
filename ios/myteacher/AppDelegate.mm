@@ -7,14 +7,18 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   self.moduleName = @"myteacher";
-  [RNSplashScreen show];
+ 
   // You can add your custom initial props in the dictionary below.
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
  if ([FIRApp defaultApp] == nil) {
     [FIRApp configure];
   }
-  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+  BOOL isStart = [super application:application didFinishLaunchingWithOptions:launchOptions];
+  if (isStart == YES) {
+    [RNSplashScreen show];
+  }
+  return isStart;
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge

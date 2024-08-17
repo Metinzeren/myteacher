@@ -1,15 +1,17 @@
+import HomeWorkClassRoom from './HomeWorkClassRoom';
+
+export type HomeWorkType = 'Quiz' | 'Test' | 'Project' | 'Other';
 interface Homework {
-    id: string;
-    title: string;
-    description: string;
-    endDate: string;
-    isCompleted: boolean;
-    type: string;
-    teacherId: string;
-    classroomId?: string[];
-    studentId?: string[];
-    startDate: string;
-    photo: string[];
+  id: string;
+  homeworkTitle: string;
+  description: string;
+  teacherId: string;
+  classRoom: HomeWorkClassRoom[];
+  startDate: string;
+  endDate: string;
+  homeWorkType: HomeWorkType;
+  createdAt: string;
+  photos: string[];
 }
 
 export default Homework;

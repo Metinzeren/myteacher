@@ -5,16 +5,18 @@ import {
   Image,
   Platform,
   TouchableOpacity,
+  Keyboard,
 } from 'react-native';
-import React, {useEffect, useRef} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
-import {useTranslation} from 'react-i18next';
-import {BottomSheetScrollView} from '@gorhom/bottom-sheet';
+import { useTranslation } from 'react-i18next';
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import styled from 'styled-components';
 import Button from '../components/Button/Button';
-import FormContainer, {FormContainerRef} from 'react-native-form-container';
+import FormContainer, { FormContainerRef } from 'react-native-form-container';
 import CustomText from '../components/Text/Text';
 import IconButton from '../components/IconButton/IconButton';
+import uuid from 'react-native-uuid';
 import {
   faAngleLeft,
   faCalendar,
@@ -29,26 +31,36 @@ import PlaceholderInput from '../components/PlaceholderInput/PlaceholderInput';
 import usePhoto from '../hooks/usePhoto';
 import Modal from 'react-native-modals';
 
-import {useHomeworks} from '../context/HomeworkContext';
+import { useHomeworks } from '../context/HomeworkContext';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import ClassRoom from '../models/ClassRoom';
 import Loading from '../components/Loading/Loading';
 import CheckboxButton from '../components/CheckboxButton/CheckboxButton';
-import {Calendar} from 'react-native-calendars';
+import { Calendar } from 'react-native-calendars';
 import dayjs from 'dayjs';
 import HomeWorkClassRoom from '../models/HomeWorkClassRoom';
 import Student from '../models/Student';
+import { getUserAccesToken, getUserId } from '../utils/AsyncStorageUtils';
+import { addHomeworkandSendNotification, sendNotification } from '../firebase/FirebaseApi';
+import { create } from 'react-test-renderer';
+import { getResourceByKey } from '../lang/i18n';
+import { initStorage } from '../firebase/config';
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
+import AlertDialog from '../components/AlertDialog/AlertDialog';
+import { HomeWorkType } from '../models/Homework';
+import NotificationModel from '../models/NotificationModel';
 
 export default function AddHomeWorkContent() {
-  const {t} = useTranslation();
-  const {setBottomSheetType, bottomSheetType, homework, handleChangeHomeWork} =
+  const { t } = useTranslation();
+  const { setBottomSheetType, bottomSheetType, homework, handleChangeHomeWork, setHomework } =
     useHomeworks();
   const formRef = useRef<FormContainerRef>(null);
   const today = new Date().toISOString().split('T')[0];
-  const {photos, deletePhoto, initLaunchCamera, initLaunchImage} = usePhoto();
+  const { photos, deletePhoto, initLaunchCamera, initLaunchImage, setPhotos } = usePhoto();
   const [startDateShow, setStartDateShow] = React.useState(false);
   const [endDateShow, setEndDateShow] = React.useState(false);
   const classRoomRepo = ClassRoomRepository.getInstance();
+  const [loadingAddHomework, setLoadingAddHomework] = useState(false)
   const [loading, setLoading] = React.useState(true);
   const [classRooms, setClassRooms] = React.useState<Array<ClassRoom>>([]);
   const [selectedClassRoom, setSelectedClassRoom] = React.useState<ClassRoom>(
@@ -68,6 +80,8 @@ export default function AddHomeWorkContent() {
         setLoading(false);
       });
   };
+
+
   const ClassRoomListStep = () => {
     return (
       <Container type="container" p={10} bgColor="white">
@@ -77,7 +91,7 @@ export default function AddHomeWorkContent() {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <View style={{position: 'absolute', left: 0}}>
+          <View style={{ position: 'absolute', left: 0 }}>
             <IconButton
               icon={faAngleLeft}
               onPress={() => setBottomSheetType('saveStep')}
@@ -121,7 +135,7 @@ export default function AddHomeWorkContent() {
             alignItems: 'center',
             justifyContent: 'center',
           }}>
-          <View style={{position: 'absolute', left: 0}}>
+          <View style={{ position: 'absolute', left: 0 }}>
             <IconButton
               icon={faAngleLeft}
               onPress={() => setBottomSheetType('classRoomList')}
@@ -143,7 +157,7 @@ export default function AddHomeWorkContent() {
       </Container>
     );
   };
-  const StudentCard = ({index, student}: {index: number; student: Student}) => {
+  const StudentCard = ({ index, student }: { index: number; student: Student }) => {
     let findClassRoom = homework.classRoom.find(
       classRoom => classRoom.id === selectedClassRoom.id,
     );
@@ -187,12 +201,124 @@ export default function AddHomeWorkContent() {
       </CheckboxContainer>
     );
   };
+  const sendNotificationToParents = async ({
+    id,
+    notificationType,
+  }: {
+    id: string;
+    notificationType: string;
+  }) => {
+    let userId = await getUserId();
+    let parentIds = selectedClassRoom.students.map(x => x.parentId);
+    let data = {
+      from: userId,
+      to: parentIds,
+      data: {
+        id,
+        notificationType,
+        studentId: '',
+        classRoomId: '',
+        isTranslate: '',
+      },
+      title: homework.homeworkTitle,
+      body: homework.description,
+    } as NotificationModel;
+    await sendNotification(data)
+      .then(e => {
+        console.log('Notification sent:' + e);
+      })
+      .catch(e => {
+        console.log('Notification error:' + e);
+      });
+  };
+
+  const handleSaveHomework = async () => {
+    let isEmpty = formRef.current?.validate(getResourceByKey('addHomeworksForm'));
+    if (!isEmpty) {
+      return;
+    }
+    setLoadingAddHomework(true)
+    let userId = await getUserId();
+    let accessToken = await getUserAccesToken();
+    Keyboard.dismiss();
+    let photoUrls = [];
+
+    if (photos && photos.length > 0) {
+      for (let i = 0; i < photos.length; i++) {
+        let photo = photos[i];
+        let bytes = await fetch(photo).then(res => res.blob());
+        let storageRef = ref(
+          initStorage,
+          `homeworkPhotos/${userId}/${uuid.v4().toString()}`,
+        );
+        await uploadBytes(storageRef, bytes);
+        let downloadUrl = await getDownloadURL(storageRef);
+        photoUrls.push(downloadUrl);
+      }
+    }
+
+    let data = {
+      homeworkTitle: homework.homeworkTitle,
+      description: homework.description,
+      classRoom: homework.classRoom,
+      startDate: homework.startDate,
+      endDate: homework.endDate,
+      homeWorkType: homework.homeWorkType,
+      photos: photoUrls,
+      teacherId: userId,
+      id: uuid.v4().toString(),
+      createdAt: new Date().toISOString(),
+    }
+    if (accessToken) {
+      try {
+        await addHomeworkandSendNotification({
+          data: data,
+          accessToken: accessToken,
+        });
+        await sendNotificationToParents({
+          id: data.id,
+          notificationType: 'homework',
+        });
+      } catch (error) {
+        console.error('Error during add homework:', error);
+      }
+      finally {
+        setLoadingAddHomework(false)
+        AlertDialog.showModal({
+          title: t('SUCCESS'),
+          message: t('CLASS_ADD_SUCCESS'),
+          onConfirm() {
+          },
+          disableCloseOnTouchOutside: true,
+        });
+        setHomework({
+          id: '',
+          homeworkTitle: '',
+          description: '',
+          teacherId: '',
+          classRoom: [] as HomeWorkClassRoom[],
+          startDate: dayjs().format('YYYY-MM-DD'),
+          endDate: dayjs().format('YYYY-MM-DD'),
+          homeWorkType: '' as HomeWorkType,
+          createdAt: '',
+          photos: [],
+        })
+        setPhotos([]);
+      }
+
+    }
+
+  }
+
+
+
+
   return (
-    <>
+    <Loading loading={loadingAddHomework}>
       {bottomSheetType === 'saveStep' ? (
         <Container bgColor="white" p={10} type="container">
           <BottomSheetScrollView>
-            <FormContainer style={{gap: 10}} formContainerRef={formRef}>
+            <FormContainer style={{ gap: 10 }} formContainerRef={formRef}>
               <View>
                 <CustomText fontSizes="body4" color="primaryText">
                   {t('ADD_PHOTO')}{' '}
@@ -216,10 +342,10 @@ export default function AddHomeWorkContent() {
                 </IconContainer>
                 <ImageContainer>
                   {
-                    <ScrollView horizontal contentContainerStyle={{gap: 10}}>
+                    <ScrollView horizontal contentContainerStyle={{ gap: 10 }}>
                       {photos.map((photo, index) => (
-                        <View>
-                          <StyledImage key={index} source={{uri: photo}} />
+                        <View key={index}>
+                          <StyledImage source={{ uri: photo }} />
                           <DeleteIconContainer>
                             <IconButton
                               iconSize={15}
@@ -263,10 +389,10 @@ export default function AddHomeWorkContent() {
                   homework.classRoom.length === 0
                     ? ''
                     : homework.classRoom
-                        .map(x => {
-                          return x.className;
-                        })
-                        .join(', ')
+                      .map(x => {
+                        return x.className;
+                      })
+                      .join(', ')
                 }
                 icon={faUser}
                 placeholder="Öğrenci Seçimi"
@@ -279,7 +405,7 @@ export default function AddHomeWorkContent() {
                   flexDirection: 'row',
                   gap: 10,
                 }}>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <PlaceholderInput
                     icon={faCalendar}
                     placeholder="Başlangıç Tarihi"
@@ -289,7 +415,7 @@ export default function AddHomeWorkContent() {
                     id="startDate"
                   />
                 </View>
-                <View style={{flex: 1}}>
+                <View style={{ flex: 1 }}>
                   <PlaceholderInput
                     icon={faCalendar}
                     onPress={() => setEndDateShow(true)}
@@ -308,26 +434,26 @@ export default function AddHomeWorkContent() {
                 <Button
                   onPress={() => handleChangeHomeWork('homeWorkType', 'Quiz')}
                   outline={homework.homeWorkType !== 'Quiz'}
-                  style={{flex: 1}}
+                  style={{ flex: 1 }}
                   text="Quiz"
                 />
                 <Button
                   onPress={() => handleChangeHomeWork('homeWorkType', 'Test')}
                   outline={homework.homeWorkType !== 'Test'}
                   text={'Test'}
-                  style={{flex: 1}}
+                  style={{ flex: 1 }}
                 />
               </ButtonContainer>
             </FormContainer>
           </BottomSheetScrollView>
-          <View style={{marginBottom: Platform.OS === 'ios' ? 20 : 10}}>
-            <Button text="Kaydet" />
+          <View style={{ marginBottom: Platform.OS === 'ios' ? 20 : 10 }}>
+            <Button onPress={() => handleSaveHomework()} text={t("SAVE")} />
           </View>
           <Modal
             onTouchOutside={() => {
               setStartDateShow(false);
             }}
-            style={{padding: 10}}
+            style={{ padding: 10 }}
             visible={startDateShow}>
             <Calendar
               initialDate={homework.startDate ? homework.startDate : today}
@@ -345,7 +471,7 @@ export default function AddHomeWorkContent() {
             onTouchOutside={() => {
               setEndDateShow(false);
             }}
-            style={{padding: 10}}
+            style={{ padding: 10 }}
             visible={endDateShow}>
             <Calendar
               minDate={homework.endDate ? homework.endDate : today}
@@ -361,7 +487,7 @@ export default function AddHomeWorkContent() {
       ) : (
         <StudentListStep />
       )}
-    </>
+    </Loading>
   );
 }
 

@@ -46,3 +46,18 @@ export const sendconfirmAbsenceNotification = async ({ data, accessToken }: { da
   };
   return axios.request(config);
 }
+
+export const addHomeworkandSendNotification = async ({ data, accessToken }: { data: any, accessToken: any }) => {
+
+  let config = {
+    method: 'post',
+    maxBodyLength: Infinity,
+    url: 'https://europe-west1-my-teacher-553bb.cloudfunctions.net/addHomework',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${accessToken}`,
+    },
+    data: data,
+  };
+  return axios.request(config);
+}

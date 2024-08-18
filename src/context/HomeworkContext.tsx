@@ -1,7 +1,7 @@
 // HomeworkContext.tsx
 
-import React, {createContext, useContext, useMemo, useState} from 'react';
-import Homework, {HomeWorkType} from '../models/Homework';
+import React, { createContext, useContext, useMemo, useState } from 'react';
+import Homework, { HomeWorkType } from '../models/Homework';
 import HomeWorkClassRoom from '../models/HomeWorkClassRoom';
 import dayjs from 'dayjs';
 
@@ -11,11 +11,12 @@ interface HomeworkContextProps {
   setBottomSheetType: (type: BottomSheetType) => void;
   homework: Homework;
   handleChangeHomeWork: (key: keyof Homework, value: string) => void;
+  setHomework: (homework: Homework) => void;
 }
 
 const initialState: HomeworkContextProps = {
   bottomSheetType: 'saveStep',
-  setBottomSheetType: () => {},
+  setBottomSheetType: () => { },
   homework: {
     id: '',
     homeworkTitle: '',
@@ -28,7 +29,8 @@ const initialState: HomeworkContextProps = {
     createdAt: '',
     photos: [],
   },
-  handleChangeHomeWork: () => {},
+  handleChangeHomeWork: () => { },
+  setHomework: () => { }
 };
 
 const HomeworkContext = createContext<HomeworkContextProps>(initialState);
@@ -37,13 +39,13 @@ interface HomeworkProviderProps {
   children: React.ReactNode;
 }
 
-const HomeworkProvider = ({children}: HomeworkProviderProps) => {
+const HomeworkProvider = ({ children }: HomeworkProviderProps) => {
   const [bottomSheetType, setBottomSheetType] = useState<BottomSheetType>(
     initialState.bottomSheetType,
   );
   const [homework, setHomework] = useState<Homework>(initialState.homework);
   const handleChangeHomeWork = (key: keyof Homework, value: string) => {
-    setHomework(prev => ({...prev, [key]: value}));
+    setHomework(prev => ({ ...prev, [key]: value }));
   };
   const value = useMemo(() => {
     return {
@@ -51,6 +53,7 @@ const HomeworkProvider = ({children}: HomeworkProviderProps) => {
       bottomSheetType,
       setBottomSheetType,
       handleChangeHomeWork,
+      setHomework
     };
   }, [bottomSheetType, handleChangeHomeWork]);
   return (

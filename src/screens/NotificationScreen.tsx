@@ -84,7 +84,7 @@ export default function NotificationScreen(
     });
   };
 
-  // yok buldum zaten
+
   const RenderItem = ({ item, index }: { item: NotificationResponse; index: number }) => {
 
     const getNotificationTitle = () => {

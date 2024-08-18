@@ -11,7 +11,7 @@ interface Homework {
   endDate: string;
   homeWorkType: HomeWorkType;
   createdAt: string;
-  photos: string[];
+  photos?: string[];
 }
 
 export default Homework;

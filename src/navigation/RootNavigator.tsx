@@ -1,13 +1,13 @@
-import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
+import { TransitionPresets, createStackNavigator } from '@react-navigation/stack';
 
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ForgotPasswordScreen from '../screens/ForgotPassword';
-import {useEffect, useState} from 'react';
-import {onAuthStateChanged} from 'firebase/auth';
-import {auth} from '../firebase/config';
+import { useEffect, useState } from 'react';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase/config';
 import HomeScreen from '../screens/HomeScreen';
-import {RootStackParamList} from '../types/Navigation';
+import { RootStackParamList } from '../types/Navigation';
 import StudentsScreen from '../screens/StudentsScreen';
 import AddStudentScreen from '../screens/AddStudentScreen';
 import CalendarScreen from '../screens/HomeWorkScreen';
@@ -18,7 +18,7 @@ import AddClassScreen from '../screens/AddClassScreen';
 import UpdateClassScreen from '../screens/UpdateClassScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import StudentEvulationScreen from '../screens/StudentEvulationScreen';
-import {getLocalStorage, setLocalStorage} from '../utils/AsyncStorageUtils';
+import { getLocalStorage, setLocalStorage } from '../utils/AsyncStorageUtils';
 import AddStudentEvulationScreen from '../screens/AddStudentEvulationScreen';
 import UpdateStudentEvulationScreen from '../screens/UpdateStudentEvulationScreen';
 import AddAbsenceScreen from '../screens/AddAbsenceScreen';
@@ -38,7 +38,7 @@ const RootNavigator = () => {
           let userFromUserCollection = await userRepository.getUser(user.uid);
           setUserRole(userFromUserCollection.role);
 
-          let concatUser = {...user, userCollection: userFromUserCollection};
+          let concatUser = { ...user, userCollection: userFromUserCollection };
           await setLocalStorage('authUser', concatUser);
         } catch (error) {
           console.error('Error during auth state change:', error);
@@ -50,8 +50,9 @@ const RootNavigator = () => {
         } catch (error) {
           console.error('Error during auth state change:', error);
         }
-        SplashScreen.hide();
       }
+      SplashScreen.hide();
+
     };
 
     const unsubscribe = onAuthStateChanged(auth, handleAuthStateChange);

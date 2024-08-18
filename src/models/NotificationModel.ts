@@ -1,6 +1,6 @@
 interface NotificationModel {
   from: string;
-  to: string;
+  to: string[];
   data: {
     id: string;
     notificationType: string;

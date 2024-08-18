@@ -1,6 +1,6 @@
-import {View, Text, PermissionsAndroid} from 'react-native';
-import React, {useState} from 'react';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { View, Text, PermissionsAndroid } from 'react-native';
+import React, { useState } from 'react';
+import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
 export default function usePhoto() {
   const [photos, setPhotos] = useState<string[]>([]);
@@ -67,5 +67,5 @@ export default function usePhoto() {
     let newPhotos = photos.filter((photo, i) => i !== index);
     setPhotos(newPhotos);
   };
-  return {photos, deletePhoto, initLaunchImage, initLaunchCamera};
+  return { photos, deletePhoto, initLaunchImage, initLaunchCamera, setPhotos };
 }

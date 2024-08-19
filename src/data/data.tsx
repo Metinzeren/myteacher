@@ -2,31 +2,32 @@ import BookSvgIcon from '../assets/icons/BookSvgIcon';
 import GroupSvgIcon from '../assets/icons/GroupSvgIcon';
 import LogoutSvgIcon from '../assets/icons/LogoutSvgIcon';
 import ScheduleSvgIcon from '../assets/icons/ScheduleSvgIcon';
+import { ICONS } from '../constant/theme';
 
 export const homeMenu = [
   {
     name: 'Sınıflar',
-    icon: <BookSvgIcon height={60} width={80} />,
+    icon: ICONS.HOME.class,
     link: 'ClassRoomScreen',
   },
   {
     name: 'Ödevler',
-    icon: <BookSvgIcon height={60} width={80} />,
+    icon: ICONS.HOME.homeworkIcon,
     link: 'CalendarScreen',
   },
   {
     name: 'Öğrenci Değerlendirme Soruları',
-    icon: <GroupSvgIcon height={60} width={80} />,
+    icon: ICONS.HOME.evaluation,
     link: 'StudentEvulationScreen',
   },
   {
     name: 'Öğrenci Devamsızlık',
-    icon: <ScheduleSvgIcon height={60} width={80} />,
+    icon: ICONS.HOME.calendar,
     link: 'AddAbsenceScreen',
   },
   {
     name: 'Çıkış Yap',
-    icon: <LogoutSvgIcon height={60} width={80} />,
+    icon: ICONS.HOME.exit,
     link: '',
   },
 ];

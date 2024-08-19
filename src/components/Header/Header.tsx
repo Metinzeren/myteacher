@@ -45,11 +45,6 @@ export default function Header({
         background: colors.primary,
       }}>
       <Container>
-        {isHome && (
-          <NameContainer>
-            <NameText adjustsFontSizeToFit={true}>{userName}</NameText>
-          </NameContainer>
-        )}
         {goBackShow && (
           <IconLeft
             hitSlop={15}

@@ -156,6 +156,12 @@
     "ABSENTEEISM_STATUS_REJECTED": "Your leave request has been rejected"
   },
   "homeworks": {
+    "HOMEWORK": "Homework",
+    "HOMEWORK_NOT_FOUND": "Homework not found",
+    "HOMEWORK_TITLE": "Homework title",
+    "HOMEWORK_DESCRIPTION": "Homework description",
+    "HOMEWORK_DUE_DATE": "Homework due date",
+    "HOMEWORK_TYPE": "Homework type",
     "HOMEWORK_ADD": "Add homework",
     "HOMEWORK_EDIT": "Edit homework",
     "HOMEWORK_DELETE": "Delete homework",

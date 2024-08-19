@@ -12,6 +12,8 @@ interface HomeworkContextProps {
   homework: Homework;
   handleChangeHomeWork: (key: keyof Homework, value: string) => void;
   setHomework: (homework: Homework) => void;
+  homeworks: Homework[];
+  setHomeworks: (homeworks: Homework[]) => void;
 }
 
 const initialState: HomeworkContextProps = {
@@ -30,7 +32,9 @@ const initialState: HomeworkContextProps = {
     photos: [],
   },
   handleChangeHomeWork: () => { },
-  setHomework: () => { }
+  setHomework: () => { },
+  homeworks: [],
+  setHomeworks: () => { },
 };
 
 const HomeworkContext = createContext<HomeworkContextProps>(initialState);
@@ -44,16 +48,31 @@ const HomeworkProvider = ({ children }: HomeworkProviderProps) => {
     initialState.bottomSheetType,
   );
   const [homework, setHomework] = useState<Homework>(initialState.homework);
+  const [homeworks, setHomeworks] = useState<Homework[]>(initialState.homeworks);
   const handleChangeHomeWork = (key: keyof Homework, value: string) => {
     setHomework(prev => ({ ...prev, [key]: value }));
   };
+
+  const addHomework = (homework: Homework) => {
+    setHomeworks([...homeworks, homework]);
+  }
+  const deleteHomework = (id: string) => {
+    const newHomeworksArray = homeworks.filter((e) => e.id !== id);
+    setHomeworks(newHomeworksArray);
+  }
+
+
   const value = useMemo(() => {
     return {
       homework,
       bottomSheetType,
       setBottomSheetType,
       handleChangeHomeWork,
-      setHomework
+      setHomework,
+      addHomework,
+      deleteHomework,
+      homeworks,
+      setHomeworks
     };
   }, [bottomSheetType, handleChangeHomeWork]);
   return (

@@ -1,14 +1,14 @@
-import {View, TouchableOpacity, Image, ScrollView} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, TouchableOpacity, Image, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CustomText from '../Text/Text';
 import useThemeColors from '../../constant/useColor';
 import dayjs from 'dayjs';
 
-import {useTranslation} from 'react-i18next';
-import {Flags} from '../../data/data';
+import { useTranslation } from 'react-i18next';
+import { Flags } from '../../data/data';
 import i18next from 'i18next';
-import {setLanguage, setLocalStorage} from '../../utils/AsyncStorageUtils';
+import { setLanguage, setLocalStorage } from '../../utils/AsyncStorageUtils';
 
 export default function Footer() {
   const colors = useThemeColors();
@@ -17,7 +17,7 @@ export default function Footer() {
   const [showOtherLanguages, setShowOtherLanguages] = useState(
     selectedLang ? false : true,
   );
-  const {t} = useTranslation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const selected = Flags.find(x => x.languageCode === i18next.language);
@@ -35,7 +35,7 @@ export default function Footer() {
             }}>
             <Image
               source={selectedLang?.languageIcon}
-              style={{width: 25, height: 25}}
+              style={{ width: 25, height: 25 }}
             />
             <CustomText color="tertiary">
               {selectedLang.languageName}
@@ -58,8 +58,8 @@ export default function Footer() {
                       setShowOtherLanguages(!showOtherLanguages);
                     }}>
                     <Image
-                      source={x.languageIcon}
-                      style={{width: 25, height: 25}}
+                      source={x?.languageIcon}
+                      style={{ width: 25, height: 25 }}
                     />
                     <CustomText color="tertiary">{x.languageName}</CustomText>
                   </FlagsContainer>
@@ -69,7 +69,7 @@ export default function Footer() {
           </View>
         )}
       </FooterHelpContainer>
-      <FooterText theme={{colors}}>
+      <FooterText theme={{ colors }}>
         © {dayjs().format('YYYY')} {t('copyright')}
       </FooterText>
     </FooterContainer>
@@ -79,11 +79,11 @@ const FooterContainer = styled(View)`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 `;
 const FooterText = styled(CustomText)`
   color: ${props => props.theme.colors.descriptionColor};
+  bottom: 10px;
 `;
 const FooterHelpContainer = styled(View)`
   display: flex;

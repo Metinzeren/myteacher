@@ -3,9 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import {
-  faAngleRight,
   faClose,
   faSearch,
 } from '@fortawesome/free-solid-svg-icons';
@@ -13,7 +11,6 @@ import useThemeColors from '../constant/useColor';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
 import { homeMenu } from '../data/data';
-import Button from '../components/Button/Button';
 import { signOut } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import Input from '../components/Input/Input';
@@ -24,20 +21,19 @@ import Loading from '../components/Loading/Loading';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import { useTranslation } from 'react-i18next';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
-
 import useFcmToken from '../hooks/useFcmToken';
 import DevicesRepository from '../repositories/DeviceRepository';
 import useUser from '../hooks/useUser';
 import Footer from '../components/Footer/Footer';
+import { SvgXml } from 'react-native-svg';
+import { ICONS, SIZES } from '../constant/theme';
 const HomeScreen = (
   props: NativeStackScreenProps<RootStackParamList, 'HomeScreen'>,
 ) => {
   const deviceRepo = DevicesRepository.getInstance();
   const classRoomRepo = ClassRoomRepository.getInstance();
   const { user } = useUser() as any;
-
   const { fcmToken } = useFcmToken();
-
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [searchStudent, setSearchStudent] = useState('');
@@ -74,8 +70,16 @@ const HomeScreen = (
             handleLogout();
           }
         }}>
-        <MenuItem>
-          <IconContainer>{item?.icon}</IconContainer>
+        <MenuItem theme={{
+          rtl: isLastItem && !isEven ? 'row' : 'column',
+          justifyContent: isLastItem && !isEven ? "flex-start" : "center",
+          minHeight: isLastItem && !isEven ? "auto" : "170px",
+        }}>
+          <SvgXml
+            height={100}
+            width={140}
+            xml={item.icon}
+          />
           <CustomText fontSizes="body5" color="primaryText" center>
             {item.name}
           </CustomText>
@@ -109,6 +113,7 @@ const HomeScreen = (
       userName={user ? user.firstName + ' ' + user.lastName : ''}
       showNotification={!focusToSearch}>
       <HomeTopContainer>
+
         <View style={{ flex: 1 }}>
           <Input
             autoCapitalize="none"
@@ -222,7 +227,6 @@ const HomeScreen = (
     </Container>
   );
 };
-const screenWidth = Dimensions.get('window').width;
 const HomeBottomContainer = styled(View)`
   flex: 1;
   flex-direction: row;
@@ -236,11 +240,6 @@ const NoSearchContainer = styled(View)`
   flex-direction: column;
 `;
 
-const IconContainer = styled(View)`
-  flex-direction: column;
-  align-items: center;
-  width: ${screenWidth * 0.3}px;
-`;
 const HomeTopContainer = styled(View)`
   margin-horizontal: 10px;
   margin-top: 10px;
@@ -251,12 +250,13 @@ const HomeTopContainer = styled(View)`
 `;
 const MenuItem = styled(View)`
   flex-basis: 80%;
-  height: 120px;
+  flex-direction: ${props => props.theme.rtl || "column"};
   margin: 10px;
+  min-height: ${props => props.theme.minHeight ?? "170px"};
   gap: 5px;
   padding: 15px;
   background-color: #fff;
-  justify-content: center;
+  justify-content: ${props => (props.theme.justifyContent ?? "center")};
   align-items: center;
   border-radius: 10px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);

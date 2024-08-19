@@ -163,6 +163,12 @@
     "ABSENTEEISM_STATUS_REJECTED": "İzin isteğiniz reddedildi"
   },
   "homeworks": {
+    "HOMEWORK": "Ödev",
+    "HOMEWORK_NOT_FOUND": "Ödev bulunamadı",
+    "HOMEWORK_TITLE": "Ödev başlığı",
+    "HOMEWORK_DESCRIPTION": "Ödev açıklaması",
+    "HOMEWORK_DUE_DATE": "Ödev teslim tarihi",
+    "HOMEWORK_TYPE": "Ödev türü",
     "HOMEWORK_ADD": "Ödev ekle",
     "HOMEWORK_EDIT": "Ödevi düzenle",
     "HOMEWORK_DELETE": "Ödevi sil",

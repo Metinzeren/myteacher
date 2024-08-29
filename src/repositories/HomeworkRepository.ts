@@ -29,22 +29,16 @@ class HomeworkRepository {
 
     private constructor() { }
 
-    async addHomework(homework: Homework) {
-        const homeworkDoc = doc(this.homeworkCollection);
-        homework.id = homeworkDoc.id;
-        await setDoc(homeworkDoc, homework);
-        return homework;
-    }
 
     async updateHomework(homework: Homework) {
-        if (!homework.id) {
-            throw new Error('Homework ID is required to update');
-        }
+        console.log(homework);
         const homeworkDoc = doc(this.homeworkCollection, homework.id);
         await setDoc(homeworkDoc, homework, { merge: true });
     }
 
     async deleteHomework(homeworkId: string) {
+        console.log(homeworkId);
+
         const homeworkDoc = doc(this.homeworkCollection, homeworkId);
         await deleteDoc(homeworkDoc);
     }

@@ -33,7 +33,16 @@ const initI18n = async () => {
       });
       return i18n;
     } else {
-      console.error('No language in AsyncStorage.');
+      await i18n.use(initReactI18next).init({
+        compatibilityJSON: 'v3',
+        resources,
+        lng: 'tr',
+        interpolation: {
+          escapeValue: false,
+        },
+        fallbackLng: 'tr',
+      });
+      return i18n;
     }
   } catch (error) {
     console.error('Error initializing i18n:', error);

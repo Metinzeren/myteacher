@@ -3,7 +3,7 @@ import useColorScheme from './useColorScheme';
 const Colors = {
   light: {
     background: '#f9f9f9',
-    primary: '#20B2AA',
+    primary: '#6557BB',
     text: '#FFF',
     secondary: '#a55eea',
     inputBorder: '#ebeff3',

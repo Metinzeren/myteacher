@@ -15,6 +15,8 @@ import {
   faWarning,
 } from '@fortawesome/free-solid-svg-icons';
 import CustomText from '../Text/Text';
+import LottieView from 'lottie-react-native';
+import { LOADING_ANIMATION } from '../../assets/animations/lottie/data';
 
 interface ModalProps {
   title?: string;
@@ -30,6 +32,73 @@ interface ModalProps {
 
 class AlertDialog {
   ids: any[] = [];
+
+  showSpecialLoading() {
+    const id = ModalPortal.show(
+      <Modal
+        visible={true}
+        onTouchOutside={() => {
+          ModalPortal.dismiss(id);
+        }}
+        modalStyle={{ backgroundColor: 'transparent' }}
+        overlayBackgroundColor={'black'}
+        modalAnimation={
+          new SlideAnimation({
+            slideFrom: 'bottom',
+          })
+        }>
+
+
+        <View
+          style={{
+            flex: 1,
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <LottieView
+            style={{ width: 300, height: 300 }}
+            autoPlay
+            loop
+            source={LOADING_ANIMATION}
+          />
+        </View>
+
+      </Modal>,
+    );
+    this.ids.push(id);
+
+  }
+
+  showLoading() {
+    const id = ModalPortal.show(
+      <Modal
+        visible={true}
+        onTouchOutside={() => {
+          ModalPortal.dismiss(id);
+        }}
+        overlayBackgroundColor={'black'}
+        modalAnimation={
+          new SlideAnimation({
+            slideFrom: 'bottom',
+          })
+        }>
+        <ModalContent style={{ backgroundColor: '#fff' }}>
+          <View>
+            <Text>Loading...</Text>
+          </View>
+        </ModalContent>
+      </Modal>,
+    );
+    this.ids.push(id);
+
+  }
+  hideLoading() {
+    if (this.ids.length > 0) {
+      ModalPortal.dismiss(this.ids[this.ids.length - 1]);
+      this.ids.pop();
+    }
+  }
 
   showModal(props: ModalProps): Promise<boolean> {
     return new Promise(resolve => {

@@ -11,7 +11,7 @@ interface NotificationModel {
   title: string;
   body: string;
   isRead: boolean;
-  createdDate: Date;
+  createdDate: string;
   isApproved: 'approved' | 'rejected' | 'pending';
 }
 export default NotificationModel;

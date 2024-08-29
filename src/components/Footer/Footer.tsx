@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 import { Flags } from '../../data/data';
 import i18next from 'i18next';
 import { setLanguage, setLocalStorage } from '../../utils/AsyncStorageUtils';
+import AlertDialog from '../AlertDialog/AlertDialog';
 
 export default function Footer() {
   const colors = useThemeColors();
@@ -53,9 +54,13 @@ export default function Footer() {
                     activeOpacity={0.7}
                     key={i}
                     onPress={async () => {
+                      AlertDialog.showSpecialLoading();
                       await setLocalStorage('language', x.languageCode);
-                      i18next.changeLanguage(x.languageCode);
+                      i18next.changeLanguage(x.languageCode).then(() => {
+                        AlertDialog.hideLoading();
+                      });
                       setShowOtherLanguages(!showOtherLanguages);
+
                     }}>
                     <Image
                       source={x?.languageIcon}

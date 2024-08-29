@@ -35,6 +35,7 @@ const HomeScreen = (
   const { user } = useUser() as any;
   const { fcmToken } = useFcmToken();
   const { t } = useTranslation();
+  const menuTranslate = useTranslation("menu").t;
   const [loading, setLoading] = useState(false);
   const [searchStudent, setSearchStudent] = useState('');
   const [focusToSearch, setFocusToSearch] = useState(false);
@@ -207,11 +208,12 @@ const HomeScreen = (
                 numColumns={2}
                 data={homeMenu}
                 renderItem={({ item, index }: { item: any; index: number }) => {
+                  let translatedName = menuTranslate(item.name);
                   return (
                     <MenuItemCard
                       index={index}
                       item={{
-                        name: item.name,
+                        name: translatedName,
                         icon: item.icon,
                         link: item.link,
                       }}

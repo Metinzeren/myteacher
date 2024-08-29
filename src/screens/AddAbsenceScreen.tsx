@@ -213,7 +213,7 @@ export default function AddAbsenceScreen(
 
     let data = {
       from: userId,
-      to: teachers[0],
+      to: [teachers[0]],
       data: {
         id,
         notificationType,
@@ -222,6 +222,9 @@ export default function AddAbsenceScreen(
       },
       title: notificationLanguage.ABSENTEEISM_NOTIFICATION_TITLE,
       body: `${notificationLanguage.ABSENTEEISM_NOTIFICATION_BODY}`,
+      isApproved: 'pending',
+      isRead: false,
+      createdDate: new Date().toISOString(),
     } as NotificationModel;
     await sendNotification(data)
       .then(e => {

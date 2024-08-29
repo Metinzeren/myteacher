@@ -42,7 +42,6 @@ import HomeWorkClassRoom from '../models/HomeWorkClassRoom';
 import Student from '../models/Student';
 import { getUserAccesToken, getUserId } from '../utils/AsyncStorageUtils';
 import { addHomeworkandSendNotification, sendNotification } from '../firebase/FirebaseApi';
-import { create } from 'react-test-renderer';
 import { getResourceByKey } from '../lang/i18n';
 import { initStorage } from '../firebase/config';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
@@ -52,7 +51,7 @@ import NotificationModel from '../models/NotificationModel';
 
 export default function AddHomeWorkContent() {
   const { t } = useTranslation();
-  const { setBottomSheetType, bottomSheetType, homework, handleChangeHomeWork, setHomework } =
+  const { setBottomSheetType, bottomSheetType, homework, handleChangeHomeWork, setHomework, addHomework } =
     useHomeworks();
   const formRef = useRef<FormContainerRef>(null);
   const today = new Date().toISOString().split('T')[0];
@@ -201,6 +200,7 @@ export default function AddHomeWorkContent() {
       </CheckboxContainer>
     );
   };
+
   const sendNotificationToParents = async ({
     id,
     notificationType,
@@ -275,6 +275,7 @@ export default function AddHomeWorkContent() {
           data: data,
           accessToken: accessToken,
         });
+        addHomework(data);
         await sendNotificationToParents({
           id: data.id,
           notificationType: 'homework',

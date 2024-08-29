@@ -42,6 +42,7 @@
     "ABSENCE_STUDENT": "Devamsızlık öğrencisi",
     "ABSENCE_STUDENT_SELECT": "Öğrenci seçin",
     "ADD_PHOTO": "Fotoğraf ekle",
+    "UPDATE_PHOTO": "Fotoğrafı güncelle",
     "SEARCH": "Ara",
     "CLASSROOMS": "Sınıflar",
     "HOMEWORKS": "Ödevler",
@@ -189,5 +190,12 @@
     "type": "Please select the type",
     "class": "Please select the class",
     "student": "Please select the student"
+  },
+  "menu": {
+    "CLASSROOM": "Sınıflar",
+    "HOMEWORKS": "Ödevler",
+    "QUESTIONS": "Öğrenci Değerlendirme Soruları",
+    "ABSENCE": "Öğrenci Devamsızlık",
+    "LOGOUT": "Çıkış Yap"
   }
 }

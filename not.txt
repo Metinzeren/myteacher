@@ -1,0 +1,7 @@
+usePhoto hook diğer sayfalarda kullanılacak.
+Ortak styledlar belirlenecek ve bunlar constant sayfasında globalStyled adlı tsxde tutalım.
+Kullanılmayan importaları silelim.
+Sayfalarda hata var ise bunların tiplerini tanımlayalım. En kötü any atalım.
+Kullanılmayan kütüphane tespiti ve kaldırılması.
+Tüm Konsol yazıları silenecek ve gerkli yerlerde ingilzice açıklama yapılacak( Satış için)
+

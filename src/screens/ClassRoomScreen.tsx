@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
@@ -12,8 +12,7 @@ import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import CustomText from '../components/Text/Text';
 import { useClassRooms } from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import Input from '../components/Input/Input';
-import { faDeleteLeft, faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPen, faTrash } from '@fortawesome/free-solid-svg-icons';
 import IconButton from '../components/IconButton/IconButton';
 import { useTranslation } from 'react-i18next';
 

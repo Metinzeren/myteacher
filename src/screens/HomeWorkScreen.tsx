@@ -15,7 +15,7 @@ import styled from 'styled-components';
 import Button from '../components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { getResourceByKey } from '../lang/i18n';
-import AddHomeWorkContent from '../BottomSheetContents/AddHomeWorkContent';
+import AddHomeWorkContent from '../bottomSheetContents/AddHomeWorkContent';
 import { useHomeworks } from '../context/HomeworkContext';
 import HomeworkRepository from '../repositories/HomeworkRepository';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
@@ -24,14 +24,19 @@ import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import Homework from '../models/Homework';
 import IconButton from '../components/IconButton/IconButton';
+import AlertDialog from '../components/AlertDialog/AlertDialog';
+import UpdateHomeWorkContent from '../bottomSheetContents/UpdateHomeWorkContent';
+import FilteredHomwork from '../bottomSheetContents/FilteredHomwork';
 export default function CalendarScreen(
   props: NativeStackScreenProps<RootStackParamList>,
 ) {
   const filterBottomSheetRef = useRef<BottomSheetRef>(null);
-  const { setHomeworks, homeworks } = useHomeworks();
+  const { setHomeworks, homeworks, deleteHomework, setSelectedHomework } = useHomeworks();
   const [loading, setLoading] = useState(true);
   const homeworkRepo = HomeworkRepository.getInstance();
+  const [search, setSearch] = useState('');
   const addHomeworkBottomSheetRef = useRef<BottomSheetRef>(null);
+  const updateHomeworkBottomSheetRef = useRef<BottomSheetRef>(null);
   const { t } = useTranslation();
   let homeworkLanguage = getResourceByKey('homeworks');
   const getSnapPoints = () => {
@@ -87,16 +92,28 @@ export default function CalendarScreen(
           <IconButton
             icon={faTrash}
             onPress={() => {
+              AlertDialog.showModal({
+                title: t('WARNING'),
+                message: t(homeworkLanguage.HOMEWORK_DELETE),
+                onConfirm() {
+                  deleteHomework(item.id);
+                  homeworkRepo.deleteHomework(item.id);
+                  AlertDialog.dismiss();
+                },
+                onCancel() { },
+              });
             }}></IconButton>
           <IconButton
             icon={faPen}
             onPress={() => {
-
+              setSelectedHomework(item);
+              updateHomeworkBottomSheetRef.current?.open()
             }}></IconButton>
         </ListItemButtonContainer>
       </ListItem>
     );
   };
+
   return (
     <Container
       goBackShow
@@ -106,12 +123,15 @@ export default function CalendarScreen(
       extraIconPress={() => {
         filterBottomSheetRef.current?.open();
       }}>
-      {Platform.OS === 'android' ? <AndroidContaier /> : <IosContainer />}
+      {Platform.OS === 'android' ? <AndroidContaier search={search} setSearch={setSearch} /> : <IosContainer />}
       <Loading loading={loading}>
         <HomeWorksContainer>
           <ListContainer>
             <CustomFlatList
               notFoundText={t('CLASS_NOT_FOUND')}
+              filter={(entity: Homework) => {
+                return entity.homeworkTitle.toLowerCase().includes(search.toLowerCase());
+              }}
               data={homeworks}
               renderItem={RenderItem}
             />
@@ -123,23 +143,25 @@ export default function CalendarScreen(
             onPress={() => addHomeworkBottomSheetRef.current?.open()}
             text={t(homeworkLanguage.HOMEWORK_ADD)}></Button>
         </ButtonContainer>
-        <CustomBottomSheet ref={filterBottomSheetRef} snapPoints={['50%']}>
-          <CustomText color="black">
-            Buraya öğrencinin ödevlerini listeleyeceğimiz bir component gelecek
-          </CustomText>
+        <CustomBottomSheet ref={filterBottomSheetRef} snapPoints={getSnapPoints()}>
+          <FilteredHomwork />
         </CustomBottomSheet>
         <CustomBottomSheet
           ref={addHomeworkBottomSheetRef}
           snapPoints={getSnapPoints()}>
           <AddHomeWorkContent />
         </CustomBottomSheet>
+        <CustomBottomSheet
+          ref={updateHomeworkBottomSheetRef}
+          snapPoints={getSnapPoints()}>
+          <UpdateHomeWorkContent />
+        </CustomBottomSheet>
       </Loading>
     </Container>
   );
 }
-const AndroidContaier = () => {
+const AndroidContaier = ({ search, setSearch }: any) => {
   const [selectedDay, setSelectedDay] = useState(dayjs().format('YYYY-MM-DD'));
-  const [search, setSearch] = useState('');
   const colors = useThemeColors();
   return (
     <SafeAreaView

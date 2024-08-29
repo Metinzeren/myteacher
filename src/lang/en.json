@@ -2,6 +2,10 @@
   "translation": {
     "LOGIN": "Login",
     "REGISTER": "Register",
+    "DO_YOU_HAVE_ACCOUNT": "Do you have an account?",
+    "DO_YOU_HAVE_NOT_ACCOUNT": "Don't you have an account?",
+    "FORGOT_PASSWORD": "Forgot password",
+    "FORGOT_PASSWORD_DESCRIPTION": "Enter your email address to reset your password. We will send you an email.",
     "SEND": "Send",
     "SAVE": "Save",
     "ADD": "Add",
@@ -105,6 +109,9 @@
     "STUDENT_NO": "Student number",
     "EMAIL": "Email",
     "PASSWORD": "Password",
+    "REGISTER_AND_START": "Create your account and create your class. Start now!",
+    "PHONE": "Phone",
+    "CONFIRM_PASSWORD": "Confirm password",
     "PARENT_FIRST_NAME": "Parent first name",
     "PARENT_LAST_NAME": "Parent last name",
     "PARENT_PHONE": "Parent phone",
@@ -123,15 +130,18 @@
     "EVULATION": "Evaluation"
   },
   "addStudentForm": {
-    "firstName": "Please enter your first name",
-    "lastName": "Please enter your last name",
-    "studentNo": "Please enter your student number",
-    "email": "Please enter your email",
-    "password": "Please enter a valid password",
-    "parentFirstName": "Please enter your parent's first name",
-    "parentLastName": "Please enter your parent's last name",
-    "parentPhone": "Please enter your parent's phone number",
-    "parentEmail": "Please enter your parent's email address"
+    "firstName": "Please enter your first name.",
+    "lastName": "Please enter your last name.",
+    "studentNo": "Please enter your student number.",
+    "email": "Please enter your email.",
+    "phone": "Please enter your phone number.",
+    "password": "Please enter a valid password.",
+    "parentFirstName": "Please enter your parent's first name.",
+    "parentLastName": "Please enter your parent's last name.",
+    "parentPhone": "Please enter your parent's phone number.",
+    "parentEmail": "Please enter your parent's email address.",
+    "confirmPassword": "Please confirm your password.",
+    "passwords_not_matched": "Passwords do not match"
   },
   "addClassRoomForm": {
     "name": "Please enter the class name!"
@@ -190,5 +200,17 @@
     "QUESTIONS": "Questions",
     "ABSENCE": "Absence",
     "LOGOUT": "Logout"
+  },
+  "firebase": {
+    "auth/invalid-email": "The email address is not valid.",
+    "auth/user-disabled": "The user account has been disabled.",
+    "auth/user-not-found": "No user found with this email.",
+    "auth/wrong-password": "The password is incorrect.",
+    "auth/email-already-in-use": "This email address is already in use.",
+    "auth/operation-not-allowed": "This operation is not allowed.",
+    "auth/weak-password": "The password is too weak.",
+    "auth/requires-recent-login": "This operation requires recent authentication. Please log in again.",
+    "auth/network-request-failed": "A network error has occurred. Please try again.",
+    "auth/missing-email": "Please enter an email address."
   }
 }

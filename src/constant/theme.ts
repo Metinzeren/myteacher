@@ -107,5 +107,6 @@ export const COLORS = {
   darkTurquoise: '#40E0D0',
   darkOlive: '#556B2F',
   darkSlate: '#2F4F4F',
+  purple: "#6557BB"
 };
 

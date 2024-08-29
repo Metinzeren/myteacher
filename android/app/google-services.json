@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:53633082621:android:b44ab0eba43b4274858a94",
+        "mobilesdk_app_id": "1:53633082621:android:1a2a9ab29972d140858a94",
         "android_client_info": {
-          "package_name": "com.myteacher"
+          "package_name": "com.ogretmenim"
         }
       },
       "oauth_client": [],

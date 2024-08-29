@@ -2,6 +2,10 @@
   "translation": {
     "LOGIN": "Giriş",
     "REGISTER": "Kayıt Ol",
+    "DO_YOU_HAVE_ACCOUNT": "Hesabınız var mı?",
+    "DO_YOU_HAVE_NOT_ACCOUNT": "Hesabınız yok mu?",
+    "FORGOT_PASSWORD": "Şifremi Unuttum",
+    "FORGOT_PASSWORD_DESCRIPTION": "Şifrenizi sıfırlamak için e-posta adresinizi girin. Size bir e-posta göndereceğiz.",
     "SEND": "Gönder",
     "ADD": "Ekle",
     "SAVE": "Kaydet",
@@ -104,7 +108,10 @@
     "LAST_NAME": "Soyad",
     "STUDENT_NO": "Öğrenci numarası",
     "EMAIL": "E-posta",
+    "PHONE": "Telefon",
     "PASSWORD": "Şifre",
+    "REGISTER_AND_START": "Hesabını oluştur ve sınıfını oluştur. Hemen başla!",
+    "CONFIRM_PASSWORD": "Şifreyi onayla",
     "PARENT_FIRST_NAME": "Veli adı",
     "PARENT_LAST_NAME": "Veli soyadı",
     "PARENT_PHONE": "Veli telefonu",
@@ -123,15 +130,18 @@
     "EVULATION": "Değerlendirme"
   },
   "addStudentForm": {
-    "firstName": "Lütfen adınızı girin",
-    "lastName": "Lütfen soyadınızı girin",
-    "studentNo": "Lütfen öğrenci numaranızı girin",
-    "email": "Lütfen e-posta adresinizi girin",
-    "password": "Lütfen geçerli bir şifre girin",
-    "parentFirstName": "Lütfen velinizin adını girin",
-    "parentLastName": "Lütfen velinizin soyadını girin",
-    "parentPhone": "Lütfen velinizin telefon numarasını girin",
-    "parentEmail": "Lütfen velinizin e-posta adresini girin"
+    "firstName": "Lütfen adınızı girin.",
+    "lastName": "Lütfen soyadınızı girin.",
+    "studentNo": "Lütfen öğrenci numaranızı girin.",
+    "email": "Lütfen e-posta adresinizi girin.",
+    "password": "Lütfen geçerli bir şifre girin.",
+    "phone": "Lütfen telefon numaranızı girin.",
+    "parentFirstName": "Lütfen velinizin adını girin.",
+    "parentLastName": "Lütfen velinizin soyadını girin.",
+    "parentPhone": "Lütfen velinizin telefon numarasını girin.",
+    "parentEmail": "Lütfen velinizin e-posta adresini girin.",
+    "confirmPassword": "Lütfen şifrenizi onaylayın.",
+    "passwords_not_matched": "Şifreler eşleşmiyor"
   },
   "addAbsenceForm": {
     "date": "Lütfen tarihi girin",
@@ -197,5 +207,17 @@
     "QUESTIONS": "Öğrenci Değerlendirme Soruları",
     "ABSENCE": "Öğrenci Devamsızlık",
     "LOGOUT": "Çıkış Yap"
+  },
+  "firebase": {
+    "auth/invalid-email": "Geçersiz e-posta adresi.",
+    "auth/user-disabled": "Kullanıcı hesabı devre dışı bırakılmış.",
+    "auth/user-not-found": "Bu e-posta ile kayıtlı kullanıcı bulunamadı.",
+    "auth/wrong-password": "Şifre yanlış.",
+    "auth/email-already-in-use": "Bu e-posta adresi zaten kullanılıyor.",
+    "auth/operation-not-allowed": "Bu işlem izin verilmiyor.",
+    "auth/weak-password": "Şifre çok zayıf.",
+    "auth/requires-recent-login": "Bu işlem için yeniden kimlik doğrulaması gerekiyor. Lütfen tekrar giriş yapın.",
+    "auth/network-request-failed": "Ağ hatası oluştu. Lütfen tekrar deneyin.",
+    "auth/missing-email": "Lütfen bir e-posta adresi girin."
   }
 }

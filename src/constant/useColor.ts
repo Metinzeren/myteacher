@@ -7,11 +7,12 @@ const Colors = {
     text: '#FFF',
     secondary: '#a55eea',
     inputBorder: '#ebeff3',
-    activeBorder: '#008B8B',
+    activeBorder: '#6557BB',
     iconColor: '#C0C0C0',
     success: '#488E48',
     notRead: '#708090',
     descriptionColor: '#797979',
+    grey: '#f2f2f2',
   },
   dark: {
     background: '#121212',
@@ -24,6 +25,7 @@ const Colors = {
     iconColor: '#E78577',
     success: '#488E48',
     descriptionColor: '#797979',
+    grey: '#f2f2f2',
   },
 };
 

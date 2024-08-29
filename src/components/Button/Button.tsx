@@ -9,10 +9,10 @@ import {
 } from 'react-native';
 
 import useThemeColors from '../../constant/useColor';
-import {SIZES} from '../../constant/theme';
+import { SIZES } from '../../constant/theme';
 import styled from 'styled-components';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 import CustomText from '../Text/Text';
 
 interface OutlineButtonProps extends TouchableOpacityProps {
@@ -59,12 +59,12 @@ export default function Button({
       theme={{
         size: size,
         borderRadius: borderRadius,
-        borderColor: loading ? '#ddd' : backgroundColor || colors.primary,
-        backgroundColor: outline
+        borderColor: props.disabled ? "#ddd" : loading ? '#ddd' : backgroundColor || colors.primary,
+        backgroundColor: props.disabled ? colors.grey : outline
           ? 'transparent'
           : loading
-          ? '#ddd'
-          : backgroundColor || colors.primary,
+            ? '#ddd'
+            : backgroundColor || colors.primary,
       }}>
       {icon && <IconLeft icon={icon} color={colors.text} />}
       {loading ? (
@@ -72,7 +72,7 @@ export default function Button({
       ) : (
         <ButtonText
           theme={{
-            color: outline ? colors.primary : textColor || colors.text,
+            color: props.disabled ? "#ddd" : outline ? colors.primary : textColor || colors.text,
           }}>
           {text}
         </ButtonText>

@@ -6,26 +6,31 @@ export const homeMenu = [
     name: 'CLASSROOM',
     icon: ICONS.HOME.class,
     link: 'ClassRoomScreen',
+    role: ['teacher'],
   },
   {
     name: 'HOMEWORKS',
     icon: ICONS.HOME.homeworkIcon,
     link: 'CalendarScreen',
+    role: ['teacher', "parent"],
   },
   {
     name: 'QUESTIONS',
     icon: ICONS.HOME.evaluation,
     link: 'StudentEvulationScreen',
+    role: ['teacher'],
   },
   {
     name: 'ABSENCE',
     icon: ICONS.HOME.calendar,
     link: 'AddAbsenceScreen',
+    role: ["parent"],
   },
   {
     name: 'LOGOUT',
     icon: ICONS.HOME.exit,
     link: '',
+    role: ['teacher', "parent"],
   },
 ];
 

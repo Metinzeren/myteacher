@@ -128,7 +128,7 @@ export default function CalendarScreen(
         <HomeWorksContainer>
           <ListContainer>
             <CustomFlatList
-              notFoundText={t('CLASS_NOT_FOUND')}
+              notFoundText={t(homeworkLanguage.HOMEWORK_NOT_FOUND)}
               filter={(entity: Homework) => {
                 return entity.homeworkTitle.toLowerCase().includes(search.toLowerCase());
               }}

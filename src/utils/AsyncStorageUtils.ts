@@ -1,8 +1,13 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import initI18n from '../lang/i18n';
 
+
+export const LocalStorageKeys = {
+  AUTH_USER: 'authUser',
+};
+
 export const setLocalStorage = async (
-  key: string,
+  key: keyof typeof LocalStorageKeys,
   value: any,
 ): Promise<void> => {
   try {
@@ -13,7 +18,7 @@ export const setLocalStorage = async (
   }
 };
 
-export const getLocalStorage = async (key: string): Promise<any> => {
+export const getLocalStorage = async (key: keyof typeof LocalStorageKeys): Promise<any> => {
   try {
     const jsonValue = await AsyncStorage.getItem(key);
     return jsonValue != null ? JSON.parse(jsonValue) : null;

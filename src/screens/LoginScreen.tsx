@@ -14,10 +14,11 @@ import { auth } from '../firebase/config';
 import '../lang/i18n';
 import DevicesRepository from '../repositories/DeviceRepository';
 import Footer from '../components/Footer/Footer';
+import { getResourceByKey } from '../lang/i18n';
 
 export default function LoginScreen(props: any) {
   const { t } = useTranslation();
-  const firebaseTranslation = useTranslation('firebase').t;
+  const firebaseTranslation = getResourceByKey('firebase')
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

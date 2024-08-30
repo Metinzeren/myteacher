@@ -1,12 +1,12 @@
-import {View, Text, Keyboard} from 'react-native';
-import React, {useRef, useState} from 'react';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { View, Text, Keyboard } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Container from '../components/Container/Container';
-import FormContainer, {FormContainerRef} from '../components/FormContainer';
+import FormContainer, { FormContainerRef } from '../components/FormContainer';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
-import {faPlus, faQuestion, faUser} from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faQuestion, faUser } from '@fortawesome/free-solid-svg-icons';
 import Questions from '../models/Questions';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
@@ -18,10 +18,11 @@ import useThemeColors from '../constant/useColor';
 import AnswerForm from '../components/AnswerForm/AnswerForm';
 import AnswerList from '../components/AnswerList/AnswerList';
 import Loading from '../components/Loading/Loading';
-import {getUserId} from '../utils/AsyncStorageUtils';
-import {useQuestions} from '../context/StudentEvulationContext';
-import {t} from 'i18next';
-import {useTranslation} from 'react-i18next';
+import { getUserId } from '../utils/AsyncStorageUtils';
+import { useQuestions } from '../context/StudentEvulationContext';
+import { t } from 'i18next';
+import { useTranslation } from 'react-i18next';
+import { getResourceByKey } from '../lang/i18n';
 
 export default function AddStudentEvulationScreen(
   props: NativeStackScreenProps<
@@ -30,10 +31,13 @@ export default function AddStudentEvulationScreen(
   >,
 ) {
   const colors = useThemeColors();
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   const formRef = useRef<FormContainerRef>(null);
   const [loading, setLoading] = useState(false);
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [showForm, setShowForm] = useState(false);
   const [loadingButton, setLoadingButton] = useState(false);
+  let addQuestionWarnings = getResourceByKey('addQuestionForm');
   const [registerDto, setRegisterDto] = useState<Questions>({
     id: '',
     name: '',
@@ -49,11 +53,36 @@ export default function AddStudentEvulationScreen(
       [key]: value,
     });
   };
-  const {addQuestion} = useQuestions();
+  const { addQuestion } = useQuestions();
   const handleAddQuestion = async () => {
-    let isEmpty = formRef.current?.validate();
+    let isEmpty = formRef.current?.validate(getResourceByKey('addQuestionForm'));
     let userId = await getUserId();
-    let addedUserIdFromTeacher = {...registerDto, teacherId: [userId]};
+    let addedUserIdFromTeacher = { ...registerDto, teacherId: [userId] };
+
+    if (registerDto.name && registerDto.questionType === undefined) {
+      AlertDialog.showModal({
+        title: t('ERROR'),
+        message: t(addQuestionWarnings.select_question_type),
+        onConfirm() {
+          setLoadingButton(false);
+        },
+        disableCloseOnTouchOutside: false,
+      });
+      return;
+    }
+
+    if (registerDto.questionType === "option" && registerDto.answer.length === 0) {
+      AlertDialog.showModal({
+        title: t('ERROR'),
+        message: t(addQuestionWarnings.answer),
+        onConfirm() {
+          setLoadingButton(false);
+        },
+        disableCloseOnTouchOutside: false,
+
+      });
+      return
+    }
 
     if (isEmpty) {
       Keyboard.dismiss();
@@ -74,8 +103,7 @@ export default function AddStudentEvulationScreen(
     }
   };
 
-  const [answers, setAnswers] = useState<string[]>([]);
-  const [showForm, setShowForm] = useState(false);
+
 
   const handleAddAnswer = (newAnswer: string) => {
     setAnswers([...answers, newAnswer]);
@@ -93,13 +121,13 @@ export default function AddStudentEvulationScreen(
       <Container p={10} type="container">
         <Loading loading={loading}>
           <EvulationContainer>
-            <FormContainer style={{gap: 20}} formContainerRef={formRef}>
+            <FormContainer style={{ gap: 20 }} formContainerRef={formRef}>
               <CustomText color="primaryText" fontSizes="body4">
                 {t('WRITE_QUESTION')}
               </CustomText>
               <Input
                 required
-                id="name"
+                id="question"
                 placeholder={t('WRITE_QUESTION')}
                 icon={faQuestion}
                 value={registerDto?.name}
@@ -110,7 +138,7 @@ export default function AddStudentEvulationScreen(
               </CustomText>
               <ButtonContainer>
                 <Button
-                  style={{flex: 1}}
+                  style={{ flex: 1 }}
                   outline={registerDto.questionType === 'rating' ? false : true}
                   text={t('QUESTION_TYPE_STAR')}
                   onPress={() => handleChange('questionType', 'rating')}
@@ -118,11 +146,11 @@ export default function AddStudentEvulationScreen(
                 <Button
                   outline={registerDto.questionType === 'option' ? false : true}
                   text={t('QUESTION_TYPE_OPTIONAL')}
-                  style={{flex: 1}}
+                  style={{ flex: 1 }}
                   onPress={() => handleChange('questionType', 'option')}
                 />
                 <Button
-                  style={{flex: 1}}
+                  style={{ flex: 1 }}
                   outline={registerDto.questionType === 'text' ? false : true}
                   text={t('QUESTION_TYPE_TEXT')}
                   onPress={() => handleChange('questionType', 'text')}

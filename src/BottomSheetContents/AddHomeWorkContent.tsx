@@ -106,6 +106,7 @@ export default function AddHomeWorkContent() {
             {classRooms.length > 0 ? (
               classRooms.map((classRoom, index) => (
                 <PlaceholderInput
+
                   key={index}
                   onPress={() => {
                     setSelectedClassRoom(classRoom);

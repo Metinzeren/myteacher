@@ -7,15 +7,15 @@ import {
   Platform,
 } from 'react-native';
 import styled from 'styled-components';
-import {useSharedValue} from 'react-native-reanimated';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faEye, faEyeSlash, faUser} from '@fortawesome/free-regular-svg-icons';
+import { useSharedValue } from 'react-native-reanimated';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faEye, faEyeSlash, faUser } from '@fortawesome/free-regular-svg-icons';
 import useThemeColors from '../../constant/useColor';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
-import {useState} from 'react';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import { useState } from 'react';
 import CustomText from '../Text/Text';
-import {FormInputProps, InputProps} from 'react-native-form-container';
-import {BottomSheetTextInput} from '@gorhom/bottom-sheet';
+import { FormInputProps, InputProps } from 'react-native-form-container';
+import { BottomSheetTextInput } from '@gorhom/bottom-sheet';
 
 interface CustomInputProps extends InputProps {
   isBottomSheet?: boolean;
@@ -87,8 +87,8 @@ export default function Input({
               inputSize === 'sm'
                 ? '10px'
                 : Platform.OS === 'android'
-                ? '10px'
-                : '15px',
+                  ? '10px'
+                  : '15px',
             left:
               iconPosition === 'left' && icon !== undefined
                 ? inputPaddingHorizontal
@@ -123,8 +123,8 @@ export default function Input({
               inputSize === 'sm'
                 ? '10px'
                 : Platform.OS === 'android'
-                ? '10px'
-                : '15px',
+                  ? '10px'
+                  : '15px',
             left:
               iconPosition === 'left' && icon !== undefined
                 ? inputPaddingHorizontal
@@ -163,7 +163,7 @@ export default function Input({
         />
       )}
       {errorMessage && (
-        <View style={{marginTop: 7}}>
+        <View style={{ marginTop: 7 }}>
           <CustomText color="error">{errorMessage}</CustomText>
         </View>
       )}

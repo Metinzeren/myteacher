@@ -57,6 +57,7 @@
     "QUESTION_NOT_FOUND": "Soru bulunamadı",
     "QUESTION_EDIT": "Soruyu düzenle",
     "QUESTION_DELETE": "Soruyu sil",
+    "QUESTION_ADD_ANSWER_TO_CONTINUE": "Devam etmek için cevap ekleyin",
     "QUESTION_INFO": "Soru bilgisi",
     "QUESTION_ADD_SUCCESS": "Soru başarıyla eklendi",
     "QUESTION_EDIT_SUCCESS": "Soru başarıyla düzenlendi",
@@ -152,6 +153,12 @@
   },
   "addClassRoomForm": {
     "name": "Lütfen sınıf adını girin!"
+  },
+  "addQuestionForm": {
+    "question": "Lütfen bir soru yazın",
+    "type": "Lütfen soru türünü seçin",
+    "answer": "Devam etmek için cevap ekleyin",
+    "select_question_type": "Lütfen soru türünü seçin"
   },
   "notifications": {
     "ABSENTEEISM_NOTIFICATION_TITLE": "Devamsızlık bildirimi",

@@ -51,6 +51,7 @@ export default function AddAbsenceScreen(
   const { t } = useTranslation();
   const formRef = useRef<FormContainerRef>(null);
   const AbsenteeismRepo = AbsenteeismRepository.getInstance();
+  let addAbsenceWarnings = getResourceByKey('addAbsenceForm');
   const UserRepo = UserRepository.getInstance();
   const ClassRoomRepo = ClassRoomRepository.getInstance();
   const startDateBottomSheetRef = useRef<BottomSheetRef>(null);
@@ -186,7 +187,7 @@ export default function AddAbsenceScreen(
     );
   };
   const getUser = async () => {
-    const user = await getLocalStorage('authUser');
+    const user = await getLocalStorage('AUTH_USER');
     const response = await UserRepo.getUser(user.uid);
     setUserInfo(response);
   };
@@ -324,6 +325,7 @@ export default function AddAbsenceScreen(
 
           <PlaceholderInput
             required
+            icon={faCalendar}
             id="startDate"
             value={
               registerDto.startDate
@@ -336,8 +338,11 @@ export default function AddAbsenceScreen(
           />
           <PlaceholderInput
             required
+            icon={faCalendar}
             id="endDate"
-            value={
+
+            value={registerDto.endDate ? dayjs(registerDto?.endDate).format('DD.MM.YYYY') : ""}
+            placeholder={
               registerDto.endDate
                 ? dayjs(registerDto?.endDate).format('DD.MM.YYYY')
                 : ` ${t('END_DATE')}`

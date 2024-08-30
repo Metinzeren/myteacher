@@ -75,7 +75,7 @@ export default function Footer() {
         )}
       </FooterHelpContainer>
       <FooterText theme={{ colors }}>
-        © {dayjs().format('YYYY')} {t('copyright')}
+        © {dayjs().format('YYYY')} Copyright
       </FooterText>
     </FooterContainer>
   );

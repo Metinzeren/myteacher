@@ -6,7 +6,7 @@ export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   ForgotPasswordScreen: undefined;
-  HomeScreen: undefined;
+  HomeScreen: { storedValue: any };
   StudentsScreen: { classRoomId: string };
   AddStudentScreen: { classRoomId: string };
   CalendarScreen: undefined;

@@ -59,6 +59,7 @@
     "QUESTION_ADD_SUCCESS": "Question added successfully",
     "QUESTION_INFO": "Question information",
     "QUESTION_EDIT_SUCCESS": "Question edited successfully",
+    "QUESTION_ADD_ANSWER_TO_CONTINUE": "Add an answer to continue",
     "QUESTION_DELETE_SUCCESS": "Question deleted successfully",
     "QUESTION_ADD_ERROR": "Question could not be added",
     "QUESTION_EDIT_ERROR": "Question could not be edited",
@@ -152,6 +153,12 @@
     "endDate": "Please enter the end date",
     "student": "Please select the student",
     "description": "Please enter the description"
+  },
+  "addQuestionForm": {
+    "question": "Please enter the question",
+    "type": "Please select the type",
+    "answer": "Please enter the answer",
+    "select_question_type": "Please select the question type"
   },
   "notifications": {
     "ABSENTEEISM_NOTIFICATION_TITLE": "Absenteeism notification",

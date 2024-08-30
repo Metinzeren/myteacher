@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Platform,
@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styled from 'styled-components';
-import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
-import {faAngleRight, faCalendar} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faAngleRight, faCalendar } from '@fortawesome/free-solid-svg-icons';
 import useThemeColors from '../../constant/useColor';
 import CustomText from '../Text/Text';
-import {IconProp} from '@fortawesome/fontawesome-svg-core';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 interface PlaceholderInputProps extends TouchableOpacityProps {
   placeholder?: string;
@@ -19,6 +19,7 @@ interface PlaceholderInputProps extends TouchableOpacityProps {
   inputSize?: 'sm' | 'md';
   required?: boolean;
   value?: string;
+  errorMessage?: string;
 }
 
 const PlaceholderInput = ({
@@ -27,7 +28,7 @@ const PlaceholderInput = ({
   icon,
   inputSize = 'md',
   required,
-
+  errorMessage,
   value,
   ...props
 }: PlaceholderInputProps) => {
@@ -64,8 +65,8 @@ const PlaceholderInput = ({
             inputSize === 'sm'
               ? '10px'
               : Platform.OS === 'android'
-              ? '15px'
-              : '15px',
+                ? '15px'
+                : '15px',
           left:
             iconPosition === 'left' && icon !== undefined
               ? inputPaddingHorizontal
@@ -89,6 +90,11 @@ const PlaceholderInput = ({
         size={iconSize}
         color={colors.iconColor}
       />
+      {errorMessage && (
+        <CustomText color="error" fontSizes="body4">
+          {errorMessage}
+        </CustomText>
+      )}
     </TouchableContainer>
   );
 };

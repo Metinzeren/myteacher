@@ -25,6 +25,7 @@ import AddAbsenceScreen from '../screens/AddAbsenceScreen';
 import FirebaseNotifications from '../screens/FirebaseNotifications';
 import UserRepository from '../repositories/UserRepository';
 import SplashScreen from 'react-native-splash-screen';
+import withLocalStorage from '../hoc/withLocalStorage';
 const RootNavigator = () => {
   const userRepository = UserRepository.getInstance();
   const Stack = createStackNavigator<RootStackParamList>();
@@ -39,14 +40,14 @@ const RootNavigator = () => {
           setUserRole(userFromUserCollection.role);
 
           let concatUser = { ...user, userCollection: userFromUserCollection };
-          await setLocalStorage('authUser', concatUser);
+          await setLocalStorage('AUTH_USER', concatUser);
         } catch (error) {
           console.error('Error during auth state change:', error);
         }
       } else {
         try {
           setAuth(null);
-          await setLocalStorage('authUser', null);
+          await setLocalStorage('AUTH_USER', null);
         } catch (error) {
           console.error('Error during auth state change:', error);
         }
@@ -64,6 +65,7 @@ const RootNavigator = () => {
     <>
       {authUser != null && <FirebaseNotifications />}
       <Stack.Navigator
+
         initialRouteName="LoginScreen"
         screenOptions={{
           ...TransitionPresets.SlideFromRightIOS,
@@ -199,4 +201,5 @@ const RootNavigator = () => {
   );
 };
 
-export default RootNavigator;
+
+export default withLocalStorage(RootNavigator, 'AUTH_USER');

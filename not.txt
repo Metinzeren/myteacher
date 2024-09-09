@@ -1,12 +1,11 @@
-Takvimdeki diller düzeltilecek.
-Kullanılmayan importaları silelim.
-Kullanılmayan kütüphane tespiti ve kaldırılması.
+Takvimdeki diller düzeltilecek. --okey
+Kullanılmayan importaları silelim.   --okey
+Kullanılmayan kütüphane tespiti ve kaldırılması. --okey
 Tüm Konsol yazıları silenecek ve gerkli yerlerde ingilzice açıklama yapılacak( Satış için)
-Sayfalarda hata var ise bunların tiplerini tanımlayalım. En kötü any atalım.
-usePhoto hook diğer sayfalarda kullanılacak.
+Sayfalarda hata var ise bunların tiplerini tanımlayalım. En kötü any atalım. --okey
+usePhoto hook diğer sayfalarda kullanılacak. --okey
 Ortak styledlar belirlenecek ve bunlar constant sayfasında globalStyled adlı tsxde tutalım.
-Bildirim backendi düzeltilecek.
+
 
 BUGS
-
-
+Bildirim backendi düzeltilecek.

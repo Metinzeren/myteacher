@@ -1,5 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
+import { View, TouchableOpacity } from 'react-native';
+import React, { useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
@@ -17,7 +17,6 @@ import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomShe
 export default function StudentsScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentsScreen'>,
 ) {
-  const colors = useThemeColors();
   const { t } = useTranslation();
   const { classRooms } = useClassRooms();
   const classRoomId = props.route.params?.classRoomId;

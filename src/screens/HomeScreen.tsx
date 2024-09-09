@@ -23,8 +23,8 @@ import DevicesRepository from '../repositories/DeviceRepository';
 import useUser from '../hooks/useUser';
 import Footer from '../components/Footer/Footer';
 
-import withLocalStorage from '../hoc/withLocalStorage';
 import MenuItems from '../sections/Home/MenuItems';
+import { getLanguage } from '../lang/i18n';
 type Props = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>;
 
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
@@ -149,7 +149,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
           ))}
         </Loading>
       ) : (
-        <MenuItems />
+        <MenuItems lang={getLanguage()} />
       )}
       {!focusToSearch &&
         <Footer />}

@@ -46,6 +46,7 @@ export default function Footer() {
           <View>
             <ScrollView
               horizontal
+              contentContainerStyle={{ gap: 5 }}
               showsHorizontalScrollIndicator={false}
               showsVerticalScrollIndicator={false}>
               {Flags.map((x, i) => {
@@ -55,7 +56,7 @@ export default function Footer() {
                     key={i}
                     onPress={async () => {
                       AlertDialog.showSpecialLoading();
-                      await setLocalStorage('language', x.languageCode);
+                      await setLocalStorage("LANGUAGE", x.languageCode);
                       i18next.changeLanguage(x.languageCode).then(() => {
                         AlertDialog.hideLoading();
                       });

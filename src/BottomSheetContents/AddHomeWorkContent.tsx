@@ -1,6 +1,5 @@
 import {
   View,
-  Text,
   ScrollView,
   Image,
   Platform,
@@ -57,6 +56,7 @@ export default function AddHomeWorkContent() {
   const today = new Date().toISOString().split('T')[0];
   const { photos, deletePhoto, initLaunchCamera, initLaunchImage, setPhotos } = usePhoto();
   const [startDateShow, setStartDateShow] = React.useState(false);
+  const homeworksLangugage = useTranslation('homeworks').t;
   const [endDateShow, setEndDateShow] = React.useState(false);
   const classRoomRepo = ClassRoomRepository.getInstance();
   const [loadingAddHomework, setLoadingAddHomework] = useState(false)
@@ -288,7 +288,7 @@ export default function AddHomeWorkContent() {
         setLoadingAddHomework(false)
         AlertDialog.showModal({
           title: t('SUCCESS'),
-          message: t('CLASS_ADD_SUCCESS'),
+          message: t("HOMEWORK_ADD_SUCCESS"),
           onConfirm() {
           },
           disableCloseOnTouchOutside: true,

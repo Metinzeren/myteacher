@@ -5,7 +5,6 @@ import {
   Modal,
   ScrollView,
   Image,
-  Text,
 } from 'react-native';
 import styled from 'styled-components';
 import Container from '../components/Container/Container';
@@ -43,7 +42,6 @@ import { getLocalStorage } from '../utils/AsyncStorageUtils';
 import CustomBottomSheet, {
   BottomSheetRef,
 } from '../components/CustomBottomSheet/CustomBottomSheet';
-import { BottomSheetScrollView, BottomSheetView } from '@gorhom/bottom-sheet';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import EvulationQuestionResponse from '../models/EvulationQuestionResponse';
 import { deleteStudent } from '../firebase/FirebaseApi';
@@ -70,23 +68,7 @@ export default function UpdateStudentScreen(
   const [selectedImage, setSelectedImage] = useState([]);
   const absenceBottomSheetRef = useRef<BottomSheetRef>(null);
   const evulationBottomSheetRef = useRef<BottomSheetRef>(null);
-  const mockAbsence = [
-    {
-      date: '12.12.2021',
-      url: 'https://picsum.photos/200/300',
-      reason: 'Hastalık',
-    },
-    {
-      date: '12.12.2024',
-      url: 'https://picsum.photos/200/300',
-      reason: 'Gezi',
-    },
-    {
-      date: '12.12.2022',
-      url: 'https://picsum.photos/200/300',
-      reason: 'Cenaze',
-    },
-  ];
+
 
   const student =
     studentFromParam ??
@@ -179,7 +161,7 @@ export default function UpdateStudentScreen(
         setLoading(true);
 
         try {
-          const user = await getLocalStorage('authUser');
+          const user = await getLocalStorage("AUTH_USER");
           const accessToken = user?.stsTokenManager?.accessToken;
           let data = {
             classRoomId: classRoomId,
@@ -187,7 +169,7 @@ export default function UpdateStudentScreen(
             parentId: student.parentId,
           };
 
-          const response = deleteStudent({
+          deleteStudent({
             accessToken,
             data,
           });
@@ -396,7 +378,7 @@ export default function UpdateStudentScreen(
 
               <AccordionContainer>
                 <Accordion title={t('STUDENT_ABSENCE')}>
-                  {absenteeisms.map((absence, index) => (
+                  {absenteeisms.map((absence: any, index: number) => (
                     <AbsenceCard
                       onPress={() => {
                         setSelectedAbsence(absence)
@@ -404,7 +386,7 @@ export default function UpdateStudentScreen(
                       }}
                       key={index}>
                       <CustomText color="primaryText">
-                        {absence.startDate}
+                        {absence?.startDate}
                       </CustomText>
                       <FontAwesomeIcon
                         color={colors.iconColor}

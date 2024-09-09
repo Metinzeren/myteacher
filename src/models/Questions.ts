@@ -5,7 +5,7 @@ interface Questions {
   id?: string;
   name: string;
   questionType?: QuestionType;
-  answer: [];
+  answer: string[];
   answerType?: AnswerType;
   teacherId: string;
 }

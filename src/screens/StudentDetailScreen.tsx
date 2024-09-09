@@ -1,33 +1,27 @@
-import {View, TouchableOpacity, Image} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import { View, Image } from 'react-native';
+
 import Container from '../components/Container/Container';
-import StudentRepository from '../repositories/StudentRepository';
 import Student from '../models/Student';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Loading from '../components/Loading/Loading';
-import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
 import Button from '../components/Button/Button';
-import {useStudents} from '../context/StudentContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import UpdateStudentScreen from './UpdateStudentScreen';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import {useClassRooms} from '../context/ClassRoomContext';
-import {faTrash} from '@fortawesome/free-solid-svg-icons';
-import EvulationRepository from '../repositories/EvulationRepository';
+import { useClassRooms } from '../context/ClassRoomContext';
 export default function StudentDetailScreen(
   props: NativeStackScreenProps<RootStackParamList, 'StudentDetailScreen'>,
 ) {
-  const {classRooms} = useClassRooms();
+  const { classRooms } = useClassRooms();
   const studentId = props.route.params.studentId;
   const classRoomId = props.route.params.classRoomId;
   const student = classRooms
     ?.find?.(x => x.id === classRoomId)
     ?.students?.find(c => c.id === studentId) as Student;
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const {deleteStudentFromClassRoom} = useClassRooms();
+  const { deleteStudentFromClassRoom } = useClassRooms();
 
   const pressToDelete = () => {
     AlertDialog.showModal({
@@ -35,6 +29,7 @@ export default function StudentDetailScreen(
       message: `${student.firstName} ${student.lastName} öğrenciyi silicek misiniz?`,
       onConfirm() {
         classRoomRepo.removeStudentFromClassRoom(
+          student.parentId as string,
           classRoomId,
           student.id as string,
         );
@@ -56,10 +51,10 @@ export default function StudentDetailScreen(
                 width={200}
                 source={
                   student?.photo
-                    ? {uri: student?.photo}
+                    ? { uri: student?.photo }
                     : {
-                        uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7ZLUi-ge0TEHx5zB1ZVNfTaAPDw5FSfpr3oR67ZkQmg&s',
-                      }
+                      uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR7ZLUi-ge0TEHx5zB1ZVNfTaAPDw5FSfpr3oR67ZkQmg&s',
+                    }
                 }
               />
             </ListItemPhoto>

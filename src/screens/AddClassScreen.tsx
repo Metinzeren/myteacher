@@ -1,4 +1,4 @@
-import { View, Text, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 import React, { useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import ClassRoom from '../models/ClassRoom';
@@ -7,8 +7,7 @@ import { FormContainerRef } from '../components/FormContainer';
 import FormContainer from 'react-native-form-container';
 import Input from '../components/Input/Input';
 import Button from '../components/Button/Button';
-import { faSortNumericDesc, faUser } from '@fortawesome/free-solid-svg-icons';
-import { t } from 'i18next';
+import { faUser } from '@fortawesome/free-solid-svg-icons';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { useClassRooms } from '../context/ClassRoomContext';
 import AlertDialog from '../components/AlertDialog/AlertDialog';

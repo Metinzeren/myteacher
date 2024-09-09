@@ -50,6 +50,9 @@
     "SEARCH": "Ara",
     "CLASSROOMS": "Sınıflar",
     "HOMEWORKS": "Ödevler",
+    "HOMEWORK_ADD_SUCCESS": "Ödev başarıyla eklendi",
+    "HOMEWORK_EDIT_SUCCESS": "Ödev başarıyla düzenlendi",
+    "HOMEWORK_DELETE_SUCCESS": "Ödev başarıyla silindi",
     "STUDENTS": "Öğrenciler",
     "PROFILE": "Profil",
     "QUESTION": "Öğrenci değerlendirme soruları",
@@ -187,12 +190,10 @@
     "HOMEWORK_DESCRIPTION": "Ödev açıklaması",
     "HOMEWORK_DUE_DATE": "Ödev teslim tarihi",
     "HOMEWORK_TYPE": "Ödev türü",
+    "HOMEWORK_CALENDAR": "Ödev takvimi",
     "HOMEWORK_ADD": "Ödev ekle",
     "HOMEWORK_EDIT": "Ödevi düzenle",
     "HOMEWORK_DELETE": "Ödevi sil",
-    "HOMEWORK_ADD_SUCCESS": "Ödev başarıyla eklendi",
-    "HOMEWORK_EDIT_SUCCESS": "Ödev başarıyla düzenlendi",
-    "HOMEWORK_DELETE_SUCCESS": "Ödev başarıyla silindi",
     "HOMEWORK_ADD_ERROR": "Ödev eklenemedi",
     "HOMEWORK_EDIT_ERROR": "Ödev düzenlenemedi",
     "HOMEWORK_DELETE_ERROR": "Ödev silinemedi",
@@ -213,7 +214,8 @@
     "HOMEWORKS": "Ödevler",
     "QUESTIONS": "Öğrenci Değerlendirme Soruları",
     "ABSENCE": "Öğrenci Devamsızlık",
-    "LOGOUT": "Çıkış Yap"
+    "LOGOUT": "Çıkış Yap",
+    "DATA_NOT_FOUND": "Veri bulunamadı"
   },
   "firebase": {
     "auth/invalid-email": "Geçersiz e-posta adresi.",

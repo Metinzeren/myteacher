@@ -1,11 +1,9 @@
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import Container from '../components/Container/Container';
 import CustomText from '../components/Text/Text';
-import { useNavigation } from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Input from '../components/Input/Input';
 import {
-  faArrowLeft,
   faEnvelope,
   faLock,
   faPhone,
@@ -14,15 +12,10 @@ import {
 import Button from '../components/Button/Button';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import { useTranslation } from 'react-i18next';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebase/config';
+
 import { useRef, useState } from 'react';
 import FormContainer, { FormContainerRef } from '../components/FormContainer';
 import { getResourceByKey } from '../lang/i18n';
-import UserRepository from '../repositories/UserRepository';
-import User from '../models/User';
-import { Dropdown } from 'react-native-element-dropdown';
 import axios from 'axios';
 import FormKeyboardView from '../components/FormKeyboardView/FormKeyboardView';
 

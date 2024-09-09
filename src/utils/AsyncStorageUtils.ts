@@ -4,6 +4,7 @@ import initI18n from '../lang/i18n';
 
 export const LocalStorageKeys = {
   AUTH_USER: 'authUser',
+  LANGUAGE: 'language',
 };
 
 export const setLocalStorage = async (

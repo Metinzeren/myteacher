@@ -64,6 +64,8 @@ class NotificationRepository {
 
     async getNotificationWithStudents(userId: string): Promise<NotificationResponse[]> {
         const notifications = await this.getNotificationsByUserId(userId);
+
+
         return await Promise.all(
             notifications.map(async notification => {
                 const classRooms = await this.ClassRepo.getClassRoom(notification.data.classRoomId);

@@ -1,4 +1,4 @@
-import { View, Text, Keyboard } from 'react-native';
+import { View, Keyboard } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
@@ -20,7 +20,6 @@ import AnswerList from '../components/AnswerList/AnswerList';
 import Loading from '../components/Loading/Loading';
 import { getUserId } from '../utils/AsyncStorageUtils';
 import { useQuestions } from '../context/StudentEvulationContext';
-import { t } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { getResourceByKey } from '../lang/i18n';
 

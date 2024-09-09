@@ -1,4 +1,3 @@
-import { View, Text } from 'react-native';
 import React, { useRef, useState } from 'react';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
@@ -8,7 +7,6 @@ import Input from '../components/Input/Input';
 import { faUser } from '@fortawesome/free-solid-svg-icons';
 import ClassRoom from '../models/ClassRoom';
 import Button from '../components/Button/Button';
-import { t } from 'i18next';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { useClassRooms } from '../context/ClassRoomContext';

@@ -16,6 +16,7 @@ import Evulation from './src/models/Evulation';
 import {useEffect, useState} from 'react';
 import initI18n from './src/lang/i18n';
 import HomeworkProvider from './src/context/HomeworkContext';
+import {LocaleConfig} from 'react-native-calendars';
 
 LogBox.ignoreAllLogs();
 const MyTeacher = () => {
@@ -50,6 +51,51 @@ const MyTeacher = () => {
   if (!isI18nReady) {
     return null;
   }
+  const setConfigrationCalendar = () => {
+    LocaleConfig.locales['tr'] = {
+      monthNames: [
+        'Ocak',
+        'Şubat',
+        'Mart',
+        'Nisan',
+        'Mayıs',
+        'Haziran',
+        'Temmuz',
+        'Ağustos',
+        'Eylül',
+        'Ekim',
+        'Kasım',
+        'Aralık',
+      ],
+      monthNamesShort: [
+        'Oca',
+        'Şub',
+        'Mar',
+        'Nis',
+        'May',
+        'Haz',
+        'Tem',
+        'Ağu',
+        'Eyl',
+        'Eki',
+        'Kas',
+        'Ara',
+      ],
+      dayNames: [
+        'Pazar',
+        'Pazartesi',
+        'Salı',
+        'Çarşamba',
+        'Perşembe',
+        'Cuma',
+        'Cumartesi',
+      ],
+      dayNamesShort: ['Paz', 'Pzt', 'Sal', 'Çar', 'Per', 'Cum', 'Cmt'],
+      today: 'Bugün',
+    };
+    LocaleConfig.defaultLocale = 'tr';
+  };
+
   const initDb = () => {
     const initClassRoom = {
       name: 'Sınıf Adı',

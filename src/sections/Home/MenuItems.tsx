@@ -1,5 +1,5 @@
 import { View, TouchableOpacity } from 'react-native'
-import React, { memo } from 'react'
+import React, { memo, useCallback } from 'react'
 import styled from 'styled-components';
 import { homeMenu } from '../../data/data';
 import { getResourceByKey } from '../../lang/i18n';
@@ -13,6 +13,7 @@ import { auth } from '../../firebase/config';
 import withLocalStorage from '../../hoc/withLocalStorage';
 
 const MenuItems = ({ storedValue }: { storedValue: any }) => {
+
     const navigation = useNavigation<any>();
     const menuTranslate = getResourceByKey("menu");
     const MenuItemCard = ({ item, index }: { item: any; index: number }) => {
@@ -65,13 +66,19 @@ const MenuItems = ({ storedValue }: { storedValue: any }) => {
             onCancel() { },
         });
     };
+
+    useCallback(() => {
+        return homeMenu.filter((entity: any) => entity.role.includes(storedValue?.userCollection?.role));
+    }, []);
+
     return (
         <NoSearchContainer>
             <HomeBottomContainer>
                 <View>
                     <CustomFlatList
                         numColumns={2}
-                        filter={(entity: any, value: any, index: number) => entity.role.includes(storedValue?.userCollection?.role)}
+                        notFoundText={menuTranslate.DATA_NOT_FOUND}
+                        filter={(entity: any) => entity.role.includes(storedValue?.userCollection?.role)}
                         data={homeMenu}
                         renderItem={({ item, index }: { item: any; index: number }) => {
                             let translatedName = menuTranslate[item.name];

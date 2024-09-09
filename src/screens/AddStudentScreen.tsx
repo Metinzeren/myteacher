@@ -1,4 +1,4 @@
-import { View, Text, Keyboard } from 'react-native';
+import { Keyboard } from 'react-native';
 import React, { useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import Input from '../components/Input/Input';
@@ -16,7 +16,6 @@ import Button from '../components/Button/Button';
 import { useTranslation } from 'react-i18next';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
-import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { useClassRooms } from '../context/ClassRoomContext';
 import { getResourceByKey } from '../lang/i18n';
 import { getLocalStorage } from '../utils/AsyncStorageUtils';
@@ -27,7 +26,6 @@ export default function AddStudentScreen(
 ) {
   const t = useTranslation().t;
   const classRoomId = props.route.params.classRoomId;
-  const classRoomRepo = ClassRoomRepository.getInstance();
   const { addStudentFromClassRoom } = useClassRooms();
   const [loading, setLoading] = useState(false);
 
@@ -58,7 +56,7 @@ export default function AddStudentScreen(
       Keyboard.dismiss();
       setLoading(true);
       try {
-        const user = await getLocalStorage('authUser');
+        const user = await getLocalStorage("AUTH_USER");
         const accessToken = user?.stsTokenManager?.accessToken;
         let data = {
           firstName: registerDto.firstName,

@@ -1,4 +1,4 @@
-import { View, Text, Image, Modal } from 'react-native';
+import { View, Image, Modal } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
@@ -25,7 +25,6 @@ import dayjs from 'dayjs';
 import Button from '../components/Button/Button';
 import { sendconfirmAbsenceNotification } from '../firebase/FirebaseApi';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
-import { use } from 'i18next';
 
 export default function NotificationScreen(
   props: NativeStackScreenProps<RootStackParamList, 'NotificationScreen'>,
@@ -36,7 +35,6 @@ export default function NotificationScreen(
   const [loading, setLoading] = useState(false);
   const [loadingAbsence, setLoadingAbsence] = useState(false)
   const notificationsApprovedRef = useRef<BottomSheetRef>(null);
-  const ClassRoomRepo = ClassRoomRepository.getInstance();
   const [showPhotoModal, setShowPhotoModal] = useState(false)
   const [selectedImage, setSelectedImage] = useState<any>([])
   const [selectedNotification, setSelectedNotification] = useState({} as NotificationResponse);
@@ -83,6 +81,7 @@ export default function NotificationScreen(
       second: '2-digit',
     });
   };
+  console.log('notifications', notifications);
 
 
   const RenderItem = ({ item, index }: { item: NotificationResponse; index: number }) => {

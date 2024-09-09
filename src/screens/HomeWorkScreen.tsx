@@ -1,7 +1,7 @@
 import { View, Platform, TouchableOpacity } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CalendarProvider, WeekCalendar } from 'react-native-calendars';
+import { CalendarProvider, LocaleConfig, WeekCalendar } from 'react-native-calendars';
 import Input from '../components/Input/Input';
 import { faFilter, faPen, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
@@ -27,9 +27,27 @@ import IconButton from '../components/IconButton/IconButton';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
 import UpdateHomeWorkContent from '../bottomSheetContents/UpdateHomeWorkContent';
 import FilteredHomwork from '../bottomSheetContents/FilteredHomwork';
+import i18next from 'i18next';
 export default function CalendarScreen(
   props: NativeStackScreenProps<RootStackParamList>,
 ) {
+
+  LocaleConfig.locales.tr = {
+    monthNames: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
+    monthNamesShort: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'],
+    dayNames: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
+    dayNamesShort: ['Paz', 'Pts', 'Sal', 'Çar', 'Per', 'Cum', 'Cts'],
+  };
+  LocaleConfig.locales.en = {
+    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+    dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    today: 'Today'
+  };
+  const currentLanguage = i18next.language;
+  LocaleConfig.defaultLocale = currentLanguage || 'tr';
+
   const filterBottomSheetRef = useRef<BottomSheetRef>(null);
   const { setHomeworks, homeworks, deleteHomework, setSelectedHomework } = useHomeworks();
   const [loading, setLoading] = useState(true);
@@ -118,7 +136,7 @@ export default function CalendarScreen(
     <Container
       goBackShow
       header
-      title="Ödev Takvimi"
+      title={t(homeworkLanguage.HOMEWORK_CALENDAR)}
       extraIcon={faFilter}
       extraIconPress={() => {
         filterBottomSheetRef.current?.open();
@@ -161,8 +179,18 @@ export default function CalendarScreen(
   );
 }
 const AndroidContaier = ({ search, setSearch }: any) => {
+
   const [selectedDay, setSelectedDay] = useState(dayjs().format('YYYY-MM-DD'));
   const colors = useThemeColors();
+
+  // useEffect(() => {
+  //   if (currentLanguage) {
+  //     LocaleConfig.defaultLocale = currentLanguage;
+  //     console.log(LocaleConfig.defaultLocale);
+
+  //   }
+  // }, [currentLanguage]);
+  // console.log(LocaleConfig.defaultLocale);
   return (
     <SafeAreaView
       style={{

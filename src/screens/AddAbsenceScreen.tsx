@@ -1,11 +1,7 @@
 import {
   View,
-  Text,
   Keyboard,
   Image,
-  StyleSheet,
-  PermissionsAndroid,
-  ScrollView,
 } from 'react-native';
 import React, { useEffect, useRef, useState } from 'react';
 import Container from '../components/Container/Container';
@@ -15,7 +11,6 @@ import Input from '../components/Input/Input';
 import {
   faAdd,
   faCalendar,
-  faCamera,
   faFileAlt,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
@@ -27,7 +22,6 @@ import CustomBottomSheet, {
   BottomSheetRef,
 } from '../components/CustomBottomSheet/CustomBottomSheet';
 import PlaceholderInput from '../components/PlaceholderInput/PlaceholderInput';
-import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import styled from 'styled-components';
 import IconButton from '../components/IconButton/IconButton';
 import { getResourceByKey } from '../lang/i18n';
@@ -45,13 +39,14 @@ import NotificationModel from '../models/NotificationModel';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import { sendNotification } from '../firebase/FirebaseApi';
 import dayjs from 'dayjs';
+import usePhoto from '../hooks/usePhoto';
 export default function AddAbsenceScreen(
   props: NativeStackScreenProps<RootStackParamList, 'AddAbsenceScreen'>,
 ) {
   const { t } = useTranslation();
   const formRef = useRef<FormContainerRef>(null);
   const AbsenteeismRepo = AbsenteeismRepository.getInstance();
-  let addAbsenceWarnings = getResourceByKey('addAbsenceForm');
+  const { photos, deletePhoto, initLaunchCamera, initLaunchImage } = usePhoto();
   const UserRepo = UserRepository.getInstance();
   const ClassRoomRepo = ClassRoomRepository.getInstance();
   const startDateBottomSheetRef = useRef<BottomSheetRef>(null);
@@ -60,7 +55,6 @@ export default function AddAbsenceScreen(
   const [loading, setLoading] = useState<boolean>(false);
   const [imageUri, setImageUri] = useState<string | null>(null);
   const [userInfo, setUserInfo] = useState({} as any);
-  const [showAddPhotoContent, setShowAddPhotoContent] = useState(false)
   const today = format(new Date(), 'yyyy-MM-dd');
   const [registerDto, setRegisterDto] = useState<Absenteeism>({
     id: uuid.v4().toString(),
@@ -104,68 +98,6 @@ export default function AddAbsenceScreen(
     );
   };
 
-  const handleSelectImage = () => {
-    const options = {
-      mediaType: 'photo' as const,
-      maxWidth: 300,
-      maxHeight: 300,
-      quality: 1,
-    };
-
-    launchImageLibrary(options as any, response => {
-      if (response.didCancel) {
-        console.log('User cancelled image picker');
-      } else if (response.errorCode) {
-        console.log('ImagePicker Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        const uri = response.assets[0].uri;
-        setImageUri(uri || null);
-        handleChange('photo', uri || '');
-      }
-    });
-  };
-  const requestCameraPermission = async () => {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.CAMERA,
-        {
-          title: 'App Camera Permission',
-          message: 'App needs access to your camera ',
-          buttonNeutral: 'Ask Me Later',
-          buttonNegative: 'Cancel',
-          buttonPositive: 'OK',
-        },
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        handleTakePhoto();
-        console.log('Camera permission given');
-      } else {
-        console.log('Camera permission denied');
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  };
-  const handleTakePhoto = () => {
-    const options = {
-      mediaType: 'photo' as const,
-      maxWidth: 300,
-      maxHeight: 300,
-      quality: 1,
-    };
-
-    launchCamera(options as any, response => {
-      if (response.didCancel) {
-        console.log('User cancelled camera');
-      } else if (response.errorCode) {
-        console.log('Camera Error: ', response.errorMessage);
-      } else if (response.assets && response.assets.length > 0) {
-        const uri = response.assets[0].uri;
-        setImageUri(uri || null);
-        handleChange('photo', uri || '');
-      }
-    });
-  };
   const PhotoButtonContent = () => {
     return (
       <Buttons>
@@ -173,14 +105,14 @@ export default function AddAbsenceScreen(
           text="Select Image"
           onPress={() => {
             photoButtonRef.current?.close();
-            handleSelectImage();
+            initLaunchImage()
           }}
         />
         <Button
           text="Take Photo"
           onPress={() => {
             photoButtonRef.current?.close();
-            requestCameraPermission();
+            initLaunchCamera();
           }}
         />
       </Buttons>
@@ -242,8 +174,8 @@ export default function AddAbsenceScreen(
       setLoading(true);
       let photoUrl = '';
 
-      if (imageUri) {
-        let bytes = await fetch(imageUri).then(res => res.blob());
+      if (photos) {
+        let bytes = await fetch(photos[0]).then(res => res.blob());
         let storageRef = ref(
           initStorage,
           `absenteeism/${userInfo.id}/${registerDto.id}`,
@@ -284,6 +216,7 @@ export default function AddAbsenceScreen(
       }
     }
   };
+  console.log(photos[0]);
 
   return (
     <Container goBackShow title={t('STUDENT_ABSENCE')} header>
@@ -305,21 +238,23 @@ export default function AddAbsenceScreen(
               />
             </IconContainer>
             <ImageContainer>
-              {imageUri && <StyledImage source={{ uri: imageUri }} />}
-              {imageUri && (
-                <DeleteIconContainer>
-                  <IconButton
-                    iconSize={15}
-                    backgroundColor="#fff"
-                    iconColor="orange"
-                    onPress={() => {
-                      setRegisterDto({ ...registerDto, photo: '' });
-                      setImageUri(null);
-                    }}
-                    icon={faTrash}
-                  />
-                </DeleteIconContainer>
-              )}
+              {photos.length > 0 && (
+                <>
+                  <StyledImage source={{ uri: photos[0] }} />
+                  <DeleteIconContainer>
+                    <IconButton
+                      iconSize={15}
+                      backgroundColor="#fff"
+                      iconColor="orange"
+                      onPress={() => {
+                        deletePhoto(0);
+                        setImageUri(null);
+                      }}
+                      icon={faTrash}
+                    />
+                  </DeleteIconContainer>
+                </>)}
+
             </ImageContainer>
           </AddPhotoContainer>
 

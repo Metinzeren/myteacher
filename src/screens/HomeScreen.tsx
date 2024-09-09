@@ -1,22 +1,19 @@
-import { View, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from 'react';
+import {View, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState} from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import {
-  faClose,
-  faSearch,
-} from '@fortawesome/free-solid-svg-icons';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
-import { auth } from '../firebase/config';
+import {faClose, faSearch} from '@fortawesome/free-solid-svg-icons';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
+import {auth} from '../firebase/config';
 import Input from '../components/Input/Input';
 import ClassRoomRepository from '../repositories/ClassRoomRepository';
 import ClassRoom from '../models/ClassRoom';
 import IconButton from '../components/IconButton/IconButton';
 import Loading from '../components/Loading/Loading';
 
-import { useTranslation } from 'react-i18next';
+import {useTranslation} from 'react-i18next';
 
 import useFcmToken from '../hooks/useFcmToken';
 import DevicesRepository from '../repositories/DeviceRepository';
@@ -24,16 +21,15 @@ import useUser from '../hooks/useUser';
 import Footer from '../components/Footer/Footer';
 
 import MenuItems from '../sections/Home/MenuItems';
-import { getLanguage } from '../lang/i18n';
+import {getLanguage} from '../lang/i18n';
 type Props = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>;
 
-const HomeScreen: React.FC<Props> = ({ navigation }) => {
-
+const HomeScreen: React.FC<Props> = ({navigation}) => {
   const deviceRepo = DevicesRepository.getInstance();
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const { user } = useUser() as any;
-  const { fcmToken } = useFcmToken();
-  const { t } = useTranslation();
+  const {user} = useUser() as any;
+  const {fcmToken} = useFcmToken();
+  const {t} = useTranslation();
   const [searchStudent, setSearchStudent] = useState('');
   const [focusToSearch, setFocusToSearch] = useState(false);
   const [searchStudents, setSearchStudents] = useState<Array<ClassRoom>>([]);
@@ -52,8 +48,6 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
     });
   };
 
-
-
   return (
     <Container
       title={focusToSearch ? t('SEARCH_RESULTS') : t('HOME')}
@@ -62,8 +56,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       userName={user ? user.firstName + ' ' + user.lastName : ''}
       showNotification={!focusToSearch}>
       <HomeTopContainer>
-
-        <View style={{ flex: 1 }}>
+        <View style={{flex: 1}}>
           <Input
             autoCapitalize="none"
             placeholder={t('SEARCH_STUDENT')}
@@ -151,12 +144,10 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
       ) : (
         <MenuItems lang={getLanguage()} />
       )}
-      {!focusToSearch &&
-        <Footer />}
+      {!focusToSearch && <Footer />}
     </Container>
   );
 };
-
 
 const HomeTopContainer = styled(View)`
   margin-horizontal: 10px;

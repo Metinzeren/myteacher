@@ -1,9 +1,18 @@
-import { View, Platform, TouchableOpacity } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { CalendarProvider, LocaleConfig, WeekCalendar } from 'react-native-calendars';
+import {View, Platform, TouchableOpacity} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import {
+  CalendarProvider,
+  LocaleConfig,
+  WeekCalendar,
+} from 'react-native-calendars';
 import Input from '../components/Input/Input';
-import { faFilter, faPen, faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+import {
+  faFilter,
+  faPen,
+  faSearch,
+  faTrash,
+} from '@fortawesome/free-solid-svg-icons';
 import dayjs from 'dayjs';
 import Container from '../components/Container/Container';
 import useThemeColors from '../constant/useColor';
@@ -13,71 +22,144 @@ import CustomBottomSheet, {
 import CustomText from '../components/Text/Text';
 import styled from 'styled-components';
 import Button from '../components/Button/Button';
-import { useTranslation } from 'react-i18next';
-import { getResourceByKey } from '../lang/i18n';
-import AddHomeWorkContent from '../bottomSheetContents/AddHomeWorkContent';
-import { useHomeworks } from '../context/HomeworkContext';
+import {useTranslation} from 'react-i18next';
+import {getResourceByKey} from '../lang/i18n';
+import AddHomeWorkContent from '../BottomSheetContents/AddHomeWorkContent';
+import {useHomeworks} from '../context/HomeworkContext';
 import HomeworkRepository from '../repositories/HomeworkRepository';
-import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
-import { RootStackParamList } from '../types/Navigation';
+import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
+import {RootStackParamList} from '../types/Navigation';
 import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import Homework from '../models/Homework';
 import IconButton from '../components/IconButton/IconButton';
 import AlertDialog from '../components/AlertDialog/AlertDialog';
-import UpdateHomeWorkContent from '../bottomSheetContents/UpdateHomeWorkContent';
-import FilteredHomwork from '../bottomSheetContents/FilteredHomwork';
+import UpdateHomeWorkContent from '../BottomSheetContents/UpdateHomeWorkContent';
+import FilteredHomwork from '../BottomSheetContents/FilteredHomework';
 import i18next from 'i18next';
-export default function CalendarScreen(
-  props: NativeStackScreenProps<RootStackParamList>,
-) {
+import withLocalStorage from '../hoc/withLocalStorage';
+import AndroidHeader from '../sections/HomeWork/AndroidHeader';
+import IosHeader from '../sections/HomeWork/IosHeader';
+LocaleConfig.locales.tr = {
+  monthNames: [
+    'Ocak',
+    'Şubat',
+    'Mart',
+    'Nisan',
+    'Mayıs',
+    'Haziran',
+    'Temmuz',
+    'Ağustos',
+    'Eylül',
+    'Ekim',
+    'Kasım',
+    'Aralık',
+  ],
+  monthNamesShort: [
+    'Oca',
+    'Şub',
+    'Mar',
+    'Nis',
+    'May',
+    'Haz',
+    'Tem',
+    'Ağu',
+    'Eyl',
+    'Eki',
+    'Kas',
+    'Ara',
+  ],
+  dayNames: [
+    'Pazar',
+    'Pazartesi',
+    'Salı',
+    'Çarşamba',
+    'Perşembe',
+    'Cuma',
+    'Cumartesi',
+  ],
+  dayNamesShort: ['Paz', 'Pts', 'Sal', 'Çar', 'Per', 'Cum', 'Cts'],
+};
+LocaleConfig.locales.en = {
+  monthNames: [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ],
+  monthNamesShort: [
+    'Jan',
+    'Feb',
+    'Mar',
+    'Apr',
+    'May',
+    'Jun',
+    'Jul',
+    'Aug',
+    'Sep',
+    'Oct',
+    'Nov',
+    'Dec',
+  ],
+  dayNames: [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ],
+  dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+  today: 'Today',
+};
+const currentLanguage = i18next.language;
+LocaleConfig.defaultLocale = currentLanguage || 'tr';
+type Props = NativeStackScreenProps<RootStackParamList, 'HomeScreen'> & {
+  storedValue: any;
+};
 
-  LocaleConfig.locales.tr = {
-    monthNames: ['Ocak', 'Şubat', 'Mart', 'Nisan', 'Mayıs', 'Haziran', 'Temmuz', 'Ağustos', 'Eylül', 'Ekim', 'Kasım', 'Aralık'],
-    monthNamesShort: ['Oca', 'Şub', 'Mar', 'Nis', 'May', 'Haz', 'Tem', 'Ağu', 'Eyl', 'Eki', 'Kas', 'Ara'],
-    dayNames: ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'],
-    dayNamesShort: ['Paz', 'Pts', 'Sal', 'Çar', 'Per', 'Cum', 'Cts'],
-  };
-  LocaleConfig.locales.en = {
-    monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
-    monthNamesShort: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-    dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-    dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-    today: 'Today'
-  };
-  const currentLanguage = i18next.language;
-  LocaleConfig.defaultLocale = currentLanguage || 'tr';
-
+const CalendarScreen: React.FC<Props> = ({navigation, storedValue}) => {
   const filterBottomSheetRef = useRef<BottomSheetRef>(null);
-  const { setHomeworks, homeworks, deleteHomework, setSelectedHomework } = useHomeworks();
+  const {setHomeworks, getHomeWorks, deleteHomework, setSelectedHomework} =
+    useHomeworks();
   const [loading, setLoading] = useState(true);
   const homeworkRepo = HomeworkRepository.getInstance();
   const [search, setSearch] = useState('');
   const addHomeworkBottomSheetRef = useRef<BottomSheetRef>(null);
   const updateHomeworkBottomSheetRef = useRef<BottomSheetRef>(null);
-  const { t } = useTranslation();
+  const {t} = useTranslation();
   let homeworkLanguage = getResourceByKey('homeworks');
   const getSnapPoints = () => {
     return ['85%'];
   };
   useEffect(() => {
-    props.navigation.addListener('focus', () => {
+    navigation.addListener('focus', () => {
       loadHomeworks();
     });
   }, []);
 
-
   const loadHomeworks = () => {
     setLoading(true);
-    homeworkRepo.getAllHomeworks().then(res => {
-      setHomeworks(res);
-    }).finally(() => {
-      setLoading(false);
-    }
-    );
-  }
+    homeworkRepo
+      .getAllHomeworks()
+      .then(res => {
+        setHomeworks(res);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
 
-  const RenderItem = ({ item, index }: { item: Homework; index: number }) => {
+  const RenderItem = ({item, index}: {item: Homework; index: number}) => {
     return (
       <ListItem
         style={{
@@ -90,21 +172,29 @@ export default function CalendarScreen(
           shadowRadius: 1.24,
           elevation: 3,
         }}
-        onPress={() => {
-
-        }}
+        onPress={() => {}}
         key={index}>
         <ListItemContainer>
-          <CustomText color="grey">{homeworkLanguage.HOMEWORK_TITLE}</CustomText>
-          <CustomText color="grey">{item.homeworkTitle.substring(0, 20)}</CustomText>
+          <CustomText color="grey">
+            {homeworkLanguage.HOMEWORK_TITLE}
+          </CustomText>
+          <CustomText color="grey">
+            {item.homeworkTitle.substring(0, 20)}
+          </CustomText>
         </ListItemContainer>
         <ListItemContainer>
-          <CustomText color="grey">{homeworkLanguage.HOMEWORK_DESCRIPTION}</CustomText>
-          <CustomText color="grey">{item.description.substring(0, 20)}</CustomText>
+          <CustomText color="grey">
+            {homeworkLanguage.HOMEWORK_DESCRIPTION}
+          </CustomText>
+          <CustomText color="grey">
+            {item.description.substring(0, 20)}
+          </CustomText>
         </ListItemContainer>
         <ListItemContainer>
           <CustomText color="grey">{homeworkLanguage.HOMEWORK_TYPE}</CustomText>
-          <CustomText color="grey">{item.homeWorkType.substring(0, 20)}</CustomText>
+          <CustomText color="grey">
+            {item.homeWorkType.substring(0, 20)}
+          </CustomText>
         </ListItemContainer>
         <ListItemButtonContainer>
           <IconButton
@@ -118,14 +208,14 @@ export default function CalendarScreen(
                   homeworkRepo.deleteHomework(item.id);
                   AlertDialog.dismiss();
                 },
-                onCancel() { },
+                onCancel() {},
               });
             }}></IconButton>
           <IconButton
             icon={faPen}
             onPress={() => {
               setSelectedHomework(item);
-              updateHomeworkBottomSheetRef.current?.open()
+              updateHomeworkBottomSheetRef.current?.open();
             }}></IconButton>
         </ListItemButtonContainer>
       </ListItem>
@@ -141,33 +231,52 @@ export default function CalendarScreen(
       extraIconPress={() => {
         filterBottomSheetRef.current?.open();
       }}>
-      {Platform.OS === 'android' ? <AndroidContaier search={search} setSearch={setSearch} /> : <IosContainer />}
+      {Platform.OS === 'android' ? (
+        <AndroidHeader search={search} setSearch={setSearch} />
+      ) : (
+        <IosHeader search={search} setSearch={setSearch} />
+      )}
       <Loading loading={loading}>
         <HomeWorksContainer>
           <ListContainer>
             <CustomFlatList
               notFoundText={t(homeworkLanguage.HOMEWORK_NOT_FOUND)}
               filter={(entity: Homework) => {
-                return entity.homeworkTitle.toLowerCase().includes(search.toLowerCase());
+                return entity.homeworkTitle
+                  .toLowerCase()
+                  .includes(search.toLowerCase());
               }}
-              data={homeworks}
+              data={getHomeWorks()}
               renderItem={RenderItem}
             />
           </ListContainer>
         </HomeWorksContainer>
-        <ButtonContainer>
-          <Button
-            borderRadius={10}
-            onPress={() => addHomeworkBottomSheetRef.current?.open()}
-            text={t(homeworkLanguage.HOMEWORK_ADD)}></Button>
-        </ButtonContainer>
-        <CustomBottomSheet ref={filterBottomSheetRef} snapPoints={getSnapPoints()}>
-          <FilteredHomwork />
+        {storedValue?.userCollection?.role === 'teacher' && (
+          <ButtonContainer>
+            <Button
+              borderRadius={10}
+              onPress={() => addHomeworkBottomSheetRef.current?.open()}
+              text={t(homeworkLanguage.HOMEWORK_ADD)}></Button>
+          </ButtonContainer>
+        )}
+
+        <CustomBottomSheet
+          ref={filterBottomSheetRef}
+          snapPoints={getSnapPoints()}>
+          <FilteredHomwork
+            onClose={() => {
+              filterBottomSheetRef.current?.close();
+            }}
+          />
         </CustomBottomSheet>
         <CustomBottomSheet
           ref={addHomeworkBottomSheetRef}
           snapPoints={getSnapPoints()}>
-          <AddHomeWorkContent />
+          <AddHomeWorkContent
+            onClose={() => {
+              addHomeworkBottomSheetRef.current?.close();
+            }}
+          />
         </CustomBottomSheet>
         <CustomBottomSheet
           ref={updateHomeworkBottomSheetRef}
@@ -177,107 +286,10 @@ export default function CalendarScreen(
       </Loading>
     </Container>
   );
-}
-const AndroidContaier = ({ search, setSearch }: any) => {
-
-  const [selectedDay, setSelectedDay] = useState(dayjs().format('YYYY-MM-DD'));
-  const colors = useThemeColors();
-
-  // useEffect(() => {
-  //   if (currentLanguage) {
-  //     LocaleConfig.defaultLocale = currentLanguage;
-  //     console.log(LocaleConfig.defaultLocale);
-
-  //   }
-  // }, [currentLanguage]);
-  // console.log(LocaleConfig.defaultLocale);
-  return (
-    <SafeAreaView
-      style={{
-        height: 140,
-        backgroundColor: colors.primary,
-      }}>
-      <CalendarProvider date={selectedDay}>
-        <View>
-          <WeekCalendar
-            date={selectedDay}
-            onDayPress={day => {
-              setSelectedDay(day.dateString);
-            }}
-            firstDay={1}
-            theme={{
-              calendarBackground: 'transparent',
-              backgroundColor: 'transparent',
-              dayTextColor: '#fff',
-              textSectionTitleColor: '#fff',
-              selectedDayBackgroundColor: '#34495b',
-            }}
-          />
-        </View>
-      </CalendarProvider>
-      <View style={{ marginTop: 10, marginBottom: 7, marginHorizontal: 10 }}>
-        <Input
-          id="search"
-          enableFocusBorder={false}
-          inputSize="md"
-          style={{ backgroundColor: '#fff' }}
-          icon={faSearch}
-          placeholder="Ödev Ara"
-          onChangeText={text => setSearch(text)}
-          value={search}
-        />
-      </View>
-    </SafeAreaView>
-  );
 };
-const IosContainer = () => {
-  const [selectedDay, setSelectedDay] = useState(dayjs().format('YYYY-MM-DD'));
-  const [search, setSearch] = useState('');
-  const colors = useThemeColors();
-  return (
-    <View>
-      <SafeAreaView>
-        <CalendarProvider date={selectedDay}>
-          <View
-            style={{
-              height: 140,
-              position: 'absolute',
-              top: -60,
-              bottom: 0,
-              backgroundColor: colors.primary,
-            }}>
-            <WeekCalendar
-              date={selectedDay}
-              onDayPress={day => {
-                setSelectedDay(day.dateString);
-              }}
-              firstDay={1}
-              theme={{
-                calendarBackground: 'transparent',
-                backgroundColor: 'transparent',
-                dayTextColor: '#fff',
-                textSectionTitleColor: '#fff',
-                selectedDayBackgroundColor: '#34495b',
-              }}
-            />
-            <View style={{ marginHorizontal: 10 }}>
-              <Input
-                id="search"
-                enableFocusBorder={false}
-                inputSize="md"
-                style={{ backgroundColor: '#fff' }}
-                icon={faSearch}
-                placeholder="Ödev Ara"
-                onChangeText={text => setSearch(text)}
-                value={search}
-              />
-            </View>
-          </View>
-        </CalendarProvider>
-      </SafeAreaView>
-    </View>
-  );
-};
+
+export default withLocalStorage(CalendarScreen, 'AUTH_USER');
+
 const HomeWorksContainer = styled(View)`
   flex: 1;
   padding: 10px;

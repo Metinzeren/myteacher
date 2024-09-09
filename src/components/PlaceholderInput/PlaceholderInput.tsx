@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import {
   View,
   Platform,
@@ -6,11 +6,11 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import styled from 'styled-components';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import { faAngleRight, faCalendar } from '@fortawesome/free-solid-svg-icons';
+import {FontAwesomeIcon} from '@fortawesome/react-native-fontawesome';
+import {faAngleRight, faCalendar} from '@fortawesome/free-solid-svg-icons';
 import useThemeColors from '../../constant/useColor';
 import CustomText from '../Text/Text';
-import { IconProp } from '@fortawesome/fontawesome-svg-core';
+import {IconProp} from '@fortawesome/fontawesome-svg-core';
 
 interface PlaceholderInputProps extends TouchableOpacityProps {
   placeholder?: string;
@@ -20,6 +20,9 @@ interface PlaceholderInputProps extends TouchableOpacityProps {
   required?: boolean;
   value?: string;
   errorMessage?: string;
+  rightIcon?: IconProp;
+  rightIconShow?: boolean;
+  rightIconColor?: string;
 }
 
 const PlaceholderInput = ({
@@ -30,6 +33,7 @@ const PlaceholderInput = ({
   required,
   errorMessage,
   value,
+  rightIconShow = true,
   ...props
 }: PlaceholderInputProps) => {
   const colors = useThemeColors();
@@ -65,8 +69,8 @@ const PlaceholderInput = ({
             inputSize === 'sm'
               ? '10px'
               : Platform.OS === 'android'
-                ? '15px'
-                : '15px',
+              ? '15px'
+              : '15px',
           left:
             iconPosition === 'left' && icon !== undefined
               ? inputPaddingHorizontal
@@ -82,14 +86,16 @@ const PlaceholderInput = ({
         </CustomText>
       </StyledTouchable>
 
-      <IconRight
-        theme={{
-          iconTop: iconTop,
-        }}
-        icon={faAngleRight}
-        size={iconSize}
-        color={colors.iconColor}
-      />
+      {rightIconShow && (
+        <IconRight
+          theme={{
+            iconTop: iconTop,
+          }}
+          icon={props.rightIcon || faAngleRight}
+          size={iconSize}
+          color={props.rightIconColor || colors.iconColor}
+        />
+      )}
       {errorMessage && (
         <CustomText color="error" fontSizes="body4">
           {errorMessage}

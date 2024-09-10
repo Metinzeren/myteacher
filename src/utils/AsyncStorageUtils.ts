@@ -14,6 +14,7 @@ export const setLocalStorage = async (
   try {
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem(key, jsonValue);
+
   } catch (e) {
     console.error('Error storing value in AsyncStorage:', e);
   }
@@ -29,7 +30,7 @@ export const getLocalStorage = async (key: keyof typeof LocalStorageKeys): Promi
 };
 export const getUserFromCollection = async (): Promise<any> => {
   try {
-    const jsonValue = await AsyncStorage.getItem('authUser');
+    const jsonValue = await AsyncStorage.getItem("AUTH_USER");
     return jsonValue != null ? JSON.parse(jsonValue).userCollection : null;
   } catch (e) {
     console.error('Error retrieving value from AsyncStorage:', e);
@@ -37,7 +38,7 @@ export const getUserFromCollection = async (): Promise<any> => {
 };
 export const getUserId = async (): Promise<any> => {
   try {
-    const jsonValue = await AsyncStorage.getItem('authUser');
+    const jsonValue = await AsyncStorage.getItem("AUTH_USER");
     return jsonValue != null ? JSON.parse(jsonValue).uid : '';
   } catch (e) {
     console.error('Error retrieving value from AsyncStorage:', e);
@@ -46,7 +47,7 @@ export const getUserId = async (): Promise<any> => {
 
 export const getUserAccesToken = async (): Promise<any> => {
   try {
-    const jsonValue = await AsyncStorage.getItem('authUser');
+    const jsonValue = await AsyncStorage.getItem("AUTH_USER");
     return jsonValue != null ? JSON.parse(jsonValue).accessToken : '';
   } catch (e) {
     console.error('Error retrieving value from AsyncStorage:', e);
@@ -54,7 +55,7 @@ export const getUserAccesToken = async (): Promise<any> => {
 }
 export const getLanguage = async (): Promise<any> => {
   try {
-    const jsonValue = await AsyncStorage.getItem('language');
+    const jsonValue = await AsyncStorage.getItem("LANGUAGE");
     return jsonValue != null ? JSON.parse(jsonValue) : null;
   } catch (e) {
     console.error('Error retrieving value from AsyncStorage:', e);

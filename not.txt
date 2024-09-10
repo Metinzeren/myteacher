@@ -9,3 +9,4 @@ Ortak styledlar belirlenecek ve bunlar constant sayfasında globalStyled adlı t
 
 BUGS
 Bildirim backendi düzeltilecek.
+giriş yapınca menü gelmiyor

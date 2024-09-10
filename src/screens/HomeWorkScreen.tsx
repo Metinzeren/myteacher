@@ -1,34 +1,27 @@
-import {View, Platform, TouchableOpacity} from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
-import {SafeAreaView} from 'react-native-safe-area-context';
+import { View, Platform, TouchableOpacity } from 'react-native';
+import React, { useEffect, useRef, useState } from 'react';
 import {
-  CalendarProvider,
   LocaleConfig,
-  WeekCalendar,
 } from 'react-native-calendars';
-import Input from '../components/Input/Input';
 import {
   faFilter,
   faPen,
-  faSearch,
   faTrash,
 } from '@fortawesome/free-solid-svg-icons';
-import dayjs from 'dayjs';
 import Container from '../components/Container/Container';
-import useThemeColors from '../constant/useColor';
 import CustomBottomSheet, {
   BottomSheetRef,
 } from '../components/CustomBottomSheet/CustomBottomSheet';
 import CustomText from '../components/Text/Text';
 import styled from 'styled-components';
 import Button from '../components/Button/Button';
-import {useTranslation} from 'react-i18next';
-import {getResourceByKey} from '../lang/i18n';
+import { useTranslation } from 'react-i18next';
+import { getResourceByKey } from '../lang/i18n';
 import AddHomeWorkContent from '../BottomSheetContents/AddHomeWorkContent';
-import {useHomeworks} from '../context/HomeworkContext';
+import { useHomeworks } from '../context/HomeworkContext';
 import HomeworkRepository from '../repositories/HomeworkRepository';
-import {NativeStackScreenProps} from 'react-native-screens/lib/typescript/native-stack/types';
-import {RootStackParamList} from '../types/Navigation';
+import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
+import { RootStackParamList } from '../types/Navigation';
 import Loading from '../components/Loading/Loading';
 import CustomFlatList from '../components/Flatlist/CustomFlatList';
 import Homework from '../models/Homework';
@@ -127,16 +120,16 @@ type Props = NativeStackScreenProps<RootStackParamList, 'HomeScreen'> & {
   storedValue: any;
 };
 
-const CalendarScreen: React.FC<Props> = ({navigation, storedValue}) => {
+const CalendarScreen: React.FC<Props> = ({ navigation, storedValue }) => {
   const filterBottomSheetRef = useRef<BottomSheetRef>(null);
-  const {setHomeworks, getHomeWorks, deleteHomework, setSelectedHomework} =
+  const { setHomeworks, getHomeWorks, deleteHomework, setSelectedHomework } =
     useHomeworks();
   const [loading, setLoading] = useState(true);
   const homeworkRepo = HomeworkRepository.getInstance();
   const [search, setSearch] = useState('');
   const addHomeworkBottomSheetRef = useRef<BottomSheetRef>(null);
   const updateHomeworkBottomSheetRef = useRef<BottomSheetRef>(null);
-  const {t} = useTranslation();
+  const { t } = useTranslation();
   let homeworkLanguage = getResourceByKey('homeworks');
   const getSnapPoints = () => {
     return ['85%'];
@@ -159,7 +152,7 @@ const CalendarScreen: React.FC<Props> = ({navigation, storedValue}) => {
       });
   };
 
-  const RenderItem = ({item, index}: {item: Homework; index: number}) => {
+  const RenderItem = ({ item, index }: { item: Homework; index: number }) => {
     return (
       <ListItem
         style={{
@@ -172,7 +165,7 @@ const CalendarScreen: React.FC<Props> = ({navigation, storedValue}) => {
           shadowRadius: 1.24,
           elevation: 3,
         }}
-        onPress={() => {}}
+        onPress={() => { }}
         key={index}>
         <ListItemContainer>
           <CustomText color="grey">
@@ -208,7 +201,7 @@ const CalendarScreen: React.FC<Props> = ({navigation, storedValue}) => {
                   homeworkRepo.deleteHomework(item.id);
                   AlertDialog.dismiss();
                 },
-                onCancel() {},
+                onCancel() { },
               });
             }}></IconButton>
           <IconButton

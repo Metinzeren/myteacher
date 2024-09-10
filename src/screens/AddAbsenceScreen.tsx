@@ -140,9 +140,8 @@ export default function AddAbsenceScreen(
     let notificationLanguage = getResourceByKey('notifications');
     let userId = await getUserId();
     let classRoomId = await UserRepo.getClassRoomIdByUserId();
+
     let teachers = await ClassRoomRepo.getTeachersByClassRoomId(classRoomId);
-
-
 
     let data = {
       from: userId,
@@ -159,6 +158,8 @@ export default function AddAbsenceScreen(
       isRead: false,
       createdDate: new Date().toISOString(),
     } as NotificationModel;
+    console.log(data.to);
+
     await sendNotification(data)
       .then(e => {
         console.log('Notification sent:' + e);
@@ -173,8 +174,9 @@ export default function AddAbsenceScreen(
       Keyboard.dismiss();
       setLoading(true);
       let photoUrl = '';
+      console.log("asdgasdg");
 
-      if (photos) {
+      if (photos.length > 0) {
         let bytes = await fetch(photos[0]).then(res => res.blob());
         let storageRef = ref(
           initStorage,
@@ -193,7 +195,6 @@ export default function AddAbsenceScreen(
         classRoomId: userInfo.classRoomId,
         isApproved: registerDto.isApproved,
       };
-
       try {
         let response = await AbsenteeismRepo.addAbsenteeism(data);
         await sendAbsenceNotification({
@@ -216,7 +217,6 @@ export default function AddAbsenceScreen(
       }
     }
   };
-  console.log(photos[0]);
 
   return (
     <Container goBackShow title={t('STUDENT_ABSENCE')} header>

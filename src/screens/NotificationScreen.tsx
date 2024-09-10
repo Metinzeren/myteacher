@@ -81,7 +81,6 @@ export default function NotificationScreen(
       second: '2-digit',
     });
   };
-  console.log('notifications', notifications);
 
 
   const RenderItem = ({ item, index }: { item: NotificationResponse; index: number }) => {
@@ -177,10 +176,11 @@ export default function NotificationScreen(
         accessToken: accessToken
       });
       notificationsApprovedRef.current?.close();
-      setLoadingAbsence(false)
+
     } else {
       console.error('Access token not found');
     }
+    setLoadingAbsence(false)
   }
 
 

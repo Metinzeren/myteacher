@@ -157,6 +157,15 @@
     "student": "Please select the student",
     "description": "Please enter the description"
   },
+  "profileForm": {
+    "firstName": "Please enter your first name",
+    "lastName": "Please enter your last name",
+    "email": "Please enter your email",
+    "phone": "Please enter your phone number",
+    "password": "Please enter your password",
+    "confirmPassword": "Please confirm your password",
+    "passwords_not_matched": "Passwords do not match"
+  },
   "addQuestionForm": {
     "question": "Please enter the question",
     "type": "Please select the type",
@@ -209,6 +218,14 @@
     "ABSENCE": "Absence",
     "LOGOUT": "Logout",
     "DATA_NOT_FOUND": "Data not found"
+  },
+  "profile": {
+    "PROFILE": "Profile",
+    "PROFILE_EDIT": "Edit profile",
+    "PROFILE_EDIT_SUCCESS": "Profile edited successfully",
+    "PROFILE_EDIT_ERROR": "Profile could not be edited",
+    "PROFILE_DELETE": "Delete profile",
+    "PROFILE_PHOTO": "Profile photo"
   },
   "firebase": {
     "auth/invalid-email": "The email address is not valid.",

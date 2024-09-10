@@ -154,6 +154,15 @@
     "student": "Lütfen öğrenciyi seçin",
     "description": "Lütfen açıklamayı girin"
   },
+  "profileForm": {
+    "firstName": "Lütfen adınızı girin",
+    "lastName": "Lütfen soyadınızı girin",
+    "email": "Lütfen e-posta adresinizi girin",
+    "phone": "Lütfen telefon numaranızı girin",
+    "password": "Lütfen şifrenizi girin",
+    "confirmPassword": "Lütfen şifrenizi onaylayın",
+    "passwords_not_matched": "Şifreler eşleşmiyor"
+  },
   "addClassRoomForm": {
     "name": "Lütfen sınıf adını girin!"
   },
@@ -216,6 +225,18 @@
     "ABSENCE": "Öğrenci Devamsızlık",
     "LOGOUT": "Çıkış Yap",
     "DATA_NOT_FOUND": "Veri bulunamadı"
+  },
+  "profile": {
+    "PROFILE": "Profil",
+    "PROFILE_INFO": "Profil bilgisi",
+    "PROFILE_EDIT": "Profili düzenle",
+    "PROFILE_EDIT_SUCCESS": "Profil başarıyla düzenlendi",
+    "PROFILE_EDIT_ERROR": "Profil düzenlenemedi",
+    "PROFILE_DELETE": "Profili sil",
+    "PROFILE_DELETE_SUCCESS": "Profil başarıyla silindi",
+    "PROFILE_DELETE_ERROR": "Profil silinemedi",
+    "PROFILE_DELETE_CHECK": "Profili silmek istediğinizden emin misiniz?",
+    "PROFILE_PHOTO": "Profil fotoğrafı"
   },
   "firebase": {
     "auth/invalid-email": "Geçersiz e-posta adresi.",

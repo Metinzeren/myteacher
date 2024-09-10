@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import Container from '../components/Container/Container';
 import styled from 'styled-components';
 import CustomText from '../components/Text/Text';
-import { faAngleDoubleRight, faAngleRight, faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight, faClose, faSearch } from '@fortawesome/free-solid-svg-icons';
 import { NativeStackScreenProps } from 'react-native-screens/lib/typescript/native-stack/types';
 import { RootStackParamList } from '../types/Navigation';
 import { auth } from '../firebase/config';
@@ -59,7 +59,11 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
         <HomeTopContainer>
 
           <View style={{ flex: 1, flexDirection: "column", gap: 20 }}>
-            {!focusToSearch && <WelcomeContainer>
+            {!focusToSearch && <WelcomeContainer
+              onPress={() => {
+                navigation.navigate('ProfileScreen')
+              }}
+            >
               <LottieView
                 style={{ width: 65, height: 65 }}
                 autoPlay
@@ -201,7 +205,7 @@ const ListItemContainer = styled(View)`
   justify-content: space-between;
   margin-bottom: 8px;
 `;
-const WelcomeContainer = styled(View)`
+const WelcomeContainer = styled(TouchableOpacity)`
     background-color: #fff;
     align-items: center;
     justify-content: space-between;

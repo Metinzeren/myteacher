@@ -26,6 +26,7 @@ import FirebaseNotifications from '../screens/FirebaseNotifications';
 import UserRepository from '../repositories/UserRepository';
 import SplashScreen from 'react-native-splash-screen';
 import withLocalStorage from '../hoc/withLocalStorage';
+import ProfileScreen from '../screens/ProfileScreen';
 const RootNavigator = () => {
   const userRepository = UserRepository.getInstance();
   const Stack = createStackNavigator<RootStackParamList>();
@@ -190,6 +191,13 @@ const RootNavigator = () => {
             <Stack.Screen
               name="AddAbsenceScreen"
               component={AddAbsenceScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen
+              name="ProfileScreen"
+              component={ProfileScreen}
               options={{
                 headerShown: false,
               }}

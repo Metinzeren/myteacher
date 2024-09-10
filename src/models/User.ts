@@ -4,7 +4,8 @@ interface User {
     lastName: string;
     phone: string;
     password: string;
-    role: 'teacher' | 'parent'
+    role: 'teacher' | 'parent';
+    email: string;
 }
 
 export default User;

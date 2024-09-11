@@ -12,7 +12,6 @@ import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/config';
 import '../lang/i18n';
-import DevicesRepository from '../repositories/DeviceRepository';
 import Footer from '../components/Footer/Footer';
 import { getResourceByKey } from '../lang/i18n';
 

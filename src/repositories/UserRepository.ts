@@ -57,6 +57,8 @@ class UserRepository {
     return userSnapshot.docs.map(doc => doc.data() as User);
   }
 
+
+
 }
 
 export default UserRepository;

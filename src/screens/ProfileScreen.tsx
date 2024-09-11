@@ -1,10 +1,10 @@
-import { View, Text, Keyboard } from 'react-native'
+import { View, Keyboard } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import Container from '../components/Container/Container'
 import { getResourceByKey } from '../lang/i18n'
 import FormContainer, { FormContainerRef } from 'react-native-form-container'
 import Input from '../components/Input/Input'
-import { faEnvelope, faLock, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faEnvelope, faPhone, faUser } from '@fortawesome/free-solid-svg-icons'
 import { useTranslation } from 'react-i18next'
 import Button from '../components/Button/Button'
 import styled from 'styled-components'
@@ -12,7 +12,8 @@ import useUser from '../hooks/useUser'
 import Loading from '../components/Loading/Loading'
 import UserRepository from '../repositories/UserRepository'
 import User from '../models/User'
-import { setLocalStorage } from '../utils/AsyncStorageUtils'
+import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomSheet/CustomBottomSheet'
+import ChangePasswordContent from '../BottomSheetContents/ChangePasswordContent'
 
 export default function ProfileScreen() {
     const profileLanguage = getResourceByKey('profile')
@@ -21,6 +22,7 @@ export default function ProfileScreen() {
     const [loading, setLoading] = useState(false);
     const { user } = useUser() as any;
     const userId = user?.id || '';
+    const changePasswordRef = useRef<BottomSheetRef>(null);
 
 
     const [updateDto, setUpdateDto] = useState({
@@ -28,8 +30,6 @@ export default function ProfileScreen() {
         lastName: '',
         email: '',
         phone: '',
-        password: '',
-        confirmPassword: '',
         id: "",
         role: "",
     })
@@ -49,8 +49,6 @@ export default function ProfileScreen() {
                 lastName: user.lastName,
                 email: user.email,
                 phone: user.phone,
-                password: "123456",
-                confirmPassword: "123456",
                 id: user.id,
                 role: user.role
             });
@@ -126,28 +124,17 @@ export default function ProfileScreen() {
                             value={updateDto.email}
                             onChangeText={e => handleChange('email', e)}
                         />
-                        <Input
-                            required
-                            id="password"
-                            placeholder={t('PASSWORD')}
-                            icon={faLock}
-                            secureTextEntry={true}
-                            value={updateDto.password}
-                            onChangeText={e => handleChange('password', e)}
-                        />
-                        <Input
-                            required
-                            id="confirmPassword"
-                            placeholder={t('CONFIRM_PASSWORD')}
-                            icon={faLock}
-                            secureTextEntry={true}
-                            value={updateDto.confirmPassword}
-                            onChangeText={e => handleChange('confirmPassword', e)}
-                        />
                     </FormContainer>
 
                 </Container>
                 <ButtonContainer>
+                    <Button
+                        borderRadius={10}
+                        text={t(profileLanguage.PROFILE_CHANGE_PASSWORD)}
+                        onPress={() => {
+                            changePasswordRef.current?.open();
+                        }}
+                    ></Button>
                     <Button
                         borderRadius={10}
                         text={t("SAVE")}
@@ -157,6 +144,9 @@ export default function ProfileScreen() {
                     ></Button>
                 </ButtonContainer>
             </Loading>
+            <CustomBottomSheet snapPoints={['60%', '70%']} ref={changePasswordRef}>
+                <ChangePasswordContent />
+            </CustomBottomSheet>
         </Container>
     )
 }
@@ -164,7 +154,9 @@ export default function ProfileScreen() {
 const ButtonContainer = styled(View)`
   flex: 0.2;
   max-height: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
+  flex-direction: column;
+  gap: 10px;
   justify-content: center;
   padding-horizontal: 10px;
 `;

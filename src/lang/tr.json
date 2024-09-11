@@ -114,6 +114,13 @@
     "EMAIL": "E-posta",
     "PHONE": "Telefon",
     "PASSWORD": "Şifre",
+    "CURRENT_PASSWORD": "Mevcut şifre",
+    "REAUTHENTICATION_FAILED": "Yeniden kimlik doğrulama başarısız oldu. Lütfen tekrar giriş yapın.",
+    "WRONG_CURRENT_PASSWORD": "Mevcut şifre yanlış",
+    "PASSWORDS_DO_NOT_MATCH": "Şifreler eşleşmiyor",
+    "PASSWORD_CHANGE_SUCCESS": "Şifre başarıyla değiştirildi",
+    "PASSWORD_CHANGE_FAILED": "Şifre değiştirilemedi",
+    "USER_NOT_FOUND": "Kullanıcı bulunamadı",
     "REGISTER_AND_START": "Hesabını oluştur ve sınıfını oluştur. Hemen başla!",
     "CONFIRM_PASSWORD": "Şifreyi onayla",
     "PARENT_FIRST_NAME": "Veli adı",
@@ -236,7 +243,8 @@
     "PROFILE_DELETE_SUCCESS": "Profil başarıyla silindi",
     "PROFILE_DELETE_ERROR": "Profil silinemedi",
     "PROFILE_DELETE_CHECK": "Profili silmek istediğinizden emin misiniz?",
-    "PROFILE_PHOTO": "Profil fotoğrafı"
+    "PROFILE_PHOTO": "Profil fotoğrafı",
+    "PROFILE_CHANGE_PASSWORD": "Şifre değiştir"
   },
   "firebase": {
     "auth/invalid-email": "Geçersiz e-posta adresi.",

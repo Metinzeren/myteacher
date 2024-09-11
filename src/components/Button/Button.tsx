@@ -46,6 +46,9 @@ export default function Button({
         if (loading) {
           return true;
         }
+        if (props.disabled) {
+          return;
+        }
         if (lockPressed) {
           return;
         }

@@ -113,6 +113,13 @@
     "STUDENT_NO": "Student number",
     "EMAIL": "Email",
     "PASSWORD": "Password",
+    "CURRENT_PASSWORD": "Current password",
+    "REAUTHENTICATION_FAILED": "Reauthentication failed",
+    "WRONG_CURRENT_PASSWORD": "Wrong current password",
+    "PASSWORDS_DO_NOT_MATCH": "Passwords do not match",
+    "PASSWORD_CHANGE_SUCCESS": "Password changed successfully",
+    "PASSWORD_CHANGE_FAILED": "Password could not be changed",
+    "USER_NOT_FOUND": "User not found",
     "REGISTER_AND_START": "Create your account and create your class. Start now!",
     "PHONE": "Phone",
     "CONFIRM_PASSWORD": "Confirm password",
@@ -225,7 +232,8 @@
     "PROFILE_EDIT_SUCCESS": "Profile edited successfully",
     "PROFILE_EDIT_ERROR": "Profile could not be edited",
     "PROFILE_DELETE": "Delete profile",
-    "PROFILE_PHOTO": "Profile photo"
+    "PROFILE_PHOTO": "Profile photo",
+    "PROFILE_CHANGE_PASSWORD": "Change password"
   },
   "firebase": {
     "auth/invalid-email": "The email address is not valid.",

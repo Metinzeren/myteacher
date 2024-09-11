@@ -68,7 +68,7 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 style={{ width: 65, height: 65 }}
                 autoPlay
                 loop
-                source={user.role === "parent" ? require('../assets/animations/lottie/parental-support.json') : require('../assets/animations/lottie/teacher-teaching-lesson.json')}
+                source={user?.role === "parent" ? require('../assets/animations/lottie/parental-support.json') : require('../assets/animations/lottie/teacher-teaching-lesson.json')}
               />
               <View
                 style={{ flex: 1, justifyContent: 'center', flexDirection: "column" }}

@@ -1,7 +1,7 @@
-import { View, Text, SafeAreaView } from 'react-native';
+import {View, Text, SafeAreaView} from 'react-native';
 import useThemeColors from '../../constant/useColor';
 import styled from 'styled-components';
-import Header, { HeaderProps } from '../Header/Header';
+import Header, {HeaderProps} from '../Header/Header';
 
 interface ContainerProps extends HeaderProps {
   children?: React.ReactNode;
@@ -75,7 +75,16 @@ export default function Container({
       style={{
         backgroundColor: bgColor ? bgColor : colors.background,
       }}>
-      {header && <Header {...props} isHome={isHome} userName={userName} goBackShow={goBackShow} />}
+      <View>
+        {header && (
+          <Header
+            {...props}
+            isHome={isHome}
+            userName={userName}
+            goBackShow={goBackShow}
+          />
+        )}
+      </View>
       {type === 'container' ? (
         <View
           style={{

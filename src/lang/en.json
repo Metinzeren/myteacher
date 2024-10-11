@@ -223,6 +223,7 @@
     "HOMEWORKS": "Homeworks",
     "QUESTIONS": "Questions",
     "ABSENCE": "Absence",
+    "MESSAGES": "Messages",
     "LOGOUT": "Logout",
     "DATA_NOT_FOUND": "Data not found"
   },

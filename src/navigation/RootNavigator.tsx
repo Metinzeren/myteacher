@@ -1,13 +1,13 @@
-import { TransitionPresets, createStackNavigator } from '@react-navigation/stack';
+import {TransitionPresets, createStackNavigator} from '@react-navigation/stack';
 
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
 import ForgotPasswordScreen from '../screens/ForgotPassword';
-import { useEffect, useState } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase/config';
+import {useEffect, useState} from 'react';
+import {onAuthStateChanged} from 'firebase/auth';
+import {auth} from '../firebase/config';
 import HomeScreen from '../screens/HomeScreen';
-import { RootStackParamList } from '../types/Navigation';
+import {RootStackParamList} from '../types/Navigation';
 import StudentsScreen from '../screens/StudentsScreen';
 import AddStudentScreen from '../screens/AddStudentScreen';
 import CalendarScreen from '../screens/HomeWorkScreen';
@@ -18,7 +18,7 @@ import AddClassScreen from '../screens/AddClassScreen';
 import UpdateClassScreen from '../screens/UpdateClassScreen';
 import NotificationScreen from '../screens/NotificationScreen';
 import StudentEvulationScreen from '../screens/StudentEvulationScreen';
-import { getLocalStorage, setLocalStorage } from '../utils/AsyncStorageUtils';
+import {getLocalStorage, setLocalStorage} from '../utils/AsyncStorageUtils';
 import AddStudentEvulationScreen from '../screens/AddStudentEvulationScreen';
 import UpdateStudentEvulationScreen from '../screens/UpdateStudentEvulationScreen';
 import AddAbsenceScreen from '../screens/AddAbsenceScreen';
@@ -27,6 +27,8 @@ import UserRepository from '../repositories/UserRepository';
 import SplashScreen from 'react-native-splash-screen';
 import withLocalStorage from '../hoc/withLocalStorage';
 import ProfileScreen from '../screens/ProfileScreen';
+import MessageScreen from '../screens/MessageScreen';
+import useUser from '../hooks/useUser';
 const RootNavigator = () => {
   const userRepository = UserRepository.getInstance();
   const Stack = createStackNavigator<RootStackParamList>();
@@ -40,7 +42,7 @@ const RootNavigator = () => {
           let userFromUserCollection = await userRepository.getUser(user.uid);
           setUserRole(userFromUserCollection.role);
 
-          let concatUser = { ...user, userCollection: userFromUserCollection };
+          let concatUser = {...user, userCollection: userFromUserCollection};
           await setLocalStorage('AUTH_USER', concatUser);
         } catch (error) {
           console.error('Error during auth state change:', error);
@@ -54,7 +56,6 @@ const RootNavigator = () => {
         }
       }
       SplashScreen.hide();
-
     };
 
     const unsubscribe = onAuthStateChanged(auth, handleAuthStateChange);
@@ -66,7 +67,6 @@ const RootNavigator = () => {
     <>
       {authUser != null && <FirebaseNotifications />}
       <Stack.Navigator
-
         initialRouteName="LoginScreen"
         screenOptions={{
           ...TransitionPresets.SlideFromRightIOS,
@@ -202,12 +202,18 @@ const RootNavigator = () => {
                 headerShown: false,
               }}
             />
+            <Stack.Screen
+              name="MessageScreen"
+              component={MessageScreen}
+              options={{
+                headerShown: false,
+              }}
+            />
           </>
         )}
       </Stack.Navigator>
     </>
   );
 };
-
 
 export default withLocalStorage(RootNavigator, 'AUTH_USER');

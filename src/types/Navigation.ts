@@ -6,11 +6,11 @@ export type RootStackParamList = {
   LoginScreen: undefined;
   RegisterScreen: undefined;
   ForgotPasswordScreen: undefined;
-  HomeScreen: { storedValue: any };
-  StudentsScreen: { classRoomId: string };
-  AddStudentScreen: { classRoomId: string };
+  HomeScreen: {storedValue: any};
+  StudentsScreen: {classRoomId: string};
+  AddStudentScreen: {classRoomId: string};
   CalendarScreen: undefined;
-  StudentDetailScreen: { studentId: string; classRoomId: string };
+  StudentDetailScreen: {studentId: string; classRoomId: string};
   UpdateStudentScreen: {
     studentId?: string;
     classRoomId: string;
@@ -18,11 +18,12 @@ export type RootStackParamList = {
   };
   ClassRoomScreen: undefined;
   AddClassScreen: undefined;
-  UpdateClassScreen: { classRoom: ClassRoom };
+  UpdateClassScreen: {classRoom: ClassRoom};
   NotificationScreen: undefined;
   StudentEvulationScreen: undefined;
   AddStudentEvulationScreen: undefined;
-  UpdateStudentEvulationScreen: { questionId: string }
+  UpdateStudentEvulationScreen: {questionId: string};
   AddAbsenceScreen: undefined;
   ProfileScreen: undefined;
+  MessageScreen: undefined;
 };

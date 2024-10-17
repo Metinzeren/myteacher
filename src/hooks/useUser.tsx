@@ -1,7 +1,5 @@
-import {View, Text} from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  getLocalStorage,
   getUserFromCollection,
 } from '../utils/AsyncStorageUtils';
 
@@ -15,7 +13,13 @@ export default function useUser() {
   const loadData = async () => {
     const getUserFromStorage = await getUserFromCollection();
     setUser(getUserFromStorage);
+    return getUserFromStorage;
   };
 
-  return {user};
+  const getUser = async () => {
+    let user = await loadData();
+    return user;
+  }
+
+  return { user, getUser };
 }

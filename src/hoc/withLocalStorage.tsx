@@ -7,7 +7,6 @@ const withLocalStorage = <P extends object>(
     WrappedComponent: React.ComponentType<P>, localStorageKey: keyof typeof LocalStorageKeys) => {
     return (props: any) => {
         const [storedValue, setStoredValue] = useState<string | null>(null);
-        console.log(storedValue);
 
         useEffect(() => {
             const fetchLocalStorageValue = async () => {

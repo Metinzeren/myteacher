@@ -9,5 +9,6 @@ interface Absenteeism {
     type?: string;
     isApproved?: 'pending' | 'approved' | 'rejected';
     notes?: string;
+    studentName: string;
 }
 export default Absenteeism;

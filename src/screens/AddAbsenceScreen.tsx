@@ -65,6 +65,7 @@ export default function AddAbsenceScreen(
     description: '',
     photo: '',
     isApproved: 'pending',
+    studentName: '',
   });
 
   const handleChange = (key: keyof typeof registerDto, value: string) => {
@@ -174,7 +175,6 @@ export default function AddAbsenceScreen(
       Keyboard.dismiss();
       setLoading(true);
       let photoUrl = '';
-      console.log("asdgasdg");
 
       if (photos.length > 0) {
         let bytes = await fetch(photos[0]).then(res => res.blob());
@@ -194,6 +194,7 @@ export default function AddAbsenceScreen(
         photo: photoUrl,
         classRoomId: userInfo.classRoomId,
         isApproved: registerDto.isApproved,
+        studentName: `${userInfo.firstName} ${userInfo.lastName}`,
       };
       try {
         let response = await AbsenteeismRepo.addAbsenteeism(data);

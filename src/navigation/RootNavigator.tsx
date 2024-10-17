@@ -36,12 +36,13 @@ const RootNavigator = () => {
     const handleAuthStateChange = async (user: any) => {
       if (user) {
         try {
-          setAuth(user as any);
+
           let userFromUserCollection = await userRepository.getUser(user.uid);
           setUserRole(userFromUserCollection.role);
-
           let concatUser = { ...user, userCollection: userFromUserCollection };
           await setLocalStorage('AUTH_USER', concatUser);
+          setAuth(user as any);
+
         } catch (error) {
           console.error('Error during auth state change:', error);
         }

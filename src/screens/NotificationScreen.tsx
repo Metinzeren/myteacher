@@ -55,7 +55,6 @@ export default function NotificationScreen(
 
   const getNotificiationWithStudents = async () => {
     let userInfo = await getUserFromCollection();
-
     setLoading(true);
     await NotificationRepo.getNotificationWithStudents(userInfo.id)
       .then(res => {
@@ -91,12 +90,12 @@ export default function NotificationScreen(
       }
       return item.title
     }
-    const getNotificationBody = () => {
-      if (item.data.isTranslate) {
-        return notificationLanguage[item.body]
-      }
-      return item.body
-    }
+    // const getNotificationBody = () => {
+    //   if (item.data.isTranslate) {
+    //     return notificationLanguage[item.body]
+    //   }
+    //   return item.body
+    // }
 
     return (
       <ListItem
@@ -183,6 +182,7 @@ export default function NotificationScreen(
     setLoadingAbsence(false)
   }
 
+  console.log("selectedAbsence", selectedAbsence);
 
   const ApprovedContent = () => {
 
@@ -226,6 +226,10 @@ export default function NotificationScreen(
 
             <ApprovedBottomContainer>
               <BottomContent>
+                <View>
+                  <CustomText color="darkCyan" fontSizes='body3'>{t("STUDENT_NAME")}</CustomText>
+                  <CustomText color="dark">{selectedAbsence?.studentName}</CustomText>
+                </View>
                 <View>
                   <CustomText color="darkCyan" fontSizes='body3'>{t("DESCRIPTION")}</CustomText>
                   <CustomText color="dark">{selectedAbsence?.description}</CustomText>

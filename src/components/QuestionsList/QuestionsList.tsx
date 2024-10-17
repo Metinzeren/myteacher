@@ -51,7 +51,7 @@ export default function QuestionsList({
     const questions = await questionRepo.getQuestions();
     setQuestions(questions);
     if (answers) {
-      //
+
     } else {
       let questionsArray = questions.map(question => {
         return {

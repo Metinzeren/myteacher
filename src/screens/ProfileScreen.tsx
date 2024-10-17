@@ -14,6 +14,7 @@ import UserRepository from '../repositories/UserRepository'
 import User from '../models/User'
 import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomSheet/CustomBottomSheet'
 import ChangePasswordContent from '../BottomSheetContents/ChangePasswordContent'
+import { setLocalStorage, updateUserFromCollection } from '../utils/AsyncStorageUtils'
 
 export default function ProfileScreen() {
     const profileLanguage = getResourceByKey('profile')
@@ -75,6 +76,7 @@ export default function ProfileScreen() {
             setLoading(true);
             try {
                 await userRepo.updateUser(updateDto as User);
+                await updateUserFromCollection({ firstName: updateDto.firstName, lastName: updateDto.lastName, email: updateDto.email, phone: updateDto.phone });
             } catch (error) {
                 console.error('Error during updating profile:', error);
             } finally {

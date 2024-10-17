@@ -36,6 +36,22 @@ export const getUserFromCollection = async (): Promise<any> => {
     console.error('Error retrieving value from AsyncStorage:', e);
   }
 };
+export const updateUserFromCollection = async (updatedData: any): Promise<void> => {
+  try {
+
+    const user = await getLocalStorage("AUTH_USER") as any;
+    const updatedUser = {
+      ...user, userCollection: {
+        ...user.userCollection,
+        ...updatedData
+      }
+    };
+    await setLocalStorage('AUTH_USER', updatedUser);
+
+  } catch (e) {
+    console.error('Error storing value in AsyncStorage:', e);
+  }
+}
 export const getUserId = async (): Promise<any> => {
   try {
     const jsonValue = await AsyncStorage.getItem("AUTH_USER");

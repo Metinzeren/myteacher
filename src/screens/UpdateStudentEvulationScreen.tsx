@@ -17,6 +17,7 @@ import AlertDialog from '../components/AlertDialog/AlertDialog'
 import { useQuestions } from '../context/StudentEvulationContext'
 import { useTranslation } from 'react-i18next'
 import CustomText from '../components/Text/Text'
+import { View } from 'react-native'
 export default function UpdateStudentEvulationScreen(
     props: NativeStackScreenProps<RootStackParamList, 'UpdateStudentEvulationScreen'>
 ) {
@@ -151,8 +152,8 @@ export default function UpdateStudentEvulationScreen(
                                 </>
                             )}
                             {updateDto.questionType === "option" && updateDto.answer?.map((answer, index) => (
-                                <>
-                                    <CustomText key={index} color="primaryText" fontSizes="body4">Cevap {index + 1}</CustomText>
+                                <View key={index}>
+                                    <CustomText color="primaryText" fontSizes="body4">Cevap {index + 1}</CustomText>
                                     <Input
 
                                         required
@@ -163,7 +164,7 @@ export default function UpdateStudentEvulationScreen(
                                         value={answer}
                                         onChangeText={e => handleChange('answer', e, index)}
                                     />
-                                </>
+                                </View>
 
                             ))}
                         </FormContainer>

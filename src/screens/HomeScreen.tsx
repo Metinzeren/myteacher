@@ -28,13 +28,28 @@ type Props = NativeStackScreenProps<RootStackParamList, 'HomeScreen'>;
 const HomeScreen: React.FC<Props> = ({ navigation }) => {
   const deviceRepo = DevicesRepository.getInstance();
   const classRoomRepo = ClassRoomRepository.getInstance();
-  const { user } = useUser() as any;
+  const { user, getUser } = useUser() as any;
+  const [profile, setProfile] = useState(user);
   const { fcmToken } = useFcmToken();
   const { t } = useTranslation();
   const [searchStudent, setSearchStudent] = useState('');
   const [focusToSearch, setFocusToSearch] = useState(false);
   const [searchStudents, setSearchStudents] = useState<Array<ClassRoom>>([]);
   const [searchLoading, setSearchLoading] = useState(false);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', async () => {
+      setSearchStudent('');
+      setSearchStudents([]);
+      setFocusToSearch(false);
+      let user = await getUser();
+      if (user) {
+        setProfile(user);
+      }
+    });
+
+    return unsubscribe;
+  }, []);
 
   useEffect(() => {
     if (fcmToken !== '') {
@@ -68,20 +83,21 @@ const HomeScreen: React.FC<Props> = ({ navigation }) => {
                 style={{ width: 65, height: 65 }}
                 autoPlay
                 loop
-                source={user?.role === "parent" ? require('../assets/animations/lottie/parental-support.json') : require('../assets/animations/lottie/teacher-teaching-lesson.json')}
+                source={profile?.role === "parent" ? require('../assets/animations/lottie/parental-support.json') : require('../assets/animations/lottie/teacher-teaching-lesson.json')}
               />
               <View
                 style={{ flex: 1, justifyContent: 'center', flexDirection: "column" }}
               >
-                <CustomText fontSizes='body5' color='textBlack'>{user ? user.firstName + ' ' + user.lastName : ''}</CustomText>
-                <CustomText fontSizes='body6' color='grey'>{user ? user.email : ""}</CustomText>
+                <CustomText fontSizes='body5' color='textBlack'>{profile ? profile.firstName + ' ' + profile.lastName : ''}</CustomText>
+                <CustomText fontSizes='body6' color='grey'>{profile ? profile.email : ""}</CustomText>
               </View>
               <IconButton
                 icon={faAngleRight}
                 backgroundColor='transparent'
                 iconColor='black'
               />
-            </WelcomeContainer>}
+            </WelcomeContainer>
+            }
             <Input
               autoCapitalize="none"
               placeholder={t('SEARCH_STUDENT')}

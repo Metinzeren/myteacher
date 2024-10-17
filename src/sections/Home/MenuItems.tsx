@@ -73,7 +73,7 @@ const MenuItems = ({ storedValue }: { storedValue: any }) => {
     <NoSearchContainer>
       <HomeBottomContainer>
         <View>
-          <CustomFlatList
+          {storedValue && <CustomFlatList
             numColumns={2}
             notFoundText={menuTranslate.DATA_NOT_FOUND}
             filter={(entity: any) =>
@@ -93,7 +93,7 @@ const MenuItems = ({ storedValue }: { storedValue: any }) => {
                 />
               );
             }}
-          />
+          />}
         </View>
       </HomeBottomContainer>
     </NoSearchContainer>

@@ -230,6 +230,7 @@
     "HOMEWORKS": "Ödevler",
     "QUESTIONS": "Öğrenci Değerlendirme Soruları",
     "ABSENCE": "Öğrenci Devamsızlık",
+    "MESSAGES": "Mesajlar",
     "LOGOUT": "Çıkış Yap",
     "DATA_NOT_FOUND": "Veri bulunamadı"
   },

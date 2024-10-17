@@ -1,5 +1,4 @@
-import { ICONS } from '../constant/theme';
-
+import {ICONS} from '../constant/theme';
 
 export const homeMenu = [
   {
@@ -12,7 +11,7 @@ export const homeMenu = [
     name: 'HOMEWORKS',
     icon: ICONS.HOME.homeworkIcon,
     link: 'CalendarScreen',
-    role: ['teacher', "parent"],
+    role: ['teacher', 'parent'],
   },
   {
     name: 'QUESTIONS',
@@ -21,16 +20,22 @@ export const homeMenu = [
     role: ['teacher'],
   },
   {
+    name: 'MESSAGES',
+    icon: ICONS.HOME.class,
+    link: 'MessageScreen',
+    role: ['teacher', 'parent'],
+  },
+  {
     name: 'ABSENCE',
     icon: ICONS.HOME.calendar,
     link: 'AddAbsenceScreen',
-    role: ["parent"],
+    role: ['parent'],
   },
   {
     name: 'LOGOUT',
     icon: ICONS.HOME.exit,
     link: '',
-    role: ['teacher', "parent"],
+    role: ['teacher', 'parent'],
   },
 ];
 

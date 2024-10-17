@@ -1,13 +1,10 @@
 import i18n from 'i18next';
-import { initReactI18next } from 'react-i18next';
+import {initReactI18next} from 'react-i18next';
 import en from './en.json';
 import tr from './tr.json';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   getLanguage as getLanguageAsync,
-  getLocalStorage,
   setLanguage,
-  setLocalStorage,
 } from '../utils/AsyncStorageUtils';
 
 const resources = {

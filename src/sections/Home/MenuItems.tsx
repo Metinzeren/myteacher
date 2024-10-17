@@ -1,28 +1,30 @@
-import { View, TouchableOpacity } from 'react-native';
-import React, { memo, useCallback } from 'react';
+import {View, TouchableOpacity} from 'react-native';
+import React, {memo, useCallback} from 'react';
 import styled from 'styled-components';
-import { homeMenu } from '../../data/data';
-import { getResourceByKey } from '../../lang/i18n';
-import { useNavigation } from '@react-navigation/native';
+import {homeMenu} from '../../data/data';
+import {getResourceByKey} from '../../lang/i18n';
+import {useNavigation} from '@react-navigation/native';
 import CustomFlatList from '../../components/Flatlist/CustomFlatList';
 import AlertDialog from '../../components/AlertDialog/AlertDialog';
-import { signOut } from 'firebase/auth';
+import {signOut} from 'firebase/auth';
 import CustomText from '../../components/Text/Text';
-import { SvgXml } from 'react-native-svg';
-import { auth } from '../../firebase/config';
+import {SvgXml} from 'react-native-svg';
+import {auth} from '../../firebase/config';
 import withLocalStorage from '../../hoc/withLocalStorage';
 
-const MenuItems = ({ storedValue }: { storedValue: any }) => {
+const MenuItems = ({storedValue}: {storedValue: any}) => {
   const navigation = useNavigation<any>();
   const menuTranslate = getResourceByKey('menu');
-  const MenuItemCard = ({ item, index }: { item: any; index: number }) => {
-    let maxItem = homeMenu.length;
+  const MenuItemCard = ({item, index}: {item: any; index: number}) => {
+    let maxItem = homeMenu.filter((entity: any) =>
+      entity?.role?.includes?.(storedValue?.userCollection?.role),
+    ).length;
     let isEven = maxItem % 2 === 0;
     let isLastItem = index === maxItem - 1;
     return (
       <TouchableOpacity
         style={{
-          width: !isEven && !isLastItem ? '50%' : '100%',
+          width: isLastItem ? '100%' : '50%',
         }}
         onPress={() => {
           if (item.link !== '') {
@@ -59,7 +61,7 @@ const MenuItems = ({ storedValue }: { storedValue: any }) => {
             AlertDialog.hideLoading();
           });
       },
-      onCancel() { },
+      onCancel() {},
     });
   };
 
@@ -80,7 +82,7 @@ const MenuItems = ({ storedValue }: { storedValue: any }) => {
               entity.role.includes(storedValue?.userCollection?.role)
             }
             data={homeMenu}
-            renderItem={({ item, index }: { item: any; index: number }) => {
+            renderItem={({item, index}: {item: any; index: number}) => {
               let translatedName = menuTranslate[item.name];
               return (
                 <MenuItemCard

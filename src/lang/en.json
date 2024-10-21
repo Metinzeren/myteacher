@@ -225,7 +225,8 @@
     "ABSENCE": "Absence",
     "MESSAGES": "Messages",
     "LOGOUT": "Logout",
-    "DATA_NOT_FOUND": "Data not found"
+    "DATA_NOT_FOUND": "Data not found",
+    "GAME": "Game"
   },
   "profile": {
     "PROFILE": "Profile",

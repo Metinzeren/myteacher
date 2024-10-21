@@ -232,7 +232,8 @@
     "ABSENCE": "Öğrenci Devamsızlık",
     "MESSAGES": "Mesajlar",
     "LOGOUT": "Çıkış Yap",
-    "DATA_NOT_FOUND": "Veri bulunamadı"
+    "DATA_NOT_FOUND": "Veri bulunamadı",
+    "GAME": "Oyun"
   },
   "profile": {
     "PROFILE": "Profil",

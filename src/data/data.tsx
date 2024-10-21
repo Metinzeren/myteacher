@@ -1,4 +1,4 @@
-import {ICONS} from '../constant/theme';
+import { ICONS } from '../constant/theme';
 
 export const homeMenu = [
   {
@@ -23,6 +23,12 @@ export const homeMenu = [
     name: 'MESSAGES',
     icon: ICONS.HOME.class,
     link: 'MessageScreen',
+    role: ['teacher', 'parent'],
+  },
+  {
+    name: 'GAME',
+    icon: ICONS.HOME.class,
+    link: 'GameRoomScreen',
     role: ['teacher', 'parent'],
   },
   {

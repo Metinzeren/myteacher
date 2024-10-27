@@ -38,31 +38,28 @@ export default function CreateGameRoom({ onClose }: { onClose: () => void }) {
         const newRoomRef = push(roomRef);
 
         set(newRoomRef, {
-            rooms: {
-                [newRoomRef.key as string]: {
-                    roomName: roomName,
-                    isGameActive: true,
-                    round: 1,
-                    players: {
-                        player1: {
-                            id: user.id,
-                            name: user.firstName,
-                            score: 0,
-                            isReady: false
-                        },
-                        player2: {
-                            id: "",
-                            name: "",
-                            score: 0,
-                            isReady: false
-                        }
-                    },
-                    currentQuestion: {
-                        questionText: "What is the translation of 'Hello'?",
-                        choices: ["Merhaba", "Hoşça kal", "Teşekkürler"],
-                        correctAnswer: "Merhaba"
-                    }
+            roomName: roomName,
+            isGameActive: true,
+            round: 1,
+            roomId: newRoomRef.key as string,
+            players: {
+                player1: {
+                    id: user.id,
+                    name: user.firstName,
+                    score: 0,
+                    isReady: false
+                },
+                player2: {
+                    id: "",
+                    name: "",
+                    score: 0,
+                    isReady: false
                 }
+            },
+            currentQuestion: {
+                questionText: "What is the translation of 'Hello'?",
+                choices: ["Merhaba", "Hoşça kal", "Teşekkürler"],
+                correctAnswer: "Merhaba"
             }
         }).then(() => {
             AlertDialog.showModal({

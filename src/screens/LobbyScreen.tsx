@@ -19,7 +19,7 @@ export default function LobbyScreen(
 
     useEffect(() => {
         setLoading(true);
-        const roomRef = ref(database, `rooms/${roomId}/rooms/${roomId}`);
+        const roomRef = ref(database, `rooms/${roomId}`);
 
         const unsubscribe = onValue(roomRef, (snapshot) => {
             const data = snapshot.val();

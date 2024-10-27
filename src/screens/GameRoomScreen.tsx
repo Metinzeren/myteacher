@@ -5,16 +5,20 @@ import Button from '../components/Button/Button'
 import styled from 'styled-components'
 import Loading from '../components/Loading/Loading'
 import { database } from '../firebase/config'
-import { onValue, ref } from 'firebase/database'
+import { onValue, ref, update } from 'firebase/database'
 import CustomFlatList from '../components/Flatlist/CustomFlatList'
 import CustomText from '../components/Text/Text'
 import CustomBottomSheet, { BottomSheetRef } from '../components/CustomBottomSheet/CustomBottomSheet'
 import CreateGameRoom from '../BottomSheetContents/CreateGameRoom'
 import Game from '../models/Game'
+import { useNavigation } from '@react-navigation/native'
+import useUser from '../hooks/useUser'
 
 export default function GameRoomScreen() {
     const [rooms, setRooms] = useState<Game[]>([])
     const addRoom = useRef<BottomSheetRef>(null);
+    const navigation = useNavigation<any>();
+    const { user } = useUser() as any;
     const [loading, setLoading] = useState(false);
     const query = ref(database, "rooms");
     const getSnapPoints = () => {
@@ -27,12 +31,11 @@ export default function GameRoomScreen() {
 
             if (snapshot.exists()) {
                 const activeRooms: any[] = [];
-                Object.values(data).forEach((roomSet: any) => {
-                    Object.values(roomSet.rooms).forEach((room: any) => {
-                        if (room.isGameActive) {
-                            activeRooms.push(room);
-                        }
-                    });
+                Object.values(data).forEach((room: any) => {
+                    // isGameActive değeri true olan odaları listeye ekliyoruz
+                    if (room.isGameActive) {
+                        activeRooms.push(room);
+                    }
                 });
                 setRooms(activeRooms);
             }
@@ -40,11 +43,49 @@ export default function GameRoomScreen() {
         });
     }, []);
 
+
+    const JoinRoom = async (room: any) => {
+        console.log(room);
+
+        if (!user) {
+            console.log("Giriş yapılmadı");
+            return;
+        }
+
+
+        if (room.players && room.players.player2.name !== "") {
+            console.log("Oda dolu");
+            return;
+        }
+
+        try {
+            const roomRef = ref(database, `rooms/${room.roomId}/players`);
+
+            await update(roomRef, {
+                player2: {
+                    id: user.id,
+                    name: user.firstName || "Anonim",
+                    score: 0,
+                    isReady: false,
+                },
+            });
+
+            // Katılım başarılıysa lobi ekranına yönlendir
+            navigation.navigate('LobbyScreen', { roomId: room.roomId });
+        } catch (error) {
+            console.error("Odaya katılırken hata oluştu:", error);
+        }
+    };
+
     const RenderItem = ({ item, index }: { item: any, index: any }) => {
+        console.log(item);
 
         return (
             <ListItem
-
+                onPress={() => {
+                    JoinRoom(item);
+                }
+                }
                 style={{
                     shadowColor: '#000',
                     shadowOffset: {

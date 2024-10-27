@@ -1,6 +1,7 @@
 interface Game {
     roomName: string;
     isGameActive: boolean;
+    roomId: string;
     round: number;
     currentQuestion: {
         questionText: string;
